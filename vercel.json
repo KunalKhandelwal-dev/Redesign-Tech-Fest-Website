@@ -1,5 +1,4 @@
 {
   "buildCommand": "npm run build",
-  "output": "dist",
   "framework": "vite"
 }
