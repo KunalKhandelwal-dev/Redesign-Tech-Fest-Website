@@ -53,6 +53,7 @@
       sourcemap: false,
       target: 'esnext',
       outDir: 'build',
+      minify: true,
     },
     server: {
       port: 3000,
