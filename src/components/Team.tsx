@@ -8,6 +8,15 @@ function Team() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Treat small viewports as "in view" because some mobile browsers
+  // don't reliably trigger intersection observers for large sections.
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) setIsMobile(true);
+  }, []);
+
+  const shouldAnimate = isMobile ? true : isInView;
 
   // ✅ Load team data (from local JSON)
   useEffect(() => {
@@ -29,13 +38,13 @@ function Team() {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-16"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            animate={shouldAnimate ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="inline-block mb-4"
           >
@@ -61,7 +70,7 @@ function Team() {
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
+          animate={shouldAnimate ? { opacity: 1 } : {}}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
           {teamMembers.map((member, index) => (

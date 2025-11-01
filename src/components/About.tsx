@@ -88,7 +88,7 @@ export default function About() {
           <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             YUGANTRAN2.0 2025 is the premier annual tech fest organized by the
             School of Computer Science & Engineering at Geeta University. Join
-            us for three days of innovation, competition, and collaboration that
+            us for innovation, competition, and collaboration that
             will push the boundaries of technology and creativity.
           </p>
         </motion.div>
