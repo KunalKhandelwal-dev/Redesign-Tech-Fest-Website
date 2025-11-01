@@ -1,42 +1,50 @@
 import { motion } from 'motion/react';
 import { Instagram, Linkedin, Mail, MapPin, Phone, Sparkles } from 'lucide-react';
+import { useMemo } from 'react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:yugantran@geetauniversity.edu.in', label: 'Email' },
-  ];
+  // ✅ Memoized arrays (prevents re-creation each render)
+  const socialLinks = useMemo(
+    () => [
+      { icon: Instagram, href: '#', label: 'Instagram' },
+      { icon: Linkedin, href: '#', label: 'LinkedIn' },
+      { icon: Mail, href: 'mailto:yugantran@geetauniversity.edu.in', label: 'Email' },
+    ],
+    []
+  );
 
-  const quickLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Events', href: '#events' },
-    { name: 'Team', href: '#team' },
-    { name: 'Register', href: '#register' },
-  ];
+  const quickLinks = useMemo(
+    () => [
+      { name: 'Home', href: '#home' },
+      { name: 'About', href: '#about' },
+      { name: 'Events', href: '#events' },
+      { name: 'Team', href: '#team' },
+      { name: 'Register', href: '#register' },
+    ],
+    []
+  );
 
   return (
     <footer id="contact" className="relative pt-20 pb-8 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600 rounded-full blur-3xl opacity-10" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-10" />
+      {/* Background Blur Orbs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        {/* Main Footer Content */}
+        {/* Footer Grid Sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Section */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-cyan-400" />
-              <span className="text-xl font-orbitron gradient-text">YUGANTRAN'25</span>
+              <span className="text-xl font-orbitron gradient-text">YUGANTRAN2.0'25</span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-4">
               The premier annual tech fest organized by the School of Computer Science & Engineering at Geeta University.
@@ -59,10 +67,10 @@ export default function Footer() {
 
           {/* Quick Links */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
             <h3 className="text-lg font-orbitron mb-4 text-cyan-400">Quick Links</h3>
             <ul className="space-y-3">
@@ -81,10 +89,10 @@ export default function Footer() {
 
           {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <h3 className="text-lg font-orbitron mb-4 text-cyan-400">Contact Us</h3>
             <ul className="space-y-3">
@@ -100,7 +108,10 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Mail className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                <a href="mailto:yugantran@geetauniversity.edu.in" className="hover:text-cyan-400 transition-colors">
+                <a
+                  href="mailto:YUGANTRAN2.0@geetauniversity.edu.in"
+                  className="hover:text-cyan-400 transition-colors"
+                >
                   yugantran@geetauniversity.edu.in
                 </a>
               </li>
@@ -109,16 +120,16 @@ export default function Footer() {
 
           {/* Event Info */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             <h3 className="text-lg font-orbitron mb-4 text-cyan-400">Event Details</h3>
             <ul className="space-y-3 text-gray-400">
               <li>
                 <span className="block text-sm text-gray-500 mb-1">Dates</span>
-                <span className="font-orbitron text-white">March 15-17, 2025</span>
+                <span className="font-orbitron text-white">November 29, 2025</span>
               </li>
               <li>
                 <span className="block text-sm text-gray-500 mb-1">Venue</span>
@@ -126,13 +137,13 @@ export default function Footer() {
               </li>
               <li>
                 <span className="block text-sm text-gray-500 mb-1">Expected Participants</span>
-                <span className="text-white">1000+</span>
+                <span className="text-white">500+</span>
               </li>
             </ul>
           </motion.div>
         </div>
 
-        {/* Divider */}
+        {/* Divider Line */}
         <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mb-8" />
 
         {/* Bottom Bar */}
@@ -144,7 +155,7 @@ export default function Footer() {
           className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500"
         >
           <p>
-            © {currentYear} YUGANTRAN. All rights reserved. | School of Computer Science & Engineering, Geeta University
+            © {currentYear} YUGANTRAN2.0. All rights reserved. | School of Computer Science & Engineering, Geeta University
           </p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-cyan-400 transition-colors">

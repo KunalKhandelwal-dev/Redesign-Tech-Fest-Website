@@ -102,7 +102,7 @@ export default function Hero() {
               textShadow: { duration: 5, repeat: Infinity, ease: "easeInOut" },
             }}
           >
-            YUGANTRAN
+            YUGANTRAN2.0
           </motion.h1>
 
           <motion.h2
@@ -124,7 +124,7 @@ export default function Hero() {
           <div className="flex flex-wrap justify-center items-center gap-6 text-gray-400">
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-cyan-400" />
-              <span>March 15–17, 2025</span>
+              <span>November 29, 2025</span>
             </div>
             <div className="w-1 h-1 bg-cyan-400 rounded-full" />
             <div className="flex items-center gap-2">

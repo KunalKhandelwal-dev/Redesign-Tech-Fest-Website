@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
 import { useRef, useState } from "react";
-import { User, Phone, Building2, Send, CheckCircle } from "lucide-react";
+import { User, Phone, Building2, Send, CheckCircle, Loader2 } from "lucide-react";
 
 export default function Register() {
   const ref = useRef(null);
@@ -9,13 +9,17 @@ export default function Register() {
 
   const [formData, setFormData] = useState({
     name: "",
+    rollNumber: "",
+    department: "",
+    semester: "",
     mobileNumber: "",
     college: "",
     eventType: [] as string[],
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const events = [
     "Code Quest",
@@ -30,6 +34,9 @@ export default function Register() {
   const validate = (data: typeof formData) => {
     const newErrors: Record<string, string> = {};
     if (!data.name.trim()) newErrors.name = "Full name is required.";
+    if (!data.rollNumber.trim()) newErrors.rollNumber = "Roll number is required.";
+    if (!data.department.trim()) newErrors.department = "Department is required.";
+    if (!data.semester.trim()) newErrors.semester = "Semester is required.";
     if (!/^[0-9]{10}$/.test(data.mobileNumber))
       newErrors.mobileNumber = "Enter a valid 10-digit mobile number.";
     if (data.eventType.length === 0)
@@ -64,6 +71,8 @@ export default function Register() {
     const valid = validate(formData);
     if (!valid) return;
 
+    setLoading(true);
+
     const payload = {
       ...formData,
       eventType: formData.eventType.join(", "),
@@ -83,6 +92,9 @@ export default function Register() {
         setSubmitted(true);
         setFormData({
           name: "",
+          rollNumber: "",
+          department: "",
+          semester: "",
           mobileNumber: "",
           college: "",
           eventType: [],
@@ -95,6 +107,8 @@ export default function Register() {
     } catch (err) {
       console.error("Network error:", err);
       alert("⚠️ Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -121,7 +135,7 @@ export default function Register() {
             </span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron mb-6">
-            <span className="gradient-text">Join</span> YUGANTRAN 2025
+            <span className="gradient-text">Join</span> YUGANTRAN2.0 2025
           </h2>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Register now to secure your spot at the most exciting tech fest of
@@ -140,48 +154,67 @@ export default function Register() {
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Full Name */}
-                <div>
-                  <label className="block text-sm mb-2 text-gray-300">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400" />
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Enter your full name"
-                      className="w-full bg-[#1a1a2e] border border-cyan-500/30 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                    />
-                  </div>
-                  {errors.name && (
-                    <p className="text-red-400 text-sm mt-1">{errors.name}</p>
-                  )}
-                </div>
+                <InputField
+                  label="Full Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                  error={errors.name}
+                  icon={<User className="text-cyan-400" />}
+                />
+
+                {/* Roll Number */}
+                <InputField
+                  label="Roll Number"
+                  name="rollNumber"
+                  value={formData.rollNumber}
+                  onChange={handleChange}
+                  placeholder="Enter your roll number"
+                  error={errors.rollNumber}
+                />
+
+                {/* Department */}
+                <InputField
+                  label="Department"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  placeholder="Enter your department"
+                  error={errors.department}
+                />
+
+                {/* Semester */}
+                <InputField
+                  label="Semester"
+                  name="semester"
+                  value={formData.semester}
+                  onChange={handleChange}
+                  placeholder="Enter your semester (e.g., 5th)"
+                  error={errors.semester}
+                />
 
                 {/* Mobile Number */}
-                <div>
-                  <label className="block text-sm mb-2 text-gray-300">
-                    Mobile Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400" />
-                    <input
-                      type="tel"
-                      name="mobileNumber"
-                      value={formData.mobileNumber}
-                      onChange={handleChange}
-                      placeholder="e.g. 9876543210"
-                      className="w-full bg-[#1a1a2e] border border-cyan-500/30 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                    />
-                  </div>
-                  {errors.mobileNumber && (
-                    <p className="text-red-400 text-sm mt-1">
-                      {errors.mobileNumber}
-                    </p>
-                  )}
-                </div>
+                <InputField
+                  label="Mobile Number"
+                  name="mobileNumber"
+                  value={formData.mobileNumber}
+                  onChange={handleChange}
+                  placeholder="e.g. 9876543210"
+                  error={errors.mobileNumber}
+                  icon={<Phone className="text-cyan-400" />}
+                />
+
+                {/* College */}
+                <InputField
+                  label="College / University"
+                  name="college"
+                  value={formData.college}
+                  onChange={handleChange}
+                  placeholder="Enter your institution name"
+                  error={errors.college}
+                  icon={<Building2 className="text-cyan-400" />}
+                />
 
                 {/* Event Selection */}
                 <div>
@@ -213,38 +246,25 @@ export default function Register() {
                   )}
                 </div>
 
-                {/* College */}
-                <div>
-                  <label className="block text-sm mb-2 text-gray-300">
-                    College / University
-                  </label>
-                  <div className="relative">
-                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400" />
-                    <input
-                      type="text"
-                      name="college"
-                      value={formData.college}
-                      onChange={handleChange}
-                      placeholder="Enter your institution name"
-                      className="w-full bg-[#1a1a2e] border border-cyan-500/30 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                    />
-                  </div>
-                  {errors.college && (
-                    <p className="text-red-400 text-sm mt-1">
-                      {errors.college}
-                    </p>
-                  )}
-                </div>
-
                 {/* Submit Button */}
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
+                  disabled={loading}
                   className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2"
                 >
-                  <Send className="w-5 h-5" />
-                  Register Now
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Register Now
+                    </>
+                  )}
                 </motion.button>
               </form>
             ) : (
@@ -266,5 +286,46 @@ export default function Register() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+// 🔹 Reusable Input Component
+function InputField({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  error,
+  icon,
+}: {
+  label: string;
+  name: string;
+  value: string;
+  onChange: any;
+  placeholder: string;
+  error?: string;
+  icon?: JSX.Element;
+}) {
+  return (
+    <div>
+      <label className="block text-sm mb-2 text-gray-300">{label}</label>
+      <div className="relative">
+        {icon && (
+          <span className="absolute left-4 top-1/2 -translate-y-1/2">{icon}</span>
+        )}
+        <input
+          type="text"
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={`w-full bg-[#1a1a2e] border border-cyan-500/30 rounded-lg ${
+            icon ? "pl-12" : "pl-4"
+          } pr-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20`}
+        />
+      </div>
+      {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
+    </div>
   );
 }

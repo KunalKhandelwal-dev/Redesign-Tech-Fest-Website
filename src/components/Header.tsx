@@ -7,9 +7,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -25,36 +23,38 @@ export default function Header() {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
+      initial={{ y: -80 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass' : 'bg-transparent'
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${
+        isScrolled ? 'glass shadow-md' : 'bg-transparent'
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <nav className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {/* --- Logo --- */}
           <motion.a
             href="#home"
             className="flex items-center gap-2 font-orbitron group"
             whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
           >
             <Sparkles className="w-6 h-6 text-cyan-400 group-hover:rotate-180 transition-transform duration-500" />
             <div>
-              <span className="text-xl tracking-wider gradient-text">YUGANTRAN</span>
+              <span className="text-xl tracking-wider gradient-text">YUGANTRAN2.0</span>
               <span className="text-cyan-400 ml-1">'25</span>
             </div>
           </motion.a>
 
-          {/* Desktop Navigation */}
+          {/* --- Desktop Navigation --- */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
               <motion.a
                 key={item.name}
                 href={item.href}
-                initial={{ opacity: 0, y: -20 }}
+                initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.05 }}
                 className="relative group text-gray-300 hover:text-cyan-400 transition-colors duration-300"
               >
                 {item.name}
@@ -63,11 +63,9 @@ export default function Header() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* --- CTA Button (Desktop) --- */}
           <motion.a
             href="#register"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron hover:glow-cyan transition-all duration-300"
@@ -75,7 +73,7 @@ export default function Header() {
             Register Now
           </motion.a>
 
-          {/* Mobile Menu Button */}
+          {/* --- Mobile Menu Button --- */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-cyan-400"
@@ -86,13 +84,14 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* Mobile Menu */}
+      {/* --- Mobile Menu --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
             className="md:hidden glass border-t border-cyan-500/20"
           >
             <div className="container mx-auto px-4 py-6 space-y-4">
@@ -101,7 +100,8 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  whileHover={{ x: 10 }}
+                  whileHover={{ x: 8 }}
+                  transition={{ duration: 0.2 }}
                   className="block py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
                 >
                   {item.name}
@@ -111,6 +111,7 @@ export default function Header() {
                 href="#register"
                 onClick={() => setIsMobileMenuOpen(false)}
                 whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
                 className="block w-full py-3 text-center bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron"
               >
                 Register Now

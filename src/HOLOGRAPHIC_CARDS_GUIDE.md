@@ -1,4 +1,4 @@
-# 🎴 Holographic Trading Cards Guide - YUGANTRAN 2025
+# 🎴 Holographic Trading Cards Guide - YUGANTRAN2.0 2025
 
 ## Overview
 Your Events and Team sections now feature stunning **3D holographic trading cards** with cyberpunk aesthetics, inspired by futuristic data panels. These cards include neon glowing borders, 3D tilt effects, animated overlays, and holographic shimmer effects.
@@ -391,7 +391,7 @@ Then in CSS:
 
 ## 🎉 Summary
 
-Your YUGANTRAN 2025 website now features:
+Your YUGANTRAN2.0 2025 website now features:
 
 ✅ **Event Cards** - Holographic panels with 3D tilt, animated icons, and hover overlays  
 ✅ **Team Cards** - Trading card style with photo shimmer, social links, and data lines  

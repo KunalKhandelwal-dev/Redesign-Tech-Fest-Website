@@ -1,7 +1,7 @@
 # 🔌 Circuit Background Implementation Guide
 
 ## Overview
-Your YUGANTRAN 2025 website now features a stunning animated circuit board background that simulates electric current flowing through a futuristic motherboard. This guide explains all the features and customization options.
+Your YUGANTRAN2.0 2025 website now features a stunning animated circuit board background that simulates electric current flowing through a futuristic motherboard. This guide explains all the features and customization options.
 
 ---
 
@@ -320,7 +320,7 @@ const opacity = useTransform(scrollYProgress, [0, 1], [0.3, 0.8]);
 
 ## 📝 Summary
 
-Your YUGANTRAN 2025 website now features:
+Your YUGANTRAN2.0 2025 website now features:
 - ✅ Global animated circuit background
 - ✅ Flowing data particles
 - ✅ Glowing circuit nodes
