@@ -15,7 +15,7 @@ export default function App() {
       <BackgroundCircuit />
 
       {/* Content Layer - Positioned above background */}
-      <div className="relative z-10">
+      <div className="relative z-20">
         {/* Sticky Header */}
         <Header />
 

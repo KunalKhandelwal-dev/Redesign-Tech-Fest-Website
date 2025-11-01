@@ -41,6 +41,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --mouse-x: -500px;
+  --mouse-y: -500px;
+  --glow-size: 300px;
 }
 
 .dark {
@@ -193,6 +196,26 @@
     }
   }
 }
+
+
+
+.hero-title {
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+}
+
+.glow-react {
+  color: #00ffff;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+}
+
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.4)); }
+  50% { filter: drop-shadow(0 0 35px rgba(0, 255, 255, 0.8)); }
+}
+.animate-glow-text {
+  animation: glowPulse 2.5s infinite ease-in-out;
+}
+
 
 html {
   font-size: var(--font-size);
@@ -639,6 +662,44 @@ html {
     background-position: 0% 50%;
   }
 }
+
+/* === YUGANTRAN HERO ANIMATIONS === */
+
+@keyframes slow-pan {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 80px 80px, 80px 80px; }
+}
+.animate-slow-pan {
+  animation: slow-pan 30s linear infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-move {
+  background-size: 200% 200%;
+  animation: gradient-move 15s ease infinite;
+}
+
+@keyframes glow-text {
+  0%, 100% { text-shadow: 0 0 20px rgba(0,255,255,0.4); }
+  50% { text-shadow: 0 0 40px rgba(0,255,255,0.8); }
+}
+.animate-glow-text {
+  animation: glow-text 4s ease-in-out infinite;
+}
+
+
 
 /* Card data display bars */
 .data-bar {

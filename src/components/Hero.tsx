@@ -1,14 +1,13 @@
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Calendar, MapPin } from 'lucide-react';
-import CircuitSparks from './CircuitSparks';
-import { useRef } from 'react';
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { Calendar, MapPin } from "lucide-react";
+import { useRef } from "react";
+import CircuitSparks from "./CircuitSparks";
 
 export default function Hero() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  // Simplified parallax movement
   const rotateX = useTransform(mouseY, [0, 1], [6, -6]);
   const rotateY = useTransform(mouseX, [0, 1], [-6, 6]);
 
@@ -17,7 +16,6 @@ export default function Hero() {
     const rect = heroRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
-    // lightweight: only update every ~30ms
     requestAnimationFrame(() => {
       mouseX.set(x);
       mouseY.set(y);
@@ -29,72 +27,100 @@ export default function Hero() {
       id="home"
       ref={heroRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black"
-      style={{ perspective: '1000px' }}
+      className="relative z-30 min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-transparent"
+      style={{ perspective: "1000px" }}
     >
-      {/* Background Effects */}
-      <CircuitSparks />
+      {/* === Background Glow Layer === */}
+      <div className="absolute inset-0 -z-[1] overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.15),transparent_70%)] blur-2xl animate-pulse-slow"></div>
+        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(0,255,255,0.25)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.25)_1px,transparent_1px)] bg-[size:60px_60px] animate-slow-pan"></div>
+        <CircuitSparks />
+      </div>
 
-      {/* Energy Gradient (merged background layers) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.08),transparent_70%)] animate-pulse-slow blur-xl"></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/30 via-blue-800/20 to-purple-900/30 animate-gradient-move blur-2xl"></div>
-
-      {/* Subtle Grid */}
-      <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(rgba(0,255,255,0.25)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.25)_1px,transparent_1px)] bg-[size:60px_60px]" />
-
-      {/* Floating Orbs (CSS animation for performance) */}
-      {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className={`absolute rounded-full blur-3xl bg-gradient-to-br from-cyan-400 to-purple-500 opacity-10 orb-move-${i + 1}`}
-          style={{
-            width: `${140 + i * 40}px`,
-            height: `${140 + i * 40}px`,
-            top: `${10 + i * 20}%`,
-            left: `${i * 25}%`,
+      {/* === Portal Animation (Faster & Always Visible) === */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        initial={{ scale: 0.7, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.9 }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+      >
+        <motion.div
+          className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-cyan-400/40 blur-sm"
+          style={{ transformStyle: "preserve-3d", rotateX: "60deg" }}
+          animate={{ rotateZ: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute inset-0 w-[700px] h-[700px] rounded-full border border-blue-500/30 blur-md"
+          style={{ transformStyle: "preserve-3d", rotateX: "60deg", rotateY: "30deg" }}
+          animate={{ rotateZ: -360 }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/50 blur-3xl shadow-[0_0_60px_rgba(0,255,255,0.8)]"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.8, 1, 0.8],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
         />
-      ))}
+      </motion.div>
 
-      {/* Main Content */}
+      {/* === Hero Text and Buttons === */}
       <motion.div
         style={{ rotateX, rotateY }}
         className="relative z-10 container mx-auto px-6 text-center"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 1 }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="space-y-8"
-        >
-          {/* Badge */}
+        <motion.div className="space-y-8">
           <motion.div
             className="inline-block px-8 py-2 rounded-full border border-cyan-400/30 bg-cyan-500/10 shadow-[0_0_25px_rgba(0,255,255,0.4)] backdrop-blur-md"
             animate={{ opacity: [0.9, 1, 0.9] }}
-            transition={{ duration: 4, repeat: Infinity }}
+            transition={{ duration: 3, repeat: Infinity }}
           >
             <span className="text-cyan-300 font-semibold tracking-wider">
               Annual Tech Fest 2025
             </span>
           </motion.div>
 
-          {/* Title */}
-          <h1 className="font-orbitron text-7xl md:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 drop-shadow-[0_0_20px_rgba(0,255,255,0.4)] animate-glow-text">
+          <motion.h1
+            className="font-orbitron text-6xl sm:text-7xl md:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600"
+            animate={{
+              textShadow: [
+                "0 0 25px rgba(0,255,255,0.8)",
+                "0 0 50px rgba(0,150,255,1)",
+                "0 0 25px rgba(0,255,255,0.8)",
+              ],
+            }}
+            transition={{
+              textShadow: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+            }}
+          >
             YUGANTRAN
-          </h1>
+          </motion.h1>
 
-          {/* Sub Title */}
-          <h2 className="text-4xl md:text-5xl font-orbitron text-cyan-400 tracking-widest opacity-90 animate-pulse-slow">
+          <motion.h2
+            className="text-4xl md:text-5xl font-orbitron text-cyan-400 tracking-widest opacity-90"
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.9, 1, 0.9],
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
             2025
-          </h2>
+          </motion.h2>
 
-          {/* Slogan */}
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Innovate, Compete, and Collaborate for a{' '}
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Innovate, Compete, and Collaborate for a{" "}
             <span className="text-cyan-400 font-orbitron">Smarter Tomorrow</span>
           </p>
 
-          {/* Event Details */}
           <div className="flex flex-wrap justify-center items-center gap-6 text-gray-400">
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-cyan-400" />
@@ -107,7 +133,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6 pt-10">
             <motion.a
               href="#events"
