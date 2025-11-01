@@ -136,7 +136,7 @@ export default function Events() {
       : events.filter((event) => event.category === activeFilter);
 
   return (
-    <section id="events" className="relative py-24 overflow-hidden" ref={ref}>
+    <section id="events" className="relative py-24 overflow-visible" ref={ref}>
       {/* Background Effects */}
       <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
       <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-10 pointer-events-none" />

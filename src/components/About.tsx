@@ -57,7 +57,7 @@ export default function About() {
     <section
       id="about"
       ref={ref}
-      className="relative py-24 overflow-hidden bg-transparent"
+      className="relative py-24 overflow-visible bg-transparent"
     >
       {/* Optimized Background Effects */}
       <div className="absolute top-1/4 -left-20 w-60 h-60 bg-purple-600 rounded-full blur-2xl opacity-20 will-change-transform" />

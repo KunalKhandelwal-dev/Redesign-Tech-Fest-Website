@@ -27,7 +27,7 @@ export default function Footer() {
   );
 
   return (
-    <footer id="contact" className="relative pt-20 pb-8 overflow-hidden">
+    <footer id="contact" className="relative pt-20 pb-8 overflow-visible">
       {/* Background Blur Orbs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-10 pointer-events-none" />

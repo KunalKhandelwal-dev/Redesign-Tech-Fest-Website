@@ -67,7 +67,7 @@ function Team() {
   return (
     <section
       id="team"
-      className="relative py-24 overflow-hidden"
+      className="relative py-24 overflow-visible"
       ref={ref}
       aria-label="Team Section"
     >
