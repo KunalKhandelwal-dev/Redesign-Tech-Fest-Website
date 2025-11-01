@@ -94,10 +94,10 @@ export default function Events() {
       },
       {
         icon: Gamepad2,
-        title: "Tekken 8",
+        title: "Tekken 7",
         category: "gaming",
         description:
-          "Show your fighting skills in an electrifying Tekken 8 tournament.",
+          "Show your fighting skills in an electrifying Tekken 7 tournament.",
         prize: "Exciting Rewards",
         gradient: "from-red-500 to-rose-600",
       },

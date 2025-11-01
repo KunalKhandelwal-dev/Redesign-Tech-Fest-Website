@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "name": "Kunal Khandelwal",
+        "role": "Tech Lead",
+        "image": "/images/team/kunal.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 2,
+        "name": "Suryansh",
+        "role": "Tech Lead",
+        "image": "/images/team/suryansh.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 3,
+        "name": "Sahil Bhardwaj",
+        "role": "Sponsorship Head",
+        "image": "/images/team/sahil.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 4,
+        "name": "Tejasvi",
+        "role": "Event Management Head",
+        "image": "/images/team/tejasvi.webp",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 5,
+        "name": "Himanshu",
+        "role": "Creativity Head",
+        "image": "/images/team/himanshu.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 6,
+        "name": "Muskan Kaushik",
+        "role": "Stage Management Head",
+        "image": "/images/team/muskan.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 7,
+        "name": "Naveeta",
+        "role": "Marketing Head",
+        "image": "/images/team/naveeta.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 8,
+        "name": "Sidharth",
+        "role": "Marketing Head",
+        "image": "/images/team/sidharth.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 9,
+        "name": "Meet Bajaj",
+        "role": "Discipline Incharge",
+        "image": "/images/team/meet.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    },
+    {
+        "id": 10,
+        "name": "Apeksha",
+        "role": "Coordinator Lead",
+        "image": "/images/team/apeksha.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    }
+]

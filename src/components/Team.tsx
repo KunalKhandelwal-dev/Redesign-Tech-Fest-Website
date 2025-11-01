@@ -1,68 +1,18 @@
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
-import { useRef, memo } from "react";
+import { useRef, memo, useEffect, useState } from "react";
 import HolographicTeamCard from "./HolographicTeamCard";
+import teamData from "../data/team.json"; // ✅ Import team details from JSON
 
 function Team() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const [teamMembers, setTeamMembers] = useState<any[]>([]);
 
-  const teamMembers = [
-    {
-      name: "Dr. Rajesh Kumar",
-      role: "Faculty Coordinator",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-    {
-      name: "Priya Sharma",
-      role: "Event Head",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-    {
-      name: "Arjun Patel",
-      role: "Technical Lead",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-    {
-      name: "Sneha Reddy",
-      role: "Marketing Head",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-    {
-      name: "Vikram Singh",
-      role: "Operations Lead",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-    {
-      name: "Ananya Verma",
-      role: "Design Head",
-      image:
-        "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop",
-      linkedin: "#",
-      github: "#",
-      email: "#",
-    },
-  ];
+  // ✅ Load team data (from local JSON)
+  useEffect(() => {
+    setTeamMembers(teamData);
+  }, []);
 
   return (
     <section
@@ -71,7 +21,7 @@ function Team() {
       ref={ref}
       aria-label="Team Section"
     >
-      {/* Subtle Background Glows (GPU-friendly gradients) */}
+      {/* Background Glows */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl opacity-20 will-change-transform" />
       <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl opacity-20 will-change-transform" />
 
@@ -100,7 +50,10 @@ function Team() {
 
           <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Dedicated individuals working tirelessly to make{" "}
-            <span className="text-cyan-400 font-medium">YUGANTRAN2.0 2025</span> an unforgettable experience.
+            <span className="text-cyan-400 font-medium">
+              YUGANTRAN 2.0 (2025)
+            </span>{" "}
+            an unforgettable experience.
           </p>
         </motion.div>
 
@@ -112,11 +65,7 @@ function Team() {
           transition={{ delay: 0.3, duration: 0.8 }}
         >
           {teamMembers.map((member, index) => (
-            <HolographicTeamCard
-              key={index}
-              {...member}
-              index={index}
-            />
+            <HolographicTeamCard key={index} {...member} index={index} />
           ))}
         </motion.div>
       </div>

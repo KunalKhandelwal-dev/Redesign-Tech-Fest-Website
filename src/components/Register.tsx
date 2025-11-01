@@ -22,12 +22,16 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
 
   const events = [
-    "Code Quest",
     "Debug-It",
+    "Tech Treasure",
+    "BGMI",
+    "Tech Show",
+    "Startup Bid",
+    "Poster Making",
     "Tech Quiz",
-    "Poster/Project Showcase",
-    "Innovation Expo",
-    "Fun Tech Zone",
+    "Tekken 7",
+    "Code Quest",
+    "Project Exibition",
   ];
 
   // Validate form inputs

@@ -96,13 +96,13 @@ export default function HolographicTeamCard({
         >
           {/* Image Section */}
           <div className="relative h-80 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-pink-500/20" />
-            <ImageWithFallback
-              src={image}
-              alt={name}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
+  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-pink-500/20" />
+  <ImageWithFallback
+    src={image}
+    alt={name}
+    className="w-full h-full object-cover"
+    loading="lazy"
+  />
             {isHovered && (
               <motion.div
                 className="absolute inset-0"

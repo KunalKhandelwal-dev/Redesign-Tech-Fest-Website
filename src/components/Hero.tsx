@@ -30,6 +30,28 @@ export default function Hero() {
       className="relative z-30 min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-transparent"
       style={{ perspective: "1000px" }}
     >
+      {/* === Floating Bot Background === */}
+      <motion.img
+        src="/public/assets/bot.jpeg"
+        alt="Bot Mascot"
+        className="absolute -z-[1] w-[250px] sm:w-[350px] opacity-70 pointer-events-none select-none"
+        initial={{ y: 0, rotate: 0 }}
+        animate={{
+          y: [0, -30, 0],
+          rotate: [0, 2, -2, 0],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          top: "40%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+
       {/* === Background Glow Layer === */}
       <div className="absolute inset-0 -z-[1] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.15),transparent_70%)] blur-2xl animate-pulse-slow"></div>
@@ -124,7 +146,7 @@ export default function Hero() {
           <div className="flex flex-wrap justify-center items-center gap-6 text-gray-400">
             <div className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-cyan-400" />
-              <span>November 29, 2025</span>
+              <span>November 28, 2025</span>
             </div>
             <div className="w-1 h-1 bg-cyan-400 rounded-full" />
             <div className="flex items-center gap-2">

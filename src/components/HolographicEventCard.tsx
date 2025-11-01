@@ -53,7 +53,7 @@ export default function HolographicEventCard({
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
         animate={{
           opacity: 1,
-          scale: isHovered ? 1.05 : 1,
+          scale: isHovered ? 1.04 : 1,
           y: 0,
         }}
         transition={{
@@ -68,68 +68,54 @@ export default function HolographicEventCard({
           mouseX.set(0);
           mouseY.set(0);
         }}
+        onClick={() => setShowModal(true)}
         style={{
           rotateX,
           rotateY,
           transformStyle: "preserve-3d",
           zIndex: isHovered ? 40 : 10,
         }}
-        className="relative group perspective-1000 cursor-pointer"
+        className="relative group cursor-pointer perspective-1000"
       >
-        {/* Neon Glass Card */}
+        {/* Card Body */}
         <motion.div
-          className="relative rounded-2xl overflow-hidden border border-cyan-400/30 bg-gradient-to-b from-gray-900/80 to-black/95 backdrop-blur-xl shadow-[0_0_20px_rgba(0,255,255,0.25)]"
+          className="relative rounded-2xl overflow-hidden border border-cyan-400/30 bg-gradient-to-b from-gray-950 to-black/90 backdrop-blur-lg shadow-lg hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] transition-all duration-500"
           animate={{
             borderColor: isHovered
               ? "rgba(6,182,212,0.8)"
               : "rgba(6,182,212,0.3)",
           }}
-          transition={{ duration: 0.3 }}
         >
-          {/* Holographic shimmer border */}
-          <motion.div
-            className="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 via-pink-500 to-purple-500 opacity-30 blur-md"
-            animate={{
-              opacity: isHovered ? [0.3, 0.6, 0.3] : 0.2,
-              backgroundPositionX: isHovered ? ["0%", "200%"] : "0%",
-            }}
-            transition={{
-              duration: 3,
-              repeat: isHovered ? Infinity : 0,
-              ease: "linear",
-            }}
-          />
-
           {/* Header */}
           <div
-            className={`relative h-48 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
+            className={`relative h-44 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
           >
             <motion.div
-              className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.2),transparent_60%)]"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.15),transparent_60%)]"
               animate={{ opacity: isHovered ? 0.6 : 0.3 }}
             />
             <motion.div
               animate={{
-                scale: isHovered ? 1.15 : 1,
-                rotateY: isHovered ? 360 : 0,
+                scale: isHovered ? 1.1 : 1,
+                rotate: isHovered ? 10 : 0,
               }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.4 }}
               className="relative z-10"
             >
-              <Icon className="w-20 h-20 text-white drop-shadow-[0_0_20px_rgba(0,255,255,0.8)]" />
+              <Icon className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.7)]" />
             </motion.div>
           </div>
 
           {/* Content */}
-          <div className="p-6">
-            <h3 className="text-2xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-2 drop-shadow-[0_0_10px_rgba(0,212,255,0.5)]">
+          <div className="p-5">
+            <h3 className="text-xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-2">
               {title}
             </h3>
-            <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-3">
               {description}
             </p>
 
-            <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-black/40 border border-cyan-500/20 mb-4">
+            <div className="flex items-center justify-between bg-black/40 border border-cyan-500/20 px-3 py-2 rounded-md">
               <span className="text-xs text-cyan-400/70 uppercase tracking-wider">
                 Prize Pool
               </span>
@@ -137,32 +123,23 @@ export default function HolographicEventCard({
                 {prize}
               </span>
             </div>
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setShowModal(true)}
-              className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white shadow-[0_0_20px_rgba(0,212,255,0.5)] hover:shadow-[0_0_35px_rgba(0,212,255,0.9)] transition-all duration-300"
-            >
-              View Details
-            </motion.button>
           </div>
         </motion.div>
 
-        {/* Glow Outline */}
+        {/* Subtle glow on hover */}
         <motion.div
-          className="absolute -inset-[2px] rounded-2xl blur-2xl pointer-events-none"
+          className="absolute -inset-[1px] rounded-2xl blur-xl pointer-events-none"
           style={{
             background:
               "linear-gradient(135deg, #00d4ff, #00ffff, #b000ff, #ff00ff)",
           }}
           animate={
             isHovered
-              ? { opacity: [0.3, 0.6, 0.3] }
+              ? { opacity: [0.2, 0.5, 0.2] }
               : { opacity: 0, transition: { duration: 0.5 } }
           }
           transition={{
-            duration: isHovered ? 2 : 0.6,
+            duration: isHovered ? 2 : 0.5,
             repeat: isHovered ? Infinity : 0,
           }}
         />
@@ -179,11 +156,11 @@ export default function HolographicEventCard({
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
-            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            initial={{ scale: 0.85, opacity: 0, y: 40 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="relative w-[90%] max-w-lg bg-gradient-to-br from-gray-900/95 to-black/95 border border-cyan-500/40 rounded-2xl p-6 shadow-[0_0_40px_rgba(0,255,255,0.4)]"
+            exit={{ scale: 0.85, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 220, damping: 20 }}
+            className="relative w-[90%] max-w-lg bg-gradient-to-br from-gray-950 to-black border border-cyan-500/40 rounded-2xl p-6 shadow-[0_0_40px_rgba(0,255,255,0.4)]"
           >
             <button
               onClick={() => setShowModal(false)}
@@ -200,14 +177,10 @@ export default function HolographicEventCard({
               <p className="text-gray-300 text-sm">{description}</p>
             </div>
 
-            <motion.div
-              className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line"
-              animate={{ opacity: [0.8, 1, 0.8] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
+            <div className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line">
               {details ||
                 "Stay tuned for more information about this event and how you can participate!"}
-            </motion.div>
+            </div>
 
             <div className="mt-5 p-3 bg-black/40 border border-cyan-500/20 rounded-lg text-center font-orbitron text-cyan-300">
               💰 Prize Pool: {prize}

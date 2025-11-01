@@ -8,8 +8,8 @@ export default function Footer() {
   // ✅ Memoized arrays (prevents re-creation each render)
   const socialLinks = useMemo(
     () => [
-      { icon: Instagram, href: '#', label: 'Instagram' },
-      { icon: Linkedin, href: '#', label: 'LinkedIn' },
+      { icon: Instagram, href: 'https://www.instagram.com/geetauniversitypanipat/', label: 'Instagram' },
+      { icon: Linkedin, href: 'https://www.linkedin.com/school/geeta-university-official/posts/?feedView=all', label: 'LinkedIn' },
       { icon: Mail, href: 'mailto:yugantran@geetauniversity.edu.in', label: 'Email' },
     ],
     []
@@ -104,7 +104,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Phone className="w-5 h-5 text-cyan-400 flex-shrink-0" />
-                <span>+91 XXXXX XXXXX</span>
+                <span>+91 9211067540, +91 90537 09750</span>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Mail className="w-5 h-5 text-cyan-400 flex-shrink-0" />
@@ -129,7 +129,7 @@ export default function Footer() {
             <ul className="space-y-3 text-gray-400">
               <li>
                 <span className="block text-sm text-gray-500 mb-1">Dates</span>
-                <span className="font-orbitron text-white">November 29, 2025</span>
+                <span className="font-orbitron text-white">November 28, 2025</span>
               </li>
               <li>
                 <span className="block text-sm text-gray-500 mb-1">Venue</span>
