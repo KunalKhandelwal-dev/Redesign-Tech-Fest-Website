@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import {
   Code,
   Box,
@@ -16,8 +16,16 @@ import HolographicEventCard from "./HolographicEventCard";
 
 export default function Events() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.25 });
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [activeFilter, setActiveFilter] = useState("all");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // ✅ Detect mobile devices to bypass intersection issues
+  useEffect(() => {
+    if (window.innerWidth < 768) setIsMobile(true);
+  }, []);
+
+  const shouldAnimate = isMobile ? true : isInView;
 
   // ✅ Events List
   const events = useMemo(
@@ -26,8 +34,7 @@ export default function Events() {
         icon: Code,
         title: "Debug It",
         category: "coding",
-        description:
-          "Find and fix programming errors faster than anyone else.",
+        description: "Find and fix programming errors faster than anyone else.",
         prize: "Exciting Rewards",
         gradient: "from-cyan-500 to-blue-600",
       },
@@ -136,33 +143,29 @@ export default function Events() {
       : events.filter((event) => event.category === activeFilter);
 
   return (
-    <section id="events" className="relative py-24 overflow-visible" ref={ref}>
-      {/* Background Effects */}
-      <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-blue-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
+    <section
+      id="events"
+      ref={ref}
+      className="relative py-24 overflow-visible scroll-mt-16"
+    >
+      {/* Background Light Effects */}
+      <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-blue-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
+      <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-purple-600 rounded-full blur-3xl opacity-10 pointer-events-none" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.4 }}
-            className="inline-block mb-4"
-          >
-            <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400">
-              Our Events
-            </span>
-          </motion.div>
+          <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400 inline-block mb-4">
+            Our Events
+          </span>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron mb-6">
-            <span className="gradient-text">Compete</span> in Cutting-Edge
-            Events
+            <span className="gradient-text">Compete</span> in Cutting-Edge Events
           </h2>
           <p className="text-lg text-gray-400 max-w-3xl mx-auto">
             Choose from a diverse range of technical competitions designed to
@@ -173,18 +176,16 @@ export default function Events() {
         {/* Filter Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-wrap items-center justify-center gap-3 mb-12"
         >
           {filters.map((filter, index) => (
             <motion.button
               key={filter.id}
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.3 + index * 0.05 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.97 }}
+              transition={{ delay: 0.3 + index * 0.05 }}
               onClick={() => setActiveFilter(filter.id)}
               className={`px-6 py-2 rounded-full transition-all duration-300 ${
                 activeFilter === filter.id
@@ -200,7 +201,7 @@ export default function Events() {
         {/* Events Grid */}
         <motion.div
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          animate={shouldAnimate ? "visible" : "hidden"}
           variants={{
             hidden: {},
             visible: { transition: { staggerChildren: 0.1 } },
@@ -214,6 +215,7 @@ export default function Events() {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
+              transition={{ duration: 0.4 }}
             >
               <HolographicEventCard
                 icon={event.icon}
