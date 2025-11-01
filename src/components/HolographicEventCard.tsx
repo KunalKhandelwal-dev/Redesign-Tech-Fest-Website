@@ -77,7 +77,7 @@ export default function HolographicEventCard({
         }}
         className="relative group cursor-pointer perspective-1000"
       >
-        {/* Card Body */}
+        {/* === Card Body === */}
         <motion.div
           className="relative rounded-2xl overflow-hidden border border-cyan-400/30 bg-gradient-to-b from-gray-950 to-black/90 backdrop-blur-lg shadow-lg hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] transition-all duration-500"
           animate={{
@@ -86,7 +86,7 @@ export default function HolographicEventCard({
               : "rgba(6,182,212,0.3)",
           }}
         >
-          {/* Header */}
+          {/* === Header Section === */}
           <div
             className={`relative h-44 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
           >
@@ -106,16 +106,16 @@ export default function HolographicEventCard({
             </motion.div>
           </div>
 
-          {/* Content */}
-          <div className="p-5">
-            <h3 className="text-xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 mb-2">
+          {/* === Content Section === */}
+          <div className="p-6 space-y-4">
+            <h3 className="text-xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               {title}
             </h3>
-            <p className="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-3">
+            <p className="text-gray-300 text-sm leading-relaxed min-h-[60px]">
               {description}
             </p>
 
-            <div className="flex items-center justify-between bg-black/40 border border-cyan-500/20 px-3 py-2 rounded-md">
+            <div className="flex items-center justify-between bg-black/40 border border-cyan-500/20 px-4 py-3 rounded-md mt-3">
               <span className="text-xs text-cyan-400/70 uppercase tracking-wider">
                 Prize Pool
               </span>
@@ -126,7 +126,7 @@ export default function HolographicEventCard({
           </div>
         </motion.div>
 
-        {/* Subtle glow on hover */}
+        {/* === Glow Effect === */}
         <motion.div
           className="absolute -inset-[1px] rounded-2xl blur-xl pointer-events-none"
           style={{
@@ -145,7 +145,7 @@ export default function HolographicEventCard({
         />
       </motion.div>
 
-      {/* ===== Modal ===== */}
+      {/* === Modal === */}
       {showModal && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
@@ -174,10 +174,10 @@ export default function HolographicEventCard({
               <h2 className="text-3xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">
                 {title}
               </h2>
-              <p className="text-gray-300 text-sm">{description}</p>
+              <p className="text-gray-300 text-sm px-2">{description}</p>
             </div>
 
-            <div className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line">
+            <div className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line px-2">
               {details ||
                 "Stay tuned for more information about this event and how you can participate!"}
             </div>

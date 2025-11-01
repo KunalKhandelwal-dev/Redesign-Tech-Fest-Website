@@ -31,50 +31,37 @@ export default function Hero() {
       style={{ perspective: "1000px" }}
     >
       {/* === BOT + GLOWS === */}
-      {/* === BOT + GLOWS (optimized for readability) === */}
-<motion.div
-  className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 z-[5] flex flex-col items-center select-none pointer-events-none opacity-70"
-  animate={{ y: [0, -20, 0] }}
-  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
->
-  {/* === Soft Dark Overlay Behind Bot === */}
-  <div className="absolute inset-0 bg-black/40 blur-[30px] rounded-full z-[0]"></div>
-
-  {/* === Outer Cyan Aura (subtle) === */}
-  <motion.div
-    className="absolute w-[720px] h-[720px] rounded-full bg-cyan-400/15 blur-[120px] z-[1]"
-    animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.05, 1] }}
-    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-  />
-
-  {/* === Holographic Base Glow (reduced intensity) === */}
-  <motion.div
-    className="absolute bottom-[-60px] w-[460px] h-[160px] rounded-full bg-cyan-300/40 blur-[130px] z-[2]"
-    animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.05, 1] }}
-    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-  />
-
-  {/* === Eye Glow (softened) === */}
-  <motion.div
-    className="absolute top-[36%] w-[180px] h-[60px] bg-cyan-300/25 blur-[30px] rounded-full z-[3]"
-    animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1] }}
-    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-  />
-
-  {/* === Bot Image (dimmed + soft blend) === */}
-  <motion.img
-    src="/images/bot/bot.png"
-    alt="AI Bot"
-    className="w-[600px] md:w-[780px] opacity-[0.38] mix-blend-soft-light z-[4] backdrop-blur-[1px]"
-    initial={{ scale: 0.9, opacity: 0 }}
-    animate={{ scale: 1, opacity: 0.38 }}
-    transition={{ duration: 1.2, ease: "easeOut" }}
-  />
-
-  {/* === Gradient Overlay Behind Bot (stronger darkening) === */}
-  <div className="absolute inset-0 bg-gradient-to-t from-[#00001a]/90 via-[#00001a]/70 to-transparent pointer-events-none z-[0]"></div>
-</motion.div>
-
+      <motion.div
+        className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 z-[5] flex flex-col items-center select-none pointer-events-none opacity-70"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="absolute inset-0 bg-black/40 blur-[30px] rounded-full z-[0]" />
+        <motion.div
+          className="absolute w-[720px] h-[720px] rounded-full bg-cyan-400/15 blur-[120px] z-[1]"
+          animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.05, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[-60px] w-[460px] h-[160px] rounded-full bg-cyan-300/40 blur-[130px] z-[2]"
+          animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.05, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-[36%] w-[180px] h-[60px] bg-cyan-300/25 blur-[30px] rounded-full z-[3]"
+          animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.img
+          src="/images/bot/bot.png"
+          alt="AI Bot"
+          className="w-[600px] md:w-[780px] opacity-[0.38] mix-blend-soft-light z-[4] backdrop-blur-[1px]"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.38 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#00001a]/90 via-[#00001a]/70 to-transparent pointer-events-none z-[0]" />
+      </motion.div>
 
       {/* === Background Glow & Grid === */}
       <div className="absolute inset-0 -z-20 overflow-hidden">
@@ -83,28 +70,7 @@ export default function Hero() {
         <CircuitSparks />
       </div>
 
-      {/* === Energy Rings === */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"
-        initial={{ scale: 0.7, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.7 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-      >
-        <motion.div
-          className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-cyan-400/40 blur-sm"
-          style={{ transformStyle: "preserve-3d", rotateX: "60deg" }}
-          animate={{ rotateZ: 360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute inset-0 w-[700px] h-[700px] rounded-full border border-blue-500/20 blur-md"
-          style={{ transformStyle: "preserve-3d", rotateX: "60deg", rotateY: "30deg" }}
-          animate={{ rotateZ: -360 }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-        />
-      </motion.div>
-
-      {/* === HERO TEXT CONTENT === */}
+      {/* === HERO CONTENT === */}
       <motion.div
         style={{ rotateX, rotateY }}
         className="relative z-20 container mx-auto px-6 text-center"
@@ -123,21 +89,35 @@ export default function Hero() {
             </span>
           </motion.div>
 
+          {/* === GLowing Title === */}
           <motion.h1
-            className="font-orbitron text-6xl sm:text-7xl md:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600"
+            className="font-orbitron text-6xl sm:text-7xl md:text-8xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-text-glow"
             animate={{
               textShadow: [
-                "0 0 25px rgba(0,255,255,0.8)",
-                "0 0 50px rgba(0,150,255,1)",
-                "0 0 25px rgba(0,255,255,0.8)",
+                "0 0 20px rgba(0,255,255,0.6)",
+                "0 0 35px rgba(0,150,255,0.9)",
+                "0 0 50px rgba(140,0,255,0.8)",
+                "0 0 25px rgba(0,255,255,0.6)",
               ],
             }}
             transition={{
-              textShadow: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+              textShadow: { duration: 6, repeat: Infinity, ease: "easeInOut" },
             }}
           >
             YUGANTRAN2.0
           </motion.h1>
+
+          <style>{`
+            @keyframes text-glow {
+              0%, 100% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+            }
+            .animate-text-glow {
+              background-size: 300% 300%;
+              animation: text-glow 6s ease-in-out infinite;
+              filter: drop-shadow(0 0 12px rgba(0,255,255,0.5));
+            }
+          `}</style>
 
           <motion.h2
             className="text-4xl md:text-5xl font-orbitron text-cyan-400 tracking-widest opacity-90"

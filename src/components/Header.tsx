@@ -21,6 +21,21 @@ export default function Header() {
     { name: 'Contact', href: '#contact' },
   ];
 
+  // 🧩 Smooth scroll with offset for fixed header
+  const handleSmoothScroll = (id: string) => {
+    const target = document.querySelector(id);
+    if (target) {
+      const headerOffset = 80; // height of your fixed header
+      const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <motion.header
       initial={{ y: -80 }}
@@ -32,7 +47,7 @@ export default function Header() {
     >
       <div className="container mx-auto px-4 lg:px-8">
         <nav className="flex items-center justify-between h-20">
-          {/* --- Logo --- */}
+          {/* Logo */}
           <motion.a
             href="#home"
             className="flex items-center gap-2 font-orbitron group"
@@ -46,7 +61,7 @@ export default function Header() {
             </div>
           </motion.a>
 
-          {/* --- Desktop Navigation --- */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
               <motion.a
@@ -63,7 +78,7 @@ export default function Header() {
             ))}
           </div>
 
-          {/* --- CTA Button (Desktop) --- */}
+          {/* CTA Button (Desktop) */}
           <motion.a
             href="#register"
             whileHover={{ scale: 1.05 }}
@@ -73,7 +88,7 @@ export default function Header() {
             Register Now
           </motion.a>
 
-          {/* --- Mobile Menu Button --- */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-cyan-400"
@@ -84,7 +99,7 @@ export default function Header() {
         </nav>
       </div>
 
-      {/* --- Mobile Menu --- */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -96,26 +111,30 @@ export default function Header() {
           >
             <div className="container mx-auto px-4 py-6 space-y-4">
               {navItems.map((item) => (
-                <motion.a
+                <motion.button
                   key={item.name}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setTimeout(() => handleSmoothScroll(item.href), 400); // wait for close animation
+                  }}
                   whileHover={{ x: 8 }}
                   transition={{ duration: 0.2 }}
-                  className="block py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                  className="block w-full text-left py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
                 >
                   {item.name}
-                </motion.a>
+                </motion.button>
               ))}
-              <motion.a
-                href="#register"
-                onClick={() => setIsMobileMenuOpen(false)}
+              <motion.button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setTimeout(() => handleSmoothScroll('#register'), 400);
+                }}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
-                className="block w-full py-3 text-center bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron"
+                className="block w-full py-3 text-center bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white"
               >
                 Register Now
-              </motion.a>
+              </motion.button>
             </div>
           </motion.div>
         )}

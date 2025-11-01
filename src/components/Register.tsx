@@ -1,7 +1,27 @@
 import { motion } from "motion/react";
 import { useInView } from "motion/react";
 import { useRef, useState } from "react";
-import { User, Phone, Building2, Send, CheckCircle, Loader2 } from "lucide-react";
+import {
+  User,
+  Phone,
+  Building2,
+  Send,
+  CheckCircle,
+  Loader2,
+  Bug,
+  Search,
+  Gamepad2,
+  Monitor,
+  TrendingUp,
+  Image,
+  HelpCircle,
+  Gamepad,
+  Code,
+  FolderOpen,
+  Hash,
+  Briefcase,
+  BookOpen,
+} from "lucide-react";
 
 export default function Register() {
   const ref = useRef(null);
@@ -21,20 +41,21 @@ export default function Register() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const events = [
-    "Debug-It",
-    "Tech Treasure",
-    "BGMI",
-    "Tech Show",
-    "Startup Bid",
-    "Poster Making",
-    "Tech Quiz",
-    "Tekken 7",
-    "Code Quest",
-    "Project Exibition",
+  // events + icon mapping
+  const events: { id: string; label: string; Icon: any }[] = [
+    { id: "debug-it", label: "Debug-It", Icon: Bug },
+    { id: "tech-treasure", label: "Tech Treasure", Icon: Search },
+    { id: "bgmi", label: "BGMI", Icon: Gamepad2 },
+    { id: "tech-show", label: "Tech Show", Icon: Monitor },
+    { id: "startup-bid", label: "Startup Bid", Icon: TrendingUp },
+    { id: "poster-making", label: "Poster Making", Icon: Image },
+    { id: "tech-quiz", label: "Tech Quiz", Icon: HelpCircle },
+    { id: "tekken-7", label: "Tekken 7", Icon: Gamepad },
+    { id: "code-quest", label: "Code Quest", Icon: Code },
+    { id: "project-exhibition", label: "Project Exhibition", Icon: FolderOpen },
   ];
 
-  // Validate form inputs
+  // ✅ Validation
   const validate = (data: typeof formData) => {
     const newErrors: Record<string, string> = {};
     if (!data.name.trim()) newErrors.name = "Full name is required.";
@@ -43,45 +64,39 @@ export default function Register() {
     if (!data.semester.trim()) newErrors.semester = "Semester is required.";
     if (!/^[0-9]{10}$/.test(data.mobileNumber))
       newErrors.mobileNumber = "Enter a valid 10-digit mobile number.";
-    if (data.eventType.length === 0)
-      newErrors.eventType = "Select at least one event.";
     if (!data.college.trim())
       newErrors.college = "College/University name is required.";
-
+    if (data.eventType.length === 0)
+      newErrors.eventType = "Select at least one event.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle input changes
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+  // ✅ Handle text inputs
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
+  // ✅ Toggle event selection (multi-select)
+  const toggleEvent = (eventLabel: string) => {
     setFormData((prev) => {
-      if (type === "checkbox") {
-        const updatedEvents = checked
-          ? [...prev.eventType, value]
-          : prev.eventType.filter((ev) => ev !== value);
-        return { ...prev, eventType: updatedEvents };
-      }
-      return { ...prev, [name]: value };
+      const isSelected = prev.eventType.includes(eventLabel);
+      return {
+        ...prev,
+        eventType: isSelected
+          ? prev.eventType.filter((ev) => ev !== eventLabel)
+          : [...prev.eventType, eventLabel],
+      };
     });
   };
 
-  // Handle form submission
+  // ✅ Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const valid = validate(formData);
-    if (!valid) return;
+    if (!validate(formData)) return;
 
     setLoading(true);
-
-    const payload = {
-      ...formData,
-      eventType: formData.eventType.join(", "),
-    };
-
     const backendUrl =
       import.meta.env.VITE_BACKEND_URL || "https://server-cr2m.onrender.com";
 
@@ -89,7 +104,10 @@ export default function Register() {
       const res = await fetch(`${backendUrl}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...formData,
+          eventType: formData.eventType.join(", "),
+        }),
       });
 
       if (res.ok) {
@@ -109,7 +127,7 @@ export default function Register() {
         alert("❌ Something went wrong. Try again.");
       }
     } catch (err) {
-      console.error("Network error:", err);
+      console.error(err);
       alert("⚠️ Network error. Please try again.");
     } finally {
       setLoading(false);
@@ -122,28 +140,21 @@ export default function Register() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full blur-3xl opacity-10" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        {/* Header */}
+        {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            className="inline-block mb-4"
-          >
-            <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400">
-              Registration
-            </span>
-          </motion.div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron mb-6">
+          <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400 mb-4 inline-block">
+            Registration
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron mb-4">
             <span className="gradient-text">Join</span> YUGANTRAN2.0 2025
           </h2>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-            Register now to secure your spot at the most exciting tech fest of
-            the year!
+          <p className="text-gray-400 max-w-3xl mx-auto">
+            Register now to secure your spot at the most exciting tech fest of the year!
           </p>
         </motion.div>
 
@@ -154,10 +165,10 @@ export default function Register() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-2xl mx-auto"
         >
-          <div className="glass rounded-2xl p-8 md:p-12 glow-blue">
+          <div className="glass rounded-2xl p-6 md:p-12 glow-blue">
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Full Name */}
+                {/* Inputs with icons (balanced padding) */}
                 <InputField
                   label="Full Name"
                   name="name"
@@ -168,7 +179,6 @@ export default function Register() {
                   icon={<User className="text-cyan-400" />}
                 />
 
-                {/* Roll Number */}
                 <InputField
                   label="Roll Number"
                   name="rollNumber"
@@ -176,9 +186,9 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="Enter your roll number"
                   error={errors.rollNumber}
+                  icon={<Hash className="text-cyan-400" />}
                 />
 
-                {/* Department */}
                 <InputField
                   label="Department"
                   name="department"
@@ -186,74 +196,82 @@ export default function Register() {
                   onChange={handleChange}
                   placeholder="Enter your department"
                   error={errors.department}
+                  icon={<Briefcase className="text-cyan-400" />}
                 />
 
-                {/* Semester */}
                 <InputField
                   label="Semester"
                   name="semester"
                   value={formData.semester}
                   onChange={handleChange}
-                  placeholder="Enter your semester (e.g., 5th)"
+                  placeholder="e.g., 5th"
                   error={errors.semester}
+                  icon={<BookOpen className="text-cyan-400" />}
                 />
 
-                {/* Mobile Number */}
                 <InputField
                   label="Mobile Number"
                   name="mobileNumber"
                   value={formData.mobileNumber}
                   onChange={handleChange}
-                  placeholder="e.g. 9876543210"
+                  placeholder="9876543210"
                   error={errors.mobileNumber}
                   icon={<Phone className="text-cyan-400" />}
                 />
 
-                {/* College */}
                 <InputField
                   label="College / University"
                   name="college"
                   value={formData.college}
                   onChange={handleChange}
-                  placeholder="Enter your institution name"
+                  placeholder="Enter your college"
                   error={errors.college}
                   icon={<Building2 className="text-cyan-400" />}
                 />
 
-                {/* Event Selection */}
+                {/* Animated Event Cards (multi-select) */}
                 <div>
-                  <label className="block text-sm mb-2 text-gray-300">
-                    Select Events (choose one or more)
+                  <label className="block text-sm mb-3 text-gray-300">
+                    Select Events (one or more)
                   </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-gray-300">
-                    {events.map((event) => (
-                      <label
-                        key={event}
-                        className="flex items-center space-x-2 bg-[#111827] border border-cyan-500/20 rounded-lg px-3 py-2 cursor-pointer hover:border-cyan-400/50 transition"
-                      >
-                        <input
-                          type="checkbox"
-                          name="eventType"
-                          value={event}
-                          checked={formData.eventType.includes(event)}
-                          onChange={handleChange}
-                          className="accent-cyan-400"
-                        />
-                        <span className="text-sm">{event}</span>
-                      </label>
-                    ))}
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {events.map(({ id, label, Icon }) => {
+                      const selected = formData.eventType.includes(label);
+                      return (
+                        <motion.button
+                          key={id}
+                          type="button"
+                          onClick={() => toggleEvent(label)}
+                          whileHover={{ scale: 1.04 }}
+                          whileTap={{ scale: 0.98 }}
+                          className={`flex items-center justify-center gap-2 py-3 px-3 rounded-lg border transition-all duration-250 text-sm font-medium focus:outline-none ${
+                            selected
+                              ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white shadow-[0_6px_20px_rgba(59,130,246,0.12)]"
+                              : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/50"
+                          }`}
+                          aria-pressed={selected}
+                        >
+                          <Icon
+                            className={`w-4 h-4 ${
+                              selected ? "text-white" : "text-cyan-300"
+                            }`}
+                          />
+                          <span className="truncate">{label}</span>
+                        </motion.button>
+                      );
+                    })}
                   </div>
+
                   {errors.eventType && (
-                    <p className="text-red-400 text-sm mt-1">
-                      {errors.eventType}
-                    </p>
+                    <p className="text-red-400 text-sm mt-2">{errors.eventType}</p>
                   )}
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit */}
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                   disabled={loading}
                   className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2"
@@ -273,7 +291,7 @@ export default function Register() {
               </form>
             ) : (
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-12"
               >
@@ -282,7 +300,7 @@ export default function Register() {
                   Registration Successful!
                 </h3>
                 <p className="text-gray-400">
-                  Thank you for registering. You'll receive confirmation soon!
+                  Thank you for registering! You’ll receive a confirmation soon.
                 </p>
               </motion.div>
             )}
@@ -293,7 +311,9 @@ export default function Register() {
   );
 }
 
-// 🔹 Reusable Input Component
+/* --------------------------------------------------
+   Reusable InputField component with icon padding
+   -------------------------------------------------- */
 function InputField({
   label,
   name,
@@ -316,7 +336,7 @@ function InputField({
       <label className="block text-sm mb-2 text-gray-300">{label}</label>
       <div className="relative">
         {icon && (
-          <span className="absolute left-4 top-1/2 -translate-y-1/2">{icon}</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2">{icon}</span>
         )}
         <input
           type="text"
@@ -324,7 +344,7 @@ function InputField({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-[#1a1a2e] border border-cyan-500/30 rounded-lg ${
+          className={`w-full bg-[#0f1724] border border-cyan-500/20 rounded-lg ${
             icon ? "pl-12" : "pl-4"
           } pr-4 py-3 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20`}
         />
