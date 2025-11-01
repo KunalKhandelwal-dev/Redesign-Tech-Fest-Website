@@ -27,75 +27,87 @@ export default function Hero() {
       id="home"
       ref={heroRef}
       onMouseMove={handleMouseMove}
-      className="relative z-30 min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-transparent"
+      className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-transparent"
       style={{ perspective: "1000px" }}
     >
-      {/* === Floating Bot Background === */}
-      <motion.img
-        src="/public/assets/bot.jpeg"
-        alt="Bot Mascot"
-        className="absolute -z-[1] w-[250px] sm:w-[350px] opacity-70 pointer-events-none select-none"
-        initial={{ y: 0, rotate: 0 }}
-        animate={{
-          y: [0, -30, 0],
-          rotate: [0, 2, -2, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{
-          top: "40%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      />
+      {/* === BOT + GLOWS === */}
+      {/* === BOT + GLOWS (optimized for readability) === */}
+<motion.div
+  className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 z-[5] flex flex-col items-center select-none pointer-events-none opacity-70"
+  animate={{ y: [0, -20, 0] }}
+  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+>
+  {/* === Soft Dark Overlay Behind Bot === */}
+  <div className="absolute inset-0 bg-black/40 blur-[30px] rounded-full z-[0]"></div>
 
-      {/* === Background Glow Layer === */}
-      <div className="absolute inset-0 -z-[1] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.15),transparent_70%)] blur-2xl animate-pulse-slow"></div>
-        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(0,255,255,0.25)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.25)_1px,transparent_1px)] bg-[size:60px_60px] animate-slow-pan"></div>
+  {/* === Outer Cyan Aura (subtle) === */}
+  <motion.div
+    className="absolute w-[720px] h-[720px] rounded-full bg-cyan-400/15 blur-[120px] z-[1]"
+    animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.05, 1] }}
+    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+  />
+
+  {/* === Holographic Base Glow (reduced intensity) === */}
+  <motion.div
+    className="absolute bottom-[-60px] w-[460px] h-[160px] rounded-full bg-cyan-300/40 blur-[130px] z-[2]"
+    animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.05, 1] }}
+    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+  />
+
+  {/* === Eye Glow (softened) === */}
+  <motion.div
+    className="absolute top-[36%] w-[180px] h-[60px] bg-cyan-300/25 blur-[30px] rounded-full z-[3]"
+    animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1] }}
+    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+  />
+
+  {/* === Bot Image (dimmed + soft blend) === */}
+  <motion.img
+    src="/images/bot/bot.png"
+    alt="AI Bot"
+    className="w-[600px] md:w-[780px] opacity-[0.38] mix-blend-soft-light z-[4] backdrop-blur-[1px]"
+    initial={{ scale: 0.9, opacity: 0 }}
+    animate={{ scale: 1, opacity: 0.38 }}
+    transition={{ duration: 1.2, ease: "easeOut" }}
+  />
+
+  {/* === Gradient Overlay Behind Bot (stronger darkening) === */}
+  <div className="absolute inset-0 bg-gradient-to-t from-[#00001a]/90 via-[#00001a]/70 to-transparent pointer-events-none z-[0]"></div>
+</motion.div>
+
+
+      {/* === Background Glow & Grid === */}
+      <div className="absolute inset-0 -z-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.18),transparent_70%)] blur-2xl animate-pulse-slow"></div>
+        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(0,255,255,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.2)_1px,transparent_1px)] bg-[size:60px_60px] animate-slow-pan"></div>
         <CircuitSparks />
       </div>
 
-      {/* === Portal Animation (Faster & Always Visible) === */}
+      {/* === Energy Rings === */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"
         initial={{ scale: 0.7, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.9 }}
+        animate={{ scale: 1, opacity: 0.7 }}
         transition={{ duration: 1.2, ease: "easeInOut" }}
       >
         <motion.div
           className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-cyan-400/40 blur-sm"
           style={{ transformStyle: "preserve-3d", rotateX: "60deg" }}
           animate={{ rotateZ: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute inset-0 w-[700px] h-[700px] rounded-full border border-blue-500/30 blur-md"
+          className="absolute inset-0 w-[700px] h-[700px] rounded-full border border-blue-500/20 blur-md"
           style={{ transformStyle: "preserve-3d", rotateX: "60deg", rotateY: "30deg" }}
           animate={{ rotateZ: -360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 w-28 h-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/50 blur-3xl shadow-[0_0_60px_rgba(0,255,255,0.8)]"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
         />
       </motion.div>
 
-      {/* === Hero Text and Buttons === */}
+      {/* === HERO TEXT CONTENT === */}
       <motion.div
         style={{ rotateX, rotateY }}
-        className="relative z-10 container mx-auto px-6 text-center"
+        className="relative z-20 container mx-auto px-6 text-center"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 1 }}
