@@ -135,6 +135,8 @@ export default function Register() {
     teamMembers: [""],
     paymentReceipt: null as File | null,
     teamType: "",
+    upiId: "",           // <-- Add this
+  transactionId: "",   // <-- Add this
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -281,6 +283,10 @@ export default function Register() {
       newErrors.eventType = "Select at least one event.";
     if (!data.paymentReceipt)
       newErrors.paymentReceipt = "Please upload your payment receipt.";
+    if (data.eventType.length > 0) {
+  if (!data.upiId.trim()) newErrors.upiId = "UPI ID/UTR ID is required.";
+  if (!data.transactionId.trim()) newErrors.transactionId = "Transaction ID is required.";
+}
 
     // If team event selected -> require team fields
     const teamSelected = data.eventType.some(
@@ -371,7 +377,7 @@ export default function Register() {
         });
 
         setErrors({});
-        setTimeout(() => setSubmitted(false), 6000);
+        setTimeout(() => setSubmitted(false), 15000);
       } else {
         console.error("❌ Server returned error:", resultText);
         alert("⚠️ Something went wrong. Please try again.");
@@ -777,14 +783,49 @@ export default function Register() {
                   </div>
                 </div>
               )}
+              {formData.eventType.length > 0 && (
+  <>
+    {/* ...existing payment section... */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <InputField
+        label="UPI ID / UTR ID"
+        name="upiId"
+        value={formData.upiId}
+        onChange={handleChange}
+        placeholder="Enter your UPI ID or UTR ID"
+        error={errors.upiId}
+        icon={<IndianRupee className="text-cyan-400" />}
+      />
+      <InputField
+        label="Transaction ID"
+        name="transactionId"
+        value={formData.transactionId}
+        onChange={handleChange}
+        placeholder="Enter your Transaction ID"
+        error={errors.transactionId}
+        icon={<Hash className="text-cyan-400" />}
+      />
+    </div>
+  </>
+)}
 
               <motion.button
   type="submit"
   whileHover={{ scale: 1.03 }}
   whileTap={{ scale: 0.98 }}
-  disabled={loading || !formData.paymentReceipt} // <-- disable if no payment receipt
+  disabled={
+    loading ||
+    !formData.paymentReceipt ||
+    !formData.upiId.trim() ||
+    !formData.transactionId.trim()
+  } // <-- disable if any required field is missing
   className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2 ${
-    (!formData.paymentReceipt || loading) ? "opacity-60 cursor-not-allowed" : ""
+    (!formData.paymentReceipt ||
+      !formData.upiId.trim() ||
+      !formData.transactionId.trim() ||
+      loading)
+      ? "opacity-60 cursor-not-allowed"
+      : ""
   }`}
 >
   {loading ? (
