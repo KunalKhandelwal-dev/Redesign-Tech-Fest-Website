@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useState, useRef } from "react";
-import { Linkedin, Github, Mail } from "lucide-react";
+import { Linkedin, Instagram, Mail } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface HolographicTeamCardProps {
@@ -144,7 +144,7 @@ export default function HolographicTeamCard({
               <div className="flex gap-5 z-10">
                 {[
                   { Icon: Linkedin, color: "cyan", link: linkedin },
-                  { Icon: Github, color: "purple", link: github },
+                  { Icon: Instagram, color: "purple", link: github },
                   { Icon: Mail, color: "pink", link: email },
                 ].map(({ Icon, color, link }, i) => (
                   <motion.a
