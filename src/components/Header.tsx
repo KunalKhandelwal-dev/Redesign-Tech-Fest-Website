@@ -19,20 +19,27 @@ export default function Header() {
     { name: 'Team', href: '#team' },
     { name: 'Register', href: '#register' },
     { name: 'Contact', href: '#contact' },
+    { name: 'Rules', href: '/docs/rules.pdf', download: true }, // PDF download link
   ];
 
   // 🧩 Smooth scroll with offset for fixed header
   const handleSmoothScroll = (id: string) => {
-    const target = document.querySelector(id);
-    if (target) {
-      const headerOffset = 80; // height of your fixed header
-      const elementPosition = target.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = elementPosition - headerOffset;
+    // If it's a hash link, scroll smoothly
+    if (id.startsWith('#')) {
+      const target = document.querySelector(id);
+      if (target) {
+        const headerOffset = 80; // height of your fixed header
+        const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerOffset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    } else {
+      // For normal links (like PDF), just follow the link
+      window.location.href = id;
     }
   };
 
@@ -63,19 +70,40 @@ export default function Header() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item, index) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="relative group text-gray-300 hover:text-cyan-400 transition-colors duration-300"
-              >
-                {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300" />
-              </motion.a>
-            ))}
+            {navItems.map((item, index) =>
+              item.download ? (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  download
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="relative group text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              ) : (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="relative group text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                  onClick={e => {
+                    if (item.href.startsWith('#')) {
+                      e.preventDefault();
+                      handleSmoothScroll(item.href);
+                    }
+                  }}
+                >
+                  {item.name}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-500 group-hover:w-full transition-all duration-300" />
+                </motion.a>
+              )
+            )}
           </div>
 
           {/* CTA Button (Desktop) */}
@@ -110,20 +138,34 @@ export default function Header() {
             className="md:hidden glass border-t border-cyan-500/20"
           >
             <div className="container mx-auto px-4 py-6 space-y-4">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.name}
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    setTimeout(() => handleSmoothScroll(item.href), 400); // wait for close animation
-                  }}
-                  whileHover={{ x: 8 }}
-                  transition={{ duration: 0.2 }}
-                  className="block w-full text-left py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
-                >
-                  {item.name}
-                </motion.button>
-              ))}
+              {navItems.map((item) =>
+                item.download ? (
+                  <motion.a
+                    key={item.name}
+                    href={item.href}
+                    download
+                    whileHover={{ x: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="block w-full text-left py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </motion.a>
+                ) : (
+                  <motion.button
+                    key={item.name}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      setTimeout(() => handleSmoothScroll(item.href), 400); // wait for close animation
+                    }}
+                    whileHover={{ x: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="block w-full text-left py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                  >
+                    {item.name}
+                  </motion.button>
+                )
+              )}
               <motion.button
                 onClick={() => {
                   setIsMobileMenuOpen(false);

@@ -64,15 +64,6 @@
     },
     {
         "id": 8,
-        "name": "Sidharth",
-        "role": "Marketing Head",
-        "image": "/images/team/sidharth.jpg",
-        "linkedin": "#",
-        "github": "#",
-        "email": "#"
-    },
-    {
-        "id": 9,
         "name": "Meet Bajaj",
         "role": "Discipline Incharge",
         "image": "/images/team/meet.jpg",
@@ -81,7 +72,7 @@
         "email": "#"
     },
     {
-        "id": 10,
+        "id": 9,
         "name": "Apeksha",
         "role": "Sub Committee Head",
         "image": "/images/team/apeksha.jpg",

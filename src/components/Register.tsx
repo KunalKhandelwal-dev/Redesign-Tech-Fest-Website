@@ -21,7 +21,6 @@ import {
   Hash,
   Briefcase,
   BookOpen,
-  Upload,
   IndianRupee,
   Check,
   Users,
@@ -30,25 +29,80 @@ import {
 export default function Register() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const successRef = useRef<HTMLDivElement>(null);
 
   /* -----------------------------
      EVENT INFO CONFIG
   ----------------------------- */
   const eventInfo: Record<
     string,
-    { type: "individual" | "team"; fee: number; maxTeam?: number }
+    { 
+    type: "individual" | "team"; 
+    fee: number; 
+    maxTeam?: number; 
+    whatsapp: string; 
+  }
   > = {
-    "Debug It": { type: "individual", fee: 100 },
-    "Tech Treasure": { type: "team", fee: 100, maxTeam: 4 },
-    BGMI: { type: "team", fee: 100, maxTeam: 4 },
-    "Tech Show": { type: "team", fee: 100, maxTeam: 3 },
-    "Startup Bid": { type: "team", fee: 100, maxTeam: 5 },
-    "Poster Making": { type: "team", fee: 100, maxTeam: 2 },
-    "Tech Quiz": { type: "team", fee: 100, maxTeam: 3 },
-    "Tekken 7": { type: "individual", fee: 100 },
-    "Code Quest": { type: "team", fee: 100, maxTeam: 2 },
-    "Project Exhibition": { type: "team", fee: 100, maxTeam: 3 },
-  };
+  "Debug It": { 
+    type: "individual", 
+    fee: 100, 
+    whatsapp: "https://chat.whatsapp.com/BWVnE4wjQeM3yRTMdCm5e1" 
+  },
+  "Tech Treasure": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 4, 
+    whatsapp: "https://chat.whatsapp.com/Ee7oNF4JvkwKuIdomRRxpj" 
+  },
+  "BGMI": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 4, 
+    whatsapp: "https://chat.whatsapp.com/Busn9D6I7wa14z5VbI8W4A" 
+  },
+  "Tech Show": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 3, 
+    whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7" 
+  },
+  "Startup Bid": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 5, 
+    whatsapp: "https://chat.whatsapp.com/HypSXtHqVcY18mKmKBcIdZ" 
+  },
+  "Poster Making": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 2, 
+    whatsapp: "https://chat.whatsapp.com/Lt04XGiL4E7L83yMVAOFgN" 
+  },
+  "Tech Quiz": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 3, 
+    whatsapp: "https://chat.whatsapp.com/F0YqBqx65x69tTzd1ASrpL" 
+  },
+  "Tekken 7": { 
+    type: "individual", 
+    fee: 100, 
+    whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M" 
+  },
+  "Code Quest": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 2, 
+    whatsapp: "https://chat.whatsapp.com/CC17GJQQ6buDc00EGDBOr2" 
+  },
+  "Project Exhibition": { 
+    type: "team", 
+    fee: 100, 
+    maxTeam: 3, 
+    whatsapp: "https://chat.whatsapp.com/LdlXwMnUD7L8URzB9PXV9Y" 
+  }
+}
+;
 
   /* -----------------------------
      ICON MAP (for toast & buttons)
@@ -86,6 +140,7 @@ export default function Register() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [lastRegisteredEvent, setLastRegisteredEvent] = useState<string | null>(null);
 
   // For toast popup (slide up + fade out)
   const [toast, setToast] = useState<{ label: string; Icon?: any } | null>(null);
@@ -178,16 +233,16 @@ export default function Register() {
         };
       }
 
-      const remainingIndividuals = prev.eventType.filter(
-        (e) => eventInfo[e]?.type === "individual"
-      );
+      // const remainingIndividuals = prev.eventType.filter(
+      //   (e) => eventInfo[e]?.type === "individual"
+      // );
       return {
-        ...prev,
-        eventType: [...remainingIndividuals, label],
-        teamName: "",
-        teamMembers: [""],
-        teamType: "individual",
-      };
+      ...prev,
+      eventType: [label],
+      teamName: "",
+      teamMembers: [""],
+      teamType: "individual",
+    };
     });
   };
 
@@ -291,6 +346,14 @@ export default function Register() {
       if (res.ok) {
         console.log("✅ Registration Response:", resultText);
         setSubmitted(true);
+
+        // Store the event name before resetting formData
+  setLastRegisteredEvent(formData.eventType[0] || null);
+
+        // Scroll to the success popup
+        setTimeout(() => {
+          successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
 
         // ✅ Reset form fields
         setFormData({
@@ -450,162 +513,159 @@ export default function Register() {
               </div>
 
               {/* Event Selection */}
-<div className="mt-6 bg-[#0a0f1c]/70 border border-cyan-500/20 rounded-2xl p-8 shadow-lg shadow-cyan-500/10 backdrop-blur-md">
-  <h3 className="text-xl font-semibold text-center mb-8 text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]">
-    Select Your Events
-  </h3>
+              <div className="mt-6 bg-[#0a0f1c]/70 border border-cyan-500/20 rounded-2xl p-8 shadow-lg shadow-cyan-500/10 backdrop-blur-md">
+                <h3 className="text-xl font-semibold text-center mb-8 text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]">
+                  Select Your Events
+                </h3>
 
-  {/* Stack vertically */}
-<div className="flex flex-col gap-8">
-  {/* ✅ MOBILE VERSION */}
-  <div className="block sm:hidden space-y-8">
-    {/* Individual Events (Mobile) */}
-    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
-      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
-        Individual Events
-      </h4>
-      <div className="grid grid-cols-2 gap-3">
-        {individualEvents.map(({ label, Icon }) => {
-          const selected = formData.eventType.includes(label);
-          const selectedStyle = selected
-            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
-            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
-          return (
-            <motion.button
-              key={label}
-              type="button"
-              onClick={() => toggleEvent(label)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
-            >
-              {selected ? (
-                <Check className="w-3 h-3" />
-              ) : (
-                <Icon className="w-3 h-3 text-cyan-300" />
-              )}
-              {label}
-            </motion.button>
-          );
-        })}
-      </div>
-    </div>
+                {/* Stack vertically */}
+                <div className="flex flex-col gap-8">
+                  {/* ✅ MOBILE VERSION */}
+                  <div className="block sm:hidden space-y-8">
+                    {/* Individual Events (Mobile) */}
+                    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
+                      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
+                        Individual Events
+                      </h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {individualEvents.map(({ label, Icon }) => {
+                          const selected = formData.eventType.includes(label);
+                          const selectedStyle = selected
+                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+                            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+                          return (
+                            <motion.button
+                              key={label}
+                              type="button"
+                              onClick={() => toggleEvent(label)}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
+                            >
+                              {selected ? (
+                                <Check className="w-3 h-3" />
+                              ) : (
+                                <Icon className="w-3 h-3 text-cyan-300" />
+                              )}
+                              {label}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-    {/* Team Events (Mobile) */}
-    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
-      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
-        Team Events
-      </h4>
-      <div className="grid grid-cols-2 gap-3">
-        {teamEvents.map(({ label, Icon }) => {
-          const selected = formData.eventType.includes(label);
-          const selectedStyle = selected
-            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
-            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
-          return (
-            <motion.button
-              key={label}
-              type="button"
-              onClick={() => toggleEvent(label)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
-            >
-              {selected ? (
-                <Check className="w-3 h-3" />
-              ) : (
-                <Icon className="w-3 h-3 text-cyan-300" />
-              )}
-              {label}
-            </motion.button>
-          );
-        })}
-      </div>
-    </div>
-  </div>
+                    {/* Team Events (Mobile) */}
+                    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
+                      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
+                        Team Events
+                      </h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        {teamEvents.map(({ label, Icon }) => {
+                          const selected = formData.eventType.includes(label);
+                          const selectedStyle = selected
+                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+                            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+                          return (
+                            <motion.button
+                              key={label}
+                              type="button"
+                              onClick={() => toggleEvent(label)}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
+                            >
+                              {selected ? (
+                                <Check className="w-3 h-3" />
+                              ) : (
+                                <Icon className="w-3 h-3 text-cyan-300" />
+                              )}
+                              {label}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
 
-  {/* 💻 LAPTOP VERSION (your old layout) */}
-  <div className="hidden sm:flex flex-col gap-8">
-    {/* Individual Events */}
-    <div className="border border-cyan-500/30 rounded-xl p-6 bg-[#0b1220]/60 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all">
-      <h4 className="text-lg font-semibold mb-5 text-cyan-300 text-center">
-        Individual Events
-      </h4>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-2">
-        {individualEvents.map(({ label, Icon }) => {
-          const selected = formData.eventType.includes(label);
-          const selectedStyle = selected
-            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
-            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
-          return (
-            <motion.button
-              key={label}
-              type="button"
-              onClick={() => toggleEvent(label)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center justify-center gap-2 py-3 px-5 rounded-lg border text-sm font-medium ${selectedStyle}`}
-            >
-              {selected ? (
-                <Check className="w-4 h-4" />
-              ) : (
-                <Icon className="w-4 h-4 text-cyan-300" />
-              )}
-              {label}
-            </motion.button>
-          );
-        })}
-      </div>
-    </div>
+                  {/* 💻 LAPTOP VERSION (your old layout) */}
+                  <div className="hidden sm:flex flex-col gap-8">
+                    {/* Individual Events */}
+                    <div className="border border-cyan-500/30 rounded-xl p-6 bg-[#0b1220]/60 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all">
+                      <h4 className="text-lg font-semibold mb-5 text-cyan-300 text-center">
+                        Individual Events
+                      </h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-2">
+                        {individualEvents.map(({ label, Icon }) => {
+                          const selected = formData.eventType.includes(label);
+                          const selectedStyle = selected
+                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+                            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+                          return (
+                            <motion.button
+                              key={label}
+                              type="button"
+                              onClick={() => toggleEvent(label)}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`flex items-center justify-center gap-2 py-3 px-5 rounded-lg border text-sm font-medium ${selectedStyle}`}
+                            >
+                              {selected ? (
+                                <Check className="w-4 h-4" />
+                              ) : (
+                                <Icon className="w-4 h-4 text-cyan-300" />
+                              )}
+                              {label}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-    {/* Team Events */}
-    <div className="border border-cyan-500/30 rounded-xl p-6 bg-[#0b1220]/60 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all">
-      <h4 className="text-lg font-semibold mb-5 text-cyan-300 text-center">
-        Team Events
-      </h4>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-2">
-        {teamEvents.map(({ label, Icon }) => {
-          const selected = formData.eventType.includes(label);
-          const selectedStyle = selected
-            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
-            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
-          return (
-            <motion.button
-              key={label}
-              type="button"
-              onClick={() => toggleEvent(label)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className={`flex items-center justify-center gap-2 py-3 px-5 rounded-lg border text-sm font-medium ${selectedStyle}`}
-            >
-              {selected ? (
-                <Check className="w-4 h-4" />
-              ) : (
-                <Icon className="w-4 h-4 text-cyan-300" />
-              )}
-              {label}
-            </motion.button>
-          );
-        })}
-      </div>
-    </div>
-  </div>
-</div>
+                    {/* Team Events */}
+                    <div className="border border-cyan-500/30 rounded-xl p-6 bg-[#0b1220]/60 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all">
+                      <h4 className="text-lg font-semibold mb-5 text-cyan-300 text-center">
+                        Team Events
+                      </h4>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 px-2">
+                        {teamEvents.map(({ label, Icon }) => {
+                          const selected = formData.eventType.includes(label);
+                          const selectedStyle = selected
+                            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+                            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+                          return (
+                            <motion.button
+                              key={label}
+                              type="button"
+                              onClick={() => toggleEvent(label)}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.98 }}
+                              className={`flex items-center justify-center gap-2 py-3 px-5 rounded-lg border text-sm font-medium ${selectedStyle}`}
+                            >
+                              {selected ? (
+                                <Check className="w-4 h-4" />
+                              ) : (
+                                <Icon className="w-4 h-4 text-cyan-300" />
+                              )}
+                              {label}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
+                {errors.eventType && (
+                  <p className="text-red-400 text-sm mt-3 text-center">
+                    {errors.eventType}
+                  </p>
+                )}
+              </div>
 
-
-  {errors.eventType && (
-    <p className="text-red-400 text-sm mt-3 text-center">
-      {errors.eventType}
-    </p>
-  )}
-
-  <p className="text-sm mt-6 text-center text-cyan-300/90 font-medium tracking-wide drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]">
-    ⚡ Choose multiple individual events or a single team event.
-  </p>
-</div>
-
-
+              {/* Info text below the event selection box */}
+              <p className="text-sm mt-6 text-center text-cyan-300/90 font-medium tracking-wide drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]">
+                ⚡ Choose individual event or a team event.
+              </p>
 
               {/* Team Section */}
               {isTeamEventSelected && (
@@ -692,7 +752,7 @@ export default function Register() {
                   <div>
                     <p className="text-gray-400 text-sm">Scan the QR below to pay</p>
                     <img
-                      src="/images/bot/qr.png"
+                      src="/images/bot/yashQR.jpg"
                       alt="Payment QR"
                       className="mx-auto w-36 h-36 rounded-lg border border-cyan-500/20"
                     />
@@ -719,37 +779,66 @@ export default function Register() {
               )}
 
               <motion.button
-                type="submit"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" /> Submitting...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5" /> Register Now
-                  </>
-                )}
-              </motion.button>
+  type="submit"
+  whileHover={{ scale: 1.03 }}
+  whileTap={{ scale: 0.98 }}
+  disabled={loading || !formData.paymentReceipt} // <-- disable if no payment receipt
+  className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2 ${
+    (!formData.paymentReceipt || loading) ? "opacity-60 cursor-not-allowed" : ""
+  }`}
+>
+  {loading ? (
+    <>
+      <Loader2 className="w-5 h-5 animate-spin" /> {/* <-- animate-spin added */}
+      Submitting...
+    </>
+  ) : (
+    <>
+      <Send className="w-5 h-5" /> Register Now
+    </>
+  )}
+</motion.button>
             </form>
           ) : (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-12"
-            >
-              <CheckCircle className="w-20 h-20 text-green-400 mx-auto mb-6" />
-              <h3 className="text-3xl font-orbitron gradient-text mb-4">
-                Registration Successful!
-              </h3>
-              <p className="text-gray-400">
-                Thank you for registering! Your payment receipt has been received.
-              </p>
-            </motion.div>
+  ref={successRef}
+  initial={{ opacity: 0, scale: 0.9 }}
+  animate={{ opacity: 1, scale: 1 }}
+  className="text-center py-12"
+>
+  <CheckCircle className="w-20 h-20 text-green-400 mx-auto mb-6" />
+  <h3 className="text-3xl font-orbitron gradient-text mb-4">
+    Registration Successful!
+  </h3>
+  <p className="text-gray-400 mb-6">
+    Thank you for registering! Your payment receipt has been received.
+  </p>
+  {/* WhatsApp group link and message */}
+  {(() => {
+    // Get the event name (should be only one in eventType)
+    const eventName = lastRegisteredEvent;
+  const whatsapp = eventName ? eventInfo[eventName]?.whatsapp : null;
+    return whatsapp ? (
+      <div className="mt-6 flex flex-col items-center gap-3">
+        <p className="text-cyan-300 font-medium">
+          Join the WhatsApp group for <span className="font-bold">{eventName}</span> to get all updates and announcements!
+        </p>
+        <a
+          href={whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition"
+        >
+          <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor"><path d="M16.001 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.6 4.47 1.74 6.41l-1.84 6.73a1.6 1.6 0 0 0 1.96 1.96l6.73-1.84a12.74 12.74 0 0 0 6.41 1.74c7.06 0 12.8-5.74 12.8-12.8s-5.74-12.8-12.8-12.8zm0 23.04c-2.07 0-4.1-.54-5.87-1.56l-.42-.24-5.01 1.37 1.37-5.01-.24-.42a10.23 10.23 0 0 1-1.56-5.87c0-5.66 4.6-10.24 10.24-10.24s10.24 4.58 10.24 10.24-4.6 10.24-10.24 10.24zm5.61-7.67c-.31-.16-1.83-.91-2.11-1.01-.28-.1-.48-.16-.68.16-.2.31-.77 1.01-.94 1.21-.17.2-.35.23-.66.08-.31-.16-1.31-.48-2.5-1.53-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.13-.63.13-.13.31-.35.47-.53.16-.18.21-.31.31-.51.1-.2.05-.38-.03-.53-.08-.16-.68-1.63-.93-2.23-.24-.58-.48-.5-.68-.51-.18-.01-.38-.01-.58-.01-.2 0-.53.08-.81.38-.28.31-1.07 1.05-1.07 2.56 0 1.51 1.09 2.97 1.24 3.18.15.2 2.14 3.28 5.19 4.47.73.31 1.3.5 1.74.64.73.23 1.39.2 1.91.12.58-.09 1.83-.75 2.09-1.48.26-.73.26-1.36.18-1.48-.08-.12-.28-.2-.59-.36z"/></svg>
+          Join WhatsApp Group
+        </a>
+        <p className="text-xs text-gray-400 mt-2">
+          Please join the group to receive important event updates and instructions.
+        </p>
+      </div>
+    ) : null;
+  })()}
+</motion.div>
           )}
         </div>
       </div>

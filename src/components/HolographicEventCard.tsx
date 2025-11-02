@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LucideIcon, X, Info } from "lucide-react";
 
 interface HolographicEventCardProps {
@@ -27,6 +27,18 @@ export default function HolographicEventCard({
 }: HolographicEventCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showModal]);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const mouseX = useMotionValue(0);
@@ -166,7 +178,7 @@ export default function HolographicEventCard({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{
-                opacity: isHovered || showModal ? 1 : 0,
+                opacity: isHovered ? 1 : 0,
               }}
               transition={{ duration: 0.4 }}
               className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 border border-cyan-400/50 text-cyan-300 text-xs sm:text-sm font-orbitron tracking-wide shadow-[0_0_10px_rgba(0,255,255,0.7)] animate-pulse-glow pointer-events-none select-none"
