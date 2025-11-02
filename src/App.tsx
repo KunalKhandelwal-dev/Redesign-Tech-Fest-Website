@@ -24,8 +24,8 @@ export default function App() {
           <Hero />
           <About />
           <Events />
-          <Team />
           <Register />
+          <Team />
         </main>
 
         {/* Footer */}

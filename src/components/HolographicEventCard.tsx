@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useState, useRef } from "react";
-import { LucideIcon, X } from "lucide-react";
+import { LucideIcon, X, Info } from "lucide-react";
 
 interface HolographicEventCardProps {
   icon: LucideIcon;
@@ -10,6 +10,8 @@ interface HolographicEventCardProps {
   gradient: string;
   index: number;
   details?: string;
+  teamSize?: string;
+  onSelectEvent?: (eventName: string) => void;
 }
 
 export default function HolographicEventCard({
@@ -20,6 +22,8 @@ export default function HolographicEventCard({
   gradient,
   index,
   details,
+  teamSize,
+  onSelectEvent,
 }: HolographicEventCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -46,8 +50,83 @@ export default function HolographicEventCard({
     mouseY.set((e.clientY - centerY) / (rect.height / 2));
   };
 
+  // ✅ Event-specific details and team sizes
+  const eventData: Record<
+    string,
+    { details: string; teamSize: string; fee?: string }
+  > = {
+    "Debug It": {
+      details:
+        "Participants will be provided buggy code snippets. Identify and fix errors to make the program run correctly within the shortest time.",
+      teamSize: "Individual Participation",
+      fee: "₹100",
+    },
+    "Tech Treasure": {
+      details:
+        "A treasure hunt of logic and tech clues! Solve puzzles and follow hints that lead to the treasure.",
+      teamSize: "2–4 Members",
+      fee: "₹100",
+    },
+    BGMI: {
+      details:
+        "Battle it out in the ultimate BGMI competition. Squad up and survive till the end to win prizes!",
+      teamSize: "Squad (4 Players)",
+      fee: "₹100 per team",
+    },
+    "Tech Show": {
+      details:
+        "Showcase your innovative technology, hardware prototypes, or research models.",
+      teamSize: "1–3 Members",
+      fee: "₹100",
+    },
+    "Startup Bid": {
+      details:
+        "Pitch your startup ideas to potential investors and mentors.",
+      teamSize: "2–5 Members",
+      fee: "₹100",
+    },
+    "Poster Making": {
+      details:
+        "Design creative posters that communicate ideas on technology or social causes.",
+      teamSize: "Individual / Duo",
+      fee: "₹100",
+    },
+    "Tech Quiz": {
+      details:
+        "Test your technical and general knowledge in this fast-paced quiz.",
+      teamSize: "2–3 Members",
+      fee: "₹100",
+    },
+    "Tekken 7": {
+      details:
+        "Prove your combat mastery in the ultimate Tekken 7 face-off.",
+      teamSize: "Individual",
+      fee: "₹100",
+    },
+    "Code Quest": {
+      details:
+        "Compete in timed programming challenges and algorithmic problems.",
+      teamSize: "1–2 Members",
+      fee: "₹100",
+    },
+    "Project Exhibition": {
+      details:
+        "Showcase your academic, mini, or major projects with innovation.",
+      teamSize: "1–3 Members",
+      fee: "₹100",
+    },
+  };
+
+  const eventDetail = eventData[title] || {
+    details:
+      "This event challenges participants to showcase their creativity, teamwork, and innovation.",
+    teamSize: "1–4 Members",
+    fee: "₹100",
+  };
+
   return (
     <>
+      {/* === Event Card === */}
       <motion.div
         ref={cardRef}
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
@@ -77,36 +156,28 @@ export default function HolographicEventCard({
         }}
         className="relative group cursor-pointer perspective-1000"
       >
-        {/* === Card Body === */}
-        <motion.div
-          className="relative rounded-2xl overflow-hidden border border-cyan-400/30 bg-gradient-to-b from-gray-950 to-black/90 backdrop-blur-lg shadow-lg hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] transition-all duration-500"
-          animate={{
-            borderColor: isHovered
-              ? "rgba(6,182,212,0.8)"
-              : "rgba(6,182,212,0.3)",
-          }}
-        >
-          {/* === Header Section === */}
+        <motion.div className="relative rounded-2xl overflow-hidden border border-cyan-400/30 bg-gradient-to-b from-gray-950 to-black/90 backdrop-blur-lg shadow-lg hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] transition-all duration-500">
           <div
-            className={`relative h-44 bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden`}
+            className={`relative h-44 bg-gradient-to-br ${gradient} flex items-center justify-center`}
           >
+            <Icon className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.7)]" />
+
+            {/* ✨ Hover Hint */}
             <motion.div
-              className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.15),transparent_60%)]"
-              animate={{ opacity: isHovered ? 0.6 : 0.3 }}
-            />
-            <motion.div
+              initial={{ opacity: 0 }}
               animate={{
-                scale: isHovered ? 1.1 : 1,
-                rotate: isHovered ? 10 : 0,
+                opacity: isHovered ? 1 : window.innerWidth < 768 ? 1 : 0,
               }}
               transition={{ duration: 0.4 }}
-              className="relative z-10"
+              className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 border border-cyan-400/50 text-cyan-300 text-xs sm:text-sm font-orbitron tracking-wide shadow-[0_0_10px_rgba(0,255,255,0.7)] animate-pulse-glow pointer-events-none select-none"
             >
-              <Icon className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(0,255,255,0.7)]" />
+              <Info className="w-4 h-4 text-cyan-300" />
+              <span className="text-[0.7rem] sm:text-xs font-semibold">
+                Click to view details
+              </span>
             </motion.div>
           </div>
 
-          {/* === Content Section === */}
           <div className="p-6 space-y-4">
             <h3 className="text-xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
               {title}
@@ -125,40 +196,20 @@ export default function HolographicEventCard({
             </div>
           </div>
         </motion.div>
-
-        {/* === Glow Effect === */}
-        <motion.div
-          className="absolute -inset-[1px] rounded-2xl blur-xl pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(135deg, #00d4ff, #00ffff, #b000ff, #ff00ff)",
-          }}
-          animate={
-            isHovered
-              ? { opacity: [0.2, 0.5, 0.2] }
-              : { opacity: 0, transition: { duration: 0.5 } }
-          }
-          transition={{
-            duration: isHovered ? 2 : 0.5,
-            repeat: isHovered ? Infinity : 0,
-          }}
-        />
       </motion.div>
 
-      {/* === Modal === */}
+      {/* === Modal Popup (simplified, no double popup) === */}
       {showModal && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
           onClick={() => setShowModal(false)}
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
             initial={{ scale: 0.85, opacity: 0, y: 40 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.85, opacity: 0 }}
             transition={{ type: "spring", stiffness: 220, damping: 20 }}
             className="relative w-[90%] max-w-lg bg-gradient-to-br from-gray-950 to-black border border-cyan-500/40 rounded-2xl p-6 shadow-[0_0_40px_rgba(0,255,255,0.4)]"
           >
@@ -177,14 +228,61 @@ export default function HolographicEventCard({
               <p className="text-gray-300 text-sm px-2">{description}</p>
             </div>
 
-            <div className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line px-2">
-              {details ||
-                "Stay tuned for more information about this event and how you can participate!"}
+            <div className="border-t border-cyan-500/30 pt-4 text-gray-200 text-sm leading-relaxed whitespace-pre-line px-2 space-y-3">
+              <p className="text-cyan-300 font-orbitron">
+                👥 Team Size: {eventDetail.teamSize}
+              </p>
+              <p className="text-cyan-300 font-orbitron">
+                💸 Registration Fee: {eventDetail.fee}
+              </p>
+              <p className="text-cyan-300 font-orbitron">
+                🏆 Prize Pool: {prize}
+              </p>
+              <p className="text-gray-200 mt-2">{eventDetail.details}</p>
             </div>
 
-            <div className="mt-5 p-3 bg-black/40 border border-cyan-500/20 rounded-lg text-center font-orbitron text-cyan-300">
-              💰 Prize Pool: {prize}
-            </div>
+            {/* ✅ Register button only scrolls to form now */}
+            <motion.button
+              onClick={() => {
+                window.dispatchEvent(
+                  new CustomEvent("eventSelected", { detail: title })
+                );
+                onSelectEvent?.(title);
+                setShowModal(false);
+
+                // ✅ Toast
+                // const toast = document.createElement("div");
+                // toast.textContent = `✅ ${title} selected!`;
+                // Object.assign(toast.style, {
+                //   position: "fixed",
+                //   bottom: "40px",
+                //   left: "50%",
+                //   transform: "translateX(-50%)",
+                //   background: "linear-gradient(to right, #00ffffaa, #007bffaa)",
+                //   color: "white",
+                //   padding: "12px 24px",
+                //   borderRadius: "12px",
+                //   fontFamily: "Orbitron, sans-serif",
+                //   boxShadow: "0 0 20px rgba(0,255,255,0.6)",
+                //   zIndex: "9999",
+                //   fontSize: "14px",
+                //   transition: "opacity 0.6s ease",
+                // });
+                // document.body.appendChild(toast);
+                // setTimeout(() => (toast.style.opacity = "0"), 2000);
+                // setTimeout(() => toast.remove(), 2600);
+
+                // ✅ Smooth scroll to register form
+                const form = document.getElementById("register");
+                if (form)
+                  form.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-6 w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-orbitron rounded-lg shadow-lg"
+            >
+              Register for this Event
+            </motion.button>
           </motion.div>
         </motion.div>
       )}
