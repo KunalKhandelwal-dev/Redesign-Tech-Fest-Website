@@ -456,7 +456,76 @@ export default function Register() {
   </h3>
 
   {/* Stack vertically */}
-  <div className="flex flex-col gap-8">
+<div className="flex flex-col gap-8">
+  {/* ✅ MOBILE VERSION */}
+  <div className="block sm:hidden space-y-8">
+    {/* Individual Events (Mobile) */}
+    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
+      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
+        Individual Events
+      </h4>
+      <div className="grid grid-cols-2 gap-3">
+        {individualEvents.map(({ label, Icon }) => {
+          const selected = formData.eventType.includes(label);
+          const selectedStyle = selected
+            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+          return (
+            <motion.button
+              key={label}
+              type="button"
+              onClick={() => toggleEvent(label)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
+            >
+              {selected ? (
+                <Check className="w-3 h-3" />
+              ) : (
+                <Icon className="w-3 h-3 text-cyan-300" />
+              )}
+              {label}
+            </motion.button>
+          );
+        })}
+      </div>
+    </div>
+
+    {/* Team Events (Mobile) */}
+    <div className="border border-cyan-500/30 rounded-xl p-4 bg-[#0b1220]/60">
+      <h4 className="text-base font-semibold mb-4 text-cyan-300 text-center">
+        Team Events
+      </h4>
+      <div className="grid grid-cols-2 gap-3">
+        {teamEvents.map(({ label, Icon }) => {
+          const selected = formData.eventType.includes(label);
+          const selectedStyle = selected
+            ? "bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white"
+            : "bg-[#0f1724] border-cyan-500/20 text-gray-300 hover:border-cyan-400/40";
+          return (
+            <motion.button
+              key={label}
+              type="button"
+              onClick={() => toggleEvent(label)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 rounded-lg border text-xs font-medium ${selectedStyle}`}
+            >
+              {selected ? (
+                <Check className="w-3 h-3" />
+              ) : (
+                <Icon className="w-3 h-3 text-cyan-300" />
+              )}
+              {label}
+            </motion.button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  {/* 💻 LAPTOP VERSION (your old layout) */}
+  <div className="hidden sm:flex flex-col gap-8">
     {/* Individual Events */}
     <div className="border border-cyan-500/30 rounded-xl p-6 bg-[#0b1220]/60 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all">
       <h4 className="text-lg font-semibold mb-5 text-cyan-300 text-center">
@@ -521,6 +590,9 @@ export default function Register() {
       </div>
     </div>
   </div>
+</div>
+
+
 
   {errors.eventType && (
     <p className="text-red-400 text-sm mt-3 text-center">

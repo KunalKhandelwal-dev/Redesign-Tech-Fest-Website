@@ -166,7 +166,7 @@ export default function HolographicEventCard({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{
-                opacity: isHovered ? 1 : window.innerWidth < 768 ? 1 : 0,
+                opacity: isHovered || showModal ? 1 : 0,
               }}
               transition={{ duration: 0.4 }}
               className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 border border-cyan-400/50 text-cyan-300 text-xs sm:text-sm font-orbitron tracking-wide shadow-[0_0_10px_rgba(0,255,255,0.7)] animate-pulse-glow pointer-events-none select-none"
