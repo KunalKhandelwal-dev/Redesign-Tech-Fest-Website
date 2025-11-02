@@ -439,7 +439,7 @@ export default function Register() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <span className="px-3 py-1 glass rounded-full text-sm text-cyan-400 mb-3 inline-block">
+          <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400 inline-block mb-4">
             Registration
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-orbitron mb-2">

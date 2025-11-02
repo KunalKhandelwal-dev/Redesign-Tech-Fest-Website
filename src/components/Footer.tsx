@@ -22,6 +22,7 @@ export default function Footer() {
       { name: 'Events', href: '#events' },
       { name: 'Team', href: '#team' },
       { name: 'Register', href: '#register' },
+      { name: 'Rules', href: '/docs/rules.pdf', download: true }, // <-- Add this
     ],
     []
   );
@@ -76,12 +77,22 @@ export default function Footer() {
             <ul className="space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-cyan-400 hover:translate-x-1 inline-block transition-all duration-300"
-                  >
-                    {link.name}
-                  </a>
+                  {link.download ? (
+                    <a
+                      href={link.href}
+                      download
+                      className="text-gray-400 hover:text-cyan-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-gray-400 hover:text-cyan-400 hover:translate-x-1 inline-block transition-all duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

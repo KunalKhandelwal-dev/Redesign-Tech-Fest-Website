@@ -141,16 +141,16 @@ export default function Header() {
               {navItems.map((item) =>
                 item.download ? (
                   <motion.a
-                    key={item.name}
-                    href={item.href}
-                    download
-                    whileHover={{ x: 8 }}
-                    transition={{ duration: 0.2 }}
-                    className="block w-full text-left py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </motion.a>
+  key={item.name}
+  href={item.href}
+  download
+  whileHover={{ x: 8 }}
+  transition={{ duration: 0.2 }}
+  className="block w-full text-center py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+  onClick={() => setIsMobileMenuOpen(false)}
+>
+  {item.name}
+</motion.a>
                 ) : (
                   <motion.button
                     key={item.name}
