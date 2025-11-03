@@ -103,7 +103,7 @@ export default function Events() {
       },
       {
         icon: Terminal,
-        title: "Code Quest",
+        title: "Code Relay",
         category: "coding",
         description:
           "Solve coding challenges and algorithms in this competitive event.",

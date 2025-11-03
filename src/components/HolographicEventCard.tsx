@@ -115,7 +115,7 @@ export default function HolographicEventCard({
       teamSize: "Individual",
       fee: "₹100",
     },
-    "Code Quest": {
+    "Code Relay": {
       details:
         "Compete in timed programming challenges and algorithmic problems.",
       teamSize: "1–2 Members",

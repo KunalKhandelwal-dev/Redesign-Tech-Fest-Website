@@ -19,7 +19,7 @@ export default function Header() {
     { name: 'Team', href: '#team' },
     { name: 'Register', href: '#register' },
     { name: 'Contact', href: '#contact' },
-    { name: 'Rules', href: '/docs/rules.pdf', download: true }, // PDF download link
+    { name: 'Brochure', href: '/docs/Brochure.pdf', download: true }, // PDF download link
   ];
 
   // 🧩 Smooth scroll with offset for fixed header
@@ -48,9 +48,8 @@ export default function Header() {
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${
-        isScrolled ? 'glass shadow-md' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all duration-300 ${isScrolled ? 'glass shadow-md' : 'bg-transparent'
+        }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <nav className="flex items-center justify-between h-20">
@@ -107,14 +106,15 @@ export default function Header() {
           </div>
 
           {/* CTA Button (Desktop) */}
-          <motion.a
-            href="#register"
+          <motion.button
+            type="button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron hover:glow-cyan transition-all duration-300"
+            className="hidden md:block px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron hover:glow-cyan transition-all duration-300 cursor-pointer"
+            onClick={() => handleSmoothScroll('#register')}
           >
             Register Now
-          </motion.a>
+          </motion.button>
 
           {/* Mobile Menu Button */}
           <button
@@ -141,16 +141,16 @@ export default function Header() {
               {navItems.map((item) =>
                 item.download ? (
                   <motion.a
-  key={item.name}
-  href={item.href}
-  download
-  whileHover={{ x: 8 }}
-  transition={{ duration: 0.2 }}
-  className="block w-full text-center py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
-  onClick={() => setIsMobileMenuOpen(false)}
->
-  {item.name}
-</motion.a>
+                    key={item.name}
+                    href={item.href}
+                    download
+                    whileHover={{ x: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="block w-full text-center py-2 text-gray-300 hover:text-cyan-400 transition-colors duration-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </motion.a>
                 ) : (
                   <motion.button
                     key={item.name}

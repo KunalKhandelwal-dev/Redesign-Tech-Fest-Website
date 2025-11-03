@@ -1,5 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght:400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* Make interactive elements show pointer cursor by default (except when disabled).
+   Add this near the top of your stylesheet (e.g. right after @layer base) so it applies globally. */
+a,
+button,
+summary,
+label[for],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"],
+[role="link"] {
+  cursor: pointer;
+}
+
+/* Respect disabled controls so users see a not-allowed cursor where appropriate */
+:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

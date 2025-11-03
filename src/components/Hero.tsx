@@ -22,6 +22,26 @@ export default function Hero() {
     });
   };
 
+  const handleSmoothScroll = (id: string) => {
+    // If it's a hash link, scroll smoothly without updating the URL
+    if (id.startsWith("#")) {
+      const target = document.querySelector(id);
+      if (target) {
+        const headerOffset = 80; // adjust if you have a different fixed header height
+        const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      // For non-hash links, follow the link normally
+      window.location.href = id;
+    }
+  };
+
   return (
     <section
       id="home"
@@ -152,6 +172,13 @@ export default function Hero() {
               href="#events"
               whileHover={{ scale: 1.1 }}
               className="px-10 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white shadow-lg hover:shadow-cyan-400/40 transition-all duration-300"
+              onClick={(e) => {
+                const href = (e.currentTarget as HTMLAnchorElement).getAttribute("href") || "";
+                if (href.startsWith("#")) {
+                  e.preventDefault();
+                  handleSmoothScroll(href);
+                }
+              }}
             >
               Explore Events
             </motion.a>
@@ -159,6 +186,13 @@ export default function Hero() {
               href="#register"
               whileHover={{ scale: 1.1 }}
               className="px-10 py-4 border border-cyan-400/40 rounded-lg font-orbitron text-cyan-300 hover:bg-cyan-400/10 transition-all duration-300"
+              onClick={(e) => {
+                const href = (e.currentTarget as HTMLAnchorElement).getAttribute("href") || "";
+                if (href.startsWith("#")) {
+                  e.preventDefault();
+                  handleSmoothScroll(href);
+                }
+              }}
             >
               Register Now
             </motion.a>

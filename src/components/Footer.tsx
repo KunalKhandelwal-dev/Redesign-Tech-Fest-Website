@@ -22,10 +22,30 @@ export default function Footer() {
       { name: 'Events', href: '#events' },
       { name: 'Team', href: '#team' },
       { name: 'Register', href: '#register' },
-      { name: 'Rules', href: '/docs/rules.pdf', download: true }, // <-- Add this
+      { name: 'Brochure', href: '/docs/Brochure.pdf', download: true },
     ],
     []
   );
+
+  const handleSmoothScroll = (id: string) => {
+    // If it's a hash link, scroll smoothly
+    if (id.startsWith('#')) {
+      const target = document.querySelector(id);
+      if (target) {
+        const headerOffset = 80; // height of your fixed header
+        const elementPosition = target.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    } else {
+      // For normal links (like PDF), just follow the link
+      window.location.href = id;
+    }
+  };
 
   return (
     <footer id="contact" className="relative pt-20 pb-8 overflow-visible">
@@ -89,6 +109,14 @@ export default function Footer() {
                     <a
                       href={link.href}
                       className="text-gray-400 hover:text-cyan-400 hover:translate-x-1 inline-block transition-all duration-300"
+                      onClick={(e) => {
+                        // Prevent the default hash change in the URL, but allow smooth scrolling
+                        if (link.href.startsWith('#')) {
+                          e.preventDefault();
+                          handleSmoothScroll(link.href);
+                        }
+                        // For non-hash links we let the default action occur
+                      }}
                     >
                       {link.name}
                     </a>
@@ -168,13 +196,29 @@ export default function Footer() {
           <p>
             © {currentYear} YUGANTRAN2.0. All rights reserved. | School of Computer Science & Engineering, Geeta University
           </p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-cyan-400 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-cyan-400 transition-colors">
-              Terms of Service
-            </a>
+          <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-6">
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-cyan-400 transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="hover:text-cyan-400 transition-colors">
+                Terms of Service
+              </a>
+            </div>
+            <span className="flex items-center gap-1 text-xs md:text-sm font-medium text-gray-400 mt-2 md:mt-0">
+              <span className="flex items-center gap-1">
+                Made with
+                <svg
+                  className="w-4 h-4 text-pink-500 animate-pulse"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  aria-label="love"
+                >
+                  <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                </svg>
+              </span>
+              <span className="text-cyan-400 font-semibold ml-1">by Kunal Khandelwal</span>
+            </span>
           </div>
         </motion.div>
       </div>
