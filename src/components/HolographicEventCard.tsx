@@ -70,13 +70,13 @@ export default function HolographicEventCard({
     "Debug It": {
       details:
         "Participants will be provided buggy code snippets. Identify and fix errors to make the program run correctly within the shortest time.",
-      teamSize: "Individual Participation",
+      teamSize: "Individual",
       fee: "₹100",
     },
     "Tech Treasure": {
       details:
         "A treasure hunt of logic and tech clues! Solve puzzles and follow hints that lead to the treasure.",
-      teamSize: "2–4 Members",
+      teamSize: "4 Members",
       fee: "₹100",
     },
     BGMI: {
@@ -88,25 +88,25 @@ export default function HolographicEventCard({
     "Tech Show": {
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
-      teamSize: "1–3 Members",
+      teamSize: "2-3 Members",
       fee: "₹100",
     },
     "Startup Bid": {
       details:
         "Pitch your startup ideas to potential investors and mentors.",
-      teamSize: "2–5 Members",
+      teamSize: "2-4 Members",
       fee: "₹100",
     },
     "Poster Making": {
       details:
         "Design creative posters that communicate ideas on technology or social causes.",
-      teamSize: "Individual / Duo",
+      teamSize: "Duo Members",
       fee: "₹100",
     },
     "Tech Quiz": {
       details:
         "Test your technical and general knowledge in this fast-paced quiz.",
-      teamSize: "2–3 Members",
+      teamSize: "Duo Members",
       fee: "₹100",
     },
     "Tekken 7": {
@@ -118,7 +118,7 @@ export default function HolographicEventCard({
     "Code Relay": {
       details:
         "Compete in timed programming challenges and algorithmic problems.",
-      teamSize: "1–2 Members",
+      teamSize: "Duo Members",
       fee: "₹100",
     },
     "Project Exhibition": {

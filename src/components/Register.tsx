@@ -69,7 +69,7 @@ export default function Register() {
     "Startup Bid": {
       type: "team",
       fee: 100,
-      maxTeam: 5,
+      maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/HypSXtHqVcY18mKmKBcIdZ",
     },
     "Poster Making": {
@@ -81,7 +81,7 @@ export default function Register() {
     "Tech Quiz": {
       type: "team",
       fee: 100,
-      maxTeam: 3,
+      maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/F0YqBqx65x69tTzd1ASrpL",
     },
     "Tekken 7": {
@@ -89,7 +89,7 @@ export default function Register() {
       fee: 100,
       whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M",
     },
-    "Code Quest": {
+    "Code Relay": {
       type: "team",
       fee: 100,
       maxTeam: 2,
@@ -115,7 +115,7 @@ export default function Register() {
     "Poster Making": Image,
     "Tech Quiz": HelpCircle,
     "Tekken 7": Gamepad,
-    "Code Quest": Code,
+    "Code QueRelayst": Code,
     "Project Exhibition": FolderOpen,
   };
 
