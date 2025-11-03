@@ -94,7 +94,7 @@ export default function About() {
           {/* Download Brochure Button */}
           <div className="flex justify-center mt-8">
             <motion.a
-              href="/docs/Brochure.pdf"
+              href="/docs/eventBrochure.pdf"
               download
               whileHover={{ scale: 1.1 }}
               className="px-10 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white shadow-lg hover:shadow-cyan-400/40 transition-all duration-300"
