@@ -898,7 +898,7 @@ export default function Register() {
                         </div>
                         <div className="text-left">
                           <div className="text-sm font-medium text-white">Click or drop screenshot / PDF here</div>
-                          <div className="text-xs text-gray-400">Accepted: JPG, PNG, PDF. Max: (as per server).</div>
+                          <div className="text-xs text-gray-400">Accepted: JPG, PNG, PDF.</div>
                         </div>
                       </div>
 
