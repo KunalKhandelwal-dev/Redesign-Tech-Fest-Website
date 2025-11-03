@@ -89,7 +89,7 @@ export default function Register() {
       fee: 100,
       whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M",
     },
-    "Code Relay": {
+    "Code Quest": {
       type: "team",
       fee: 100,
       maxTeam: 2,
@@ -115,7 +115,7 @@ export default function Register() {
     "Poster Making": Image,
     "Tech Quiz": HelpCircle,
     "Tekken 7": Gamepad,
-    "Code Relay": Code,
+    "Code Quest": Code,
     "Project Exhibition": FolderOpen,
   };
 
@@ -267,27 +267,30 @@ export default function Register() {
      - centralized handler to set file & preview
      - enforce fixed preview size, and stable layout so Remove stays inside
   ----------------------------- */
-  const handleFile = useCallback((file: File | null) => {
-    // revoke previous preview
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+  const handleFile = useCallback(
+    (file: File | null) => {
+      // revoke previous preview
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
 
-    if (!file) {
-      setFormData((prev) => ({ ...prev, paymentReceipt: null }));
-      setPreviewUrl(null);
-      return;
-    }
+      if (!file) {
+        setFormData((prev) => ({ ...prev, paymentReceipt: null }));
+        setPreviewUrl(null);
+        return;
+      }
 
-    setFormData((prev) => ({ ...prev, paymentReceipt: file }));
+      setFormData((prev) => ({ ...prev, paymentReceipt: file }));
 
-    if (file.type.startsWith("image/")) {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [previewUrl]);
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      } else {
+        setPreviewUrl(null);
+      }
+    },
+    [previewUrl]
+  );
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -507,6 +510,7 @@ export default function Register() {
   const individualEvents = events.filter((e) => eventInfo[e.label]?.type === "individual");
   const teamEvents = events.filter((e) => eventInfo[e.label]?.type === "team");
 
+  
   /* -----------------------------
      External event selection (from event cards)
   ----------------------------- */
@@ -518,6 +522,7 @@ export default function Register() {
     return () => window.removeEventListener("eventSelected", handleEventSelect as EventListener);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   /* -----------------------------
      Helpers for UI display name
@@ -874,18 +879,18 @@ export default function Register() {
                       className="hidden"
                     />
 
-                    {/* Visible upload card with drag/drop handlers */}
+                    {/* Visible upload card with responsive layout so "Browse" and filename don't overflow on small screens */}
                     <label
                       htmlFor="paymentReceiptInput"
                       onDrop={onDrop}
                       onDragOver={onDragOver}
                       onDragLeave={onDragLeave}
-                      className={`group cursor-pointer block w-full border-2 rounded-xl p-4 flex items-center gap-4 justify-between bg-[#071025] border-cyan-500/30 hover:border-cyan-400 transition ${isDragActive ? "bg-cyan-600/5 border-cyan-400" : ""}`}
+                      className={`group cursor-pointer block w-full border-2 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between bg-[#071025] border-cyan-500/30 hover:border-cyan-400 transition ${isDragActive ? "bg-cyan-600/5 border-cyan-400" : ""}`}
                       title="Click or drop a file here to upload payment receipt (image or PDF)"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-md flex items-center justify-center bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md">
-                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-md flex items-center justify-center bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md flex-shrink-0">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
                             <path d="M12 16V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             <path d="M8 8l4-4 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             <rect x="3" y="12" width="18" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -897,16 +902,18 @@ export default function Register() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      {/* Right side - file info and browse pill.
+                          On small screens this will wrap below the left block because of flex-col, preventing overflow. */}
+                      <div className="flex items-center gap-3 sm:gap-4 sm:flex-row flex-col sm:flex-nowrap">
                         {formData.paymentReceipt ? (
-                          <div className="text-right max-w-[220px]">
+                          <div className="text-right max-w-[220px] sm:max-w-[220px]">
                             <div className="text-sm font-medium text-cyan-300 truncate">{fileDisplayName}</div>
                             <div className="text-xs text-gray-400">{fileSizeKB} • {formData.paymentReceipt?.type.split("/")[1]}</div>
                           </div>
                         ) : (
                           <div className="text-xs text-gray-400">No file selected</div>
                         )}
-                        <div className="px-3 py-2 rounded-md bg-cyan-600/10 text-cyan-300 text-xs font-semibold">
+                        <div className="px-3 py-2 rounded-md bg-cyan-600/10 text-cyan-300 text-xs font-semibold whitespace-nowrap">
                           Browse
                         </div>
                       </div>
@@ -921,9 +928,11 @@ export default function Register() {
                     {formData.paymentReceipt && (
                       <div className="mt-4">
                         <div className="relative w-full max-w-full rounded-md border border-cyan-500/30 overflow-hidden bg-[#071025]">
-                          <div className="flex items-stretch">
-                            {/* Fixed preview area (prevents overflow) */}
-                            <div className="flex-shrink-0 w-80 sm:w-[480px] h-44 sm:h-[220px] overflow-hidden bg-[#0b1220]">
+                          <div className="flex flex-col sm:flex-row items-stretch">
+                            {/* Fixed preview area (prevents overflow) - responsive widths:
+                                - mobile: full width, fixed height
+                                - desktop: fixed width and height */}
+                            <div className="flex-shrink-0 w-full sm:w-[480px] h-44 sm:h-[220px] overflow-hidden bg-[#0b1220]">
                               {previewUrl ? (
                                 <img src={previewUrl} alt="Receipt preview" className="w-full h-full object-cover block" />
                               ) : (
@@ -931,15 +940,15 @@ export default function Register() {
                               )}
                             </div>
 
-                            {/* Metadata area to the right of preview; uses truncate/min-w-0 so it doesn't push the image */}
+                            {/* Metadata area below the image on mobile, right of it on desktop */}
                             <div className="flex-1 p-4 flex flex-col justify-center min-w-0">
-                              {/* <div className="text-sm font-semibold text-white truncate">{fileDisplayName}</div>
-                              <div className="text-xs text-gray-400 mt-1">{fileSizeKB}</div> */}
+                              <div className="text-sm font-semibold text-white truncate">{fileDisplayName}</div>
+                              <div className="text-xs text-gray-400 mt-1">{fileSizeKB}</div>
                               {errors.paymentReceipt && <p className="text-red-400 text-sm mt-2">{errors.paymentReceipt}</p>}
                             </div>
                           </div>
 
-                          {/* Remove button overlaid inside preview container (always visible) */}
+                          {/* Remove button overlaid inside preview container (always visible and inside viewport) */}
                           <button
                             type="button"
                             onClick={removeFile}
