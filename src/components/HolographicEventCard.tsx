@@ -82,13 +82,13 @@ export default function HolographicEventCard({
     BGMI: {
       details:
         "Battle it out in the ultimate BGMI competition. Squad up and survive till the end to win prizes!",
-      teamSize: "Squad (4 Players)",
-      fee: "₹100 per team",
+      teamSize: "Solo/ Squad (4 Players)",
+      fee: "₹100",
     },
     "Tech Show": {
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
-      teamSize: "2-3 Members",
+      teamSize: "1-3 Members",
       fee: "₹100",
     },
     "Startup Bid": {
@@ -100,13 +100,13 @@ export default function HolographicEventCard({
     "Poster Making": {
       details:
         "Design creative posters that communicate ideas on technology or social causes.",
-      teamSize: "Duo Members",
+      teamSize: "Individual",
       fee: "₹100",
     },
     "Tech Quiz": {
       details:
         "Test your technical and general knowledge in this fast-paced quiz.",
-      teamSize: "Duo Members",
+      teamSize: "Individual",
       fee: "₹100",
     },
     "Tekken 7": {
@@ -118,19 +118,19 @@ export default function HolographicEventCard({
     "Code Relay": {
       details:
         "Compete in timed programming challenges and algorithmic problems.",
-      teamSize: "Duo Members",
+      teamSize: "Duo",
       fee: "₹100",
     },
     "Project Exhibition": {
       details:
         "Showcase your academic, mini, or major projects with innovation.",
-      teamSize: "1–3 Members",
+      teamSize: "1–2 Members",
       fee: "₹100",
     },
     "Free Fire": {
       details:
         "Team up and battle against the best in this thrilling Free Fire tournament. Showcase your strategy, skills, and teamwork to claim victory!",
-      teamSize: "Squad of 4 Members",
+      teamSize: "Squad (4 Players)",
       fee: "₹100",
     },
   };

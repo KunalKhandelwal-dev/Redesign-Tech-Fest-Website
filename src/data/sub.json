@@ -1,21 +1,21 @@
 [
     {
         "id": 1,
-        "name": "Kunal Khandelwal",
-        "role": "Tech Lead",
-        "image": "/images/team/kunal.jpg",
-        "linkedin": "https://www.linkedin.com/in/kunal-khandelwal-62a5b1311",
-        "instagram": "https://www.instagram.com/k13_kunal/",
-        "email": "kunalkhandelwal155@gmail.com"
+        "name": "Anjali",
+        "role": "Sponsor Lead",
+        "image": "/images/team/anjali.jpg",
+        "linkedin": "https://www.linkedin.com/in/anjali-dhankar?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://www.instagram.com/_anjali._.10._?igsh=MXNlb3FpeXJ3MXh2Yw==",
+        "email": "a22847632@gmail.com"
     },
     {
         "id": 2,
-        "name": "Suryansh",
-        "role": "Tech Lead",
-        "image": "/images/team/suryansh.jpg",
-        "linkedin": "https://www.linkedin.com/in/suryansh-saini-216712292/",
-        "instagram": "https://www.instagram.com/suryxnsh_09/",
-        "email": "anshsaini189@gmail.com"
+        "name": "Sejal",
+        "role": "Sponsor Lead",
+        "image": "/images/team/sejal.jpg",
+        "linkedin": "https://www.linkedin.com/in/sejal-sharama-135974389?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "#",
+        "email": "sejalsharmab.tech@gmail.com"
     },
     {
         "id": 3,
@@ -29,10 +29,10 @@
     {
         "id": 4,
         "name": "Apeksha",
-        "role": "Sub Committee Head",
+        "role": "Event Manager",
         "image": "/images/team/apeksha.jpg",
-        "linkedin": "#",
-        "github": "#",
-        "email": "#"
+        "linkedin": "https://www.linkedin.com/in/apeksha-rana-13b371384?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://www.instagram.com/apeksharana.04?igsh=MWRrMDBxb2hkd3kzdw==",
+        "email": "ranav7983@gmail.com"
     }
 ]

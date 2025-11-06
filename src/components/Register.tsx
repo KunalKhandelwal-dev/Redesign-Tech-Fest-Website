@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { createPortal } from "react-dom";
 import { useInView } from "motion/react";
 import { useRef, useState, useEffect, useCallback } from "react";
 import {
@@ -39,6 +40,7 @@ export default function Register() {
     {
       type: "individual" | "team";
       fee: number;
+      minTeam: number;
       maxTeam?: number;
       whatsapp: string;
     }
@@ -46,67 +48,76 @@ export default function Register() {
     "Debug It": {
       type: "individual",
       fee: 100,
+      minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/BWVnE4wjQeM3yRTMdCm5e1",
     },
     "Tech Treasure": {
       type: "team",
       fee: 100,
+      minTeam: 4,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Ee7oNF4JvkwKuIdomRRxpj",
     },
     BGMI: {
       type: "team",
       fee: 100,
+      minTeam: 1,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Busn9D6I7wa14z5VbI8W4A",
     },
     "Tech Show": {
       type: "team",
       fee: 100,
+      minTeam: 1,
       maxTeam: 3,
       whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7",
     },
     "Startup Bid": {
       type: "team",
       fee: 100,
+      minTeam: 2,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/HypSXtHqVcY18mKmKBcIdZ",
     },
     "Poster Making": {
-      type: "team",
+      type: "individual",
       fee: 100,
-      maxTeam: 2,
+      minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/Lt04XGiL4E7L83yMVAOFgN",
     },
     "Tech Quiz": {
-      type: "team",
+      type: "individual",
       fee: 100,
-      maxTeam: 2,
+      minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/F0YqBqx65x69tTzd1ASrpL",
     },
     "Tekken 7": {
       type: "individual",
       fee: 100,
+      minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M",
     },
     "Code Relay": {
       type: "team",
       fee: 100,
+      minTeam: 2,
       maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/CC17GJQQ6buDc00EGDBOr2",
     },
     "Project Exhibition": {
       type: "team",
       fee: 100,
-      maxTeam: 3,
+      minTeam: 1,
+      maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/LdlXwMnUD7L8URzB9PXV9Y",
     },
     "Free Fire": {
       type: "team",
       fee: 100,
+      minTeam: 4,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Ief26wFIkgTHVJF1x7qaU5",
-    }
+    },
   };
 
   /* -----------------------------
@@ -163,6 +174,15 @@ export default function Register() {
   // Drag state for drop area
   const [isDragActive, setIsDragActive] = useState(false);
 
+  // Team size modal states
+  const [showTeamSizeModal, setShowTeamSizeModal] = useState(false);
+  const [modalEventLabel, setModalEventLabel] = useState<string | null>(null);
+  // chosenTeamSize tracks the user's selected size for the currently selected team event.
+  // chosenTeamEvent stores the event label that chosenTeamSize applies to.
+  // If the user selects size 1 for a team event we will treat it as an individual selection.
+  const [chosenTeamSize, setChosenTeamSize] = useState<number | null>(null);
+  const [chosenTeamEvent, setChosenTeamEvent] = useState<string | null>(null);
+
   /* -----------------------------
      FEE CALCULATION
   ----------------------------- */
@@ -183,7 +203,6 @@ export default function Register() {
 
   /* -----------------------------
      FLOATING TOAST (form only)
-     Note: This is the original ephemeral JS-toast used in several places.
   ----------------------------- */
   const showFloatingToast = (msg: string) => {
     const toastEl = document.createElement("div");
@@ -210,7 +229,6 @@ export default function Register() {
 
   /* -----------------------------
      Bottom-center motion toast helper
-     Use this for non-blocking messages (like max team reached)
   ----------------------------- */
   const showToastPopup = (label: string, subtitle?: string, Icon?: any) => {
     setToast({ label, subtitle, Icon });
@@ -219,7 +237,56 @@ export default function Register() {
   };
 
   /* -----------------------------
-     TOGGLE EVENT (form click only)
+     Prevent body scroll while modal is open
+  ----------------------------- */
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    if (showTeamSizeModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = prevOverflow || "";
+    }
+    // cleanup on unmount (restore overflow)
+    return () => {
+      document.body.style.overflow = prevOverflow || "";
+    };
+  }, [showTeamSizeModal]);
+
+  /* -----------------------------
+     Close modal on Escape
+  ----------------------------- */
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === "Escape" && showTeamSizeModal) {
+        cancelTeamSizeModal();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showTeamSizeModal]);
+
+  /* -----------------------------
+     Helper: selected team info & fixed-size detection
+     - fixedTeamSize becomes true when a selected team event has only one valid size option
+  ----------------------------- */
+  const selectedTeamInfo = formData.eventType[0] ? eventInfo[formData.eventType[0]] : null;
+  const fixedTeamSize =
+    Boolean(selectedTeamInfo && selectedTeamInfo.type === "team" && selectedTeamInfo.maxTeam != null && selectedTeamInfo.minTeam === selectedTeamInfo.maxTeam);
+
+  // lock team member add/remove when:
+  // - the event config is fixed (min === max), OR
+  // - the user explicitly chose a team size for the currently selected event
+  const teamSizeLocked = Boolean(
+    fixedTeamSize ||
+      (chosenTeamSize != null && chosenTeamEvent === formData.eventType[0])
+  );
+
+  /* -----------------------------
+     TOGGLE EVENT (form click only / external)
+     - if team event is being selected, show team size modal (so user picks size)
+     - if the team event has only one possible size (min==max) -> auto-select size and skip modal
+     - if deselecting -> straightforward removal
   ----------------------------- */
   const toggleEvent = (label: string, isExternal = false) => {
     const info = eventInfo[label];
@@ -227,49 +294,127 @@ export default function Register() {
 
     const currentlySelected = formData.eventType.includes(label);
 
-    // 🔒 Show glow/toast only if user clicked from form (not external)
-    if (!isExternal) {
-      const actionText = currentlySelected ? "deselected ❌" : "selected ✅";
-      showFloatingToast(`${label} ${actionText}`);
-    }
+    // If deselecting, remove and reset team-related fields
+    if (currentlySelected) {
+      const newEventType = formData.eventType.filter((e) => e !== label);
+      const newTeamType =
+        newEventType.some((e) => eventInfo[e]?.type === "team")
+          ? "team"
+          : "individual";
 
-    setFormData((prev) => {
-      if (currentlySelected) {
-        const newEventType = prev.eventType.filter((e) => e !== label);
-        const newTeamType =
-          newEventType.some((e) => eventInfo[e]?.type === "team")
-            ? "team"
-            : "individual";
-        if (info.type === "team") {
-          return {
-            ...prev,
-            eventType: newEventType,
-            teamName: "",
-            teamMembers: [""],
-            teamType: newTeamType,
-          };
-        }
-        return { ...prev, eventType: newEventType, teamType: newTeamType };
+      // If we're removing the event that had a chosen team size, clear the chosen size and its event association
+      if (chosenTeamEvent === label) {
+        setChosenTeamSize(null);
+        setChosenTeamEvent(null);
       }
+
+      // clear modal event label as it's no longer relevant
+      setModalEventLabel(null);
 
       if (info.type === "team") {
-        return {
+        setFormData((prev) => ({
           ...prev,
-          eventType: [label],
-          teamName: prev.teamName,
+          eventType: newEventType,
+          teamName: "",
           teamMembers: [""],
-          teamType: "team",
-        };
+          teamType: newTeamType,
+        }));
+      } else {
+        setFormData((prev) => ({ ...prev, eventType: newEventType, teamType: newTeamType }));
       }
 
-      return {
+      if (!isExternal) {
+        showFloatingToast(`${label} deselected ❌`);
+      }
+      return;
+    }
+
+    // If selecting a team event, open the team-size modal so user can pick the team size.
+    if (info.type === "team") {
+      // If there is only one valid team size option (min === max), auto-confirm that size and skip modal.
+      if (info.maxTeam != null && info.minTeam === info.maxTeam) {
+        // auto-confirm
+        confirmTeamSize(label, info.minTeam);
+        if (!isExternal) {
+          showFloatingToast(`${label} selected — Fixed team of ${info.minTeam} players ✅`);
+        }
+        return;
+      }
+
+      // store which event the modal is about
+      setModalEventLabel(label);
+      setShowTeamSizeModal(true);
+      // do not modify formData here — wait for user to choose size in modal
+      if (!isExternal) {
+        // show a small hint toast if user clicked directly (modal will appear)
+        showFloatingToast(`Choose team size for ${label}`);
+      }
+      return;
+    }
+
+    // Non-team selection (individual) - clear any chosen team size/event
+    if (!isExternal) {
+      showFloatingToast(`${label} selected ✅`);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      eventType: [label],
+      teamName: "",
+      teamMembers: [""],
+      teamType: "individual",
+    }));
+    // when selecting a non-team event we clear chosenTeamSize and its event
+    setChosenTeamSize(null);
+    setChosenTeamEvent(null);
+  };
+
+  /* -----------------------------
+     Confirm team size from modal
+     - if chosen size == 1 -> treat as individual selection (per requirement)
+     - else create teamMembers array sized to size-1 (excluding the user)
+  ----------------------------- */
+  const confirmTeamSize = (label: string, size: number) => {
+    setShowTeamSizeModal(false);
+    setModalEventLabel(null);
+
+    if (size === 1) {
+      // treat as individual: clear any previous chosen team size/event
+      setChosenTeamSize(null);
+      setChosenTeamEvent(null);
+
+      setFormData((prev) => ({
         ...prev,
         eventType: [label],
         teamName: "",
         teamMembers: [""],
         teamType: "individual",
-      };
-    });
+      }));
+      showFloatingToast(`${label} selected as individual ✅`);
+      return;
+    }
+
+    // For team sizes > 1, set both size and the event it belongs to
+    setChosenTeamSize(size);
+    setChosenTeamEvent(label);
+
+    setFormData((prev) => ({
+      ...prev,
+      eventType: [label],
+      teamType: "team",
+      // teamMembers excludes the current user so we create size - 1 entries
+      teamMembers: Array.from({ length: size - 1 }, () => ""),
+    }));
+    showFloatingToast(`${label} selected — Team of ${size} players ✅`);
+  };
+
+  /* -----------------------------
+     Cancel team size modal (don't select event)
+  ----------------------------- */
+  const cancelTeamSizeModal = () => {
+    setShowTeamSizeModal(false);
+    setModalEventLabel(null);
+    // do not change current formData (event not selected)
   };
 
   /* -----------------------------
@@ -282,8 +427,6 @@ export default function Register() {
 
   /* -----------------------------
      FILE HANDLING (upload + drag/drop)
-     - centralized handler to set file & preview
-     - enforce fixed preview size, and stable layout so Remove stays inside
   ----------------------------- */
   const handleFile = useCallback(
     (file: File | null) => {
@@ -357,8 +500,7 @@ export default function Register() {
 
   /* -----------------------------
      VALIDATION
-     - constraints for UPI/UTR and Transaction ID
-     - show floating pop for first error (similar to event selection)
+     - uses chosenTeamSize (if set and belongs to current event) to validate team size constraints
   ----------------------------- */
   const validate = (data: typeof formData) => {
     const newErrors: Record<string, string> = {};
@@ -406,10 +548,28 @@ export default function Register() {
       // ensure no empty team member names
       if (data.teamMembers.some((m) => !m.trim())) newErrors.teamMembers = "All team member names are required.";
 
-      // validate max team size
-      const max = Math.max(...data.eventType.map((e) => eventInfo[e]?.maxTeam || 1));
-      if (data.teamMembers.length > max - 1)
-        newErrors.teamMembers = `Maximum ${max - 1} members (excluding you) allowed.`;
+      // Determine whether the chosen team size applies to the currently selected event
+      const selectedEvent = data.eventType[0];
+      const chosenApplies = chosenTeamSize != null && chosenTeamEvent === selectedEvent;
+
+      if (chosenApplies && chosenTeamSize != null) {
+        // Enforce exact count when a user explicitly chose a size for THIS event
+        if (data.teamMembers.length !== chosenTeamSize - 1) {
+          newErrors.teamMembers = `Exactly ${chosenTeamSize - 1} member(s) (excluding you) required for this team size.`;
+        }
+      } else {
+        // fallback: validate against event config min/max
+        const max = Math.max(...data.eventType.map((e) => eventInfo[e]?.maxTeam || 1));
+        if (data.teamMembers.length > Math.max(max - 1, 0))
+          newErrors.teamMembers = `Maximum ${Math.max(max - 1, 0)} members (excluding you) allowed.`;
+        // also ensure minimum team members if there is a min > 1
+        const min = Math.min(...data.eventType.map((e) => eventInfo[e]?.minTeam || 1));
+        if (max >= 1 && min > 1) {
+          if (data.teamMembers.length < min - 1) {
+            newErrors.teamMembers = `Minimum ${min - 1} members (excluding you) required.`;
+          }
+        }
+      }
     }
 
     setErrors(newErrors);
@@ -451,7 +611,7 @@ export default function Register() {
       if (formData.paymentReceipt instanceof File) {
         // Optionally set a custom filename for the uploaded file (server receives this name)
         // Use team name if team event else user's name; fallback to original filename
-        const isTeam = formData.eventType.some((e) => eventInfo[e]?.type === "team");
+        const isTeam = formData.eventType.some((e) => eventInfo[e]?.type === "team") && formData.teamType === "team";
         const baseName = isTeam ? (formData.teamName || formData.name || "team") : (formData.name || "participant");
         const extMatch = formData.paymentReceipt.name.match(/\.[a-zA-Z0-9]+$/);
         const ext = extMatch ? extMatch[0] : "";
@@ -496,6 +656,10 @@ export default function Register() {
           transactionId: "",
         });
 
+        // Reset chosen team size and chosen team event after successful registration
+        setChosenTeamSize(null);
+        setChosenTeamEvent(null);
+
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
           setPreviewUrl(null);
@@ -517,12 +681,17 @@ export default function Register() {
   /* -----------------------------
      Helper: is team event selected
   ----------------------------- */
-  const isTeamEventSelected = formData.eventType.some((e) => eventInfo[e]?.type === "team");
+  const isTeamEventSelected = formData.eventType.some((e) => eventInfo[e]?.type === "team" && formData.teamType === "team");
 
   // compute current max team size for currently selected team event(s)
-  const currentMaxTeam = isTeamEventSelected
-    ? Math.max(...formData.eventType.map((e) => eventInfo[e]?.maxTeam || 1))
-    : 1;
+  const currentMaxTeam = (() => {
+    if (isTeamEventSelected) {
+      // prefer chosenTeamSize if it applies to the currently selected event
+      if (chosenTeamSize != null && chosenTeamEvent === formData.eventType[0]) return chosenTeamSize;
+      return Math.max(...formData.eventType.map((e) => eventInfo[e]?.maxTeam || 1));
+    }
+    return 1;
+  })();
 
   const events = Object.keys(eventInfo).map((label) => {
     const Icon = icons[label] || Code;
@@ -535,11 +704,42 @@ export default function Register() {
 
   /* -----------------------------
      External event selection (from event cards)
+     - robust matching: tolerant normalization (case, hyphen/underscore, extra spaces)
   ----------------------------- */
   useEffect(() => {
-    const handleEventSelect = (e: CustomEvent<string>) => {
-      toggleEvent(e.detail);
+    const normalize = (s?: string | null) =>
+      (s ?? "")
+        .toString()
+        .trim()
+        .replace(/[-_]+/g, " ")
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+    const findMatchingLabel = (incoming?: string | null) => {
+      if (!incoming) return null;
+      // try exact first
+      if (incoming in eventInfo) return incoming;
+      const n = normalize(incoming);
+      for (const k of Object.keys(eventInfo)) {
+        if (normalize(k) === n) return k;
+      }
+      return null;
     };
+
+    const handleEventSelect = (e: Event) => {
+      // incoming detail may be on CustomEvent.detail
+      const incoming = (e as CustomEvent<string>).detail ?? (e as any).detail;
+      // DEBUG: log incoming to help spot format issues (remove in production if desired)
+      console.debug("[Register] eventSelected incoming detail:", incoming);
+
+      const matched = findMatchingLabel(incoming);
+      if (matched) {
+        toggleEvent(matched, true);
+      } else {
+        console.warn(`[Register] Unrecognized external event label: "${incoming}". Available: ${Object.keys(eventInfo).join(", ")}`);
+      }
+    };
+
     window.addEventListener("eventSelected", handleEventSelect as EventListener);
     return () => window.removeEventListener("eventSelected", handleEventSelect as EventListener);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -547,7 +747,6 @@ export default function Register() {
 
   /* -----------------------------
      Helpers for UI display name
-     - fileDisplayName: show teamName (if team event) or user name; fallback to original file name
   ----------------------------- */
   const fileDisplayName = (() => {
     if (!formData.paymentReceipt) return "No file selected";
@@ -569,23 +768,23 @@ export default function Register() {
      UI
   ----------------------------- */
   return (
-    <section id="register" className="relative py-16" ref={ref}>
+    <section id="register" className="relative py-24 overflow-visible bg-transparent" ref={ref}>
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full blur-3xl opacity-8" />
 
-      <div className="container mx-auto px-4 relative z-1">
+      <div className="container mx-auto px-4 lg:px-8 relative z-1">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8"
+          transition={{ duration: 0.6, ease: "easeOut"}}
+          className="text-center mb-16"
         >
           <span className="px-4 py-2 glass rounded-full text-sm text-cyan-400 inline-block mb-4">
             Registration
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-orbitron mb-2">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-orbitron mb-6">
             <span className="gradient-text">Join</span> YUGANTRAN2.0 2025
           </h2>
-          <p className="text-gray-400 max-w-3xl mx-auto text-sm">
+          <p className="text-gray-400 max-w-3xl mx-auto text-lg">
             Register now to secure your spot at the most exciting tech fest of
             the year! Fill details & upload payment receipt to complete.
           </p>
@@ -808,7 +1007,7 @@ export default function Register() {
               </p>
 
               {/* Team Section */}
-              {isTeamEventSelected && (
+              {formData.teamType === "team" && isTeamEventSelected && (
                 <div className="p-3 border border-cyan-500/20 rounded-xl bg-[#0f1724] space-y-3">
                   <InputField
                     label="Team Name"
@@ -826,7 +1025,9 @@ export default function Register() {
                     </label>
 
                     {/* Render each team member input and allow removing any member
-                        as long as there's at least one input left. */}
+                        as long as there's at least one input left.
+                        We hide remove/add when teamSizeLocked (either fixed config or chosen size for THIS event).
+                    */}
                     {formData.teamMembers.map((member, i) => (
                       <div key={i} className="flex gap-2 mb-2">
                         <input
@@ -840,10 +1041,8 @@ export default function Register() {
                           placeholder={`Member ${i + 1}`}
                           className="w-full bg-[#0f1724] border border-cyan-500/20 rounded-lg px-4 py-2 text-white"
                         />
-                        {/* Show remove button for EVERY member if there is more than one input.
-                            This allows removing the first one as well after additional members are added.
-                            Ensure we always keep at least one input by restoring [""] if the last is removed. */}
-                        {formData.teamMembers.length > 1 && (
+                        {/* Only allow removing members when the team size is NOT locked. */}
+                        {!teamSizeLocked && formData.teamMembers.length > 1 && (
                           <button
                             type="button"
                             onClick={() => {
@@ -861,25 +1060,32 @@ export default function Register() {
                       </div>
                     ))}
 
-                    {/* Only show Add Member button while under the max members limit.
-                        Note: teamMembers counts members excluding the user, so we compare with currentMaxTeam - 1 */}
-                    {formData.teamMembers.length < Math.max(currentMaxTeam - 1, 0) ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const max = currentMaxTeam;
-                          if (formData.teamMembers.length < max - 1) {
-                            setFormData({ ...formData, teamMembers: [...formData.teamMembers, ""] });
-                          } else {
-                            // show non-blocking toast popup instead of alert
-                            showToastPopup(`Maximum ${max - 1} members allowed.`, undefined);
-                          }
-                        }}
-                        className="text-cyan-400 text-sm hover:underline"
-                      >
-                        + Add Member
-                      </button>
-                    ) : null}
+                    {/* Only show Add Member button while under the selected team size (or currentMaxTeam) limit.
+                        Hide the Add Member button entirely if the team size is locked (either fixed by event or by user's explicit choice for THIS event).
+                    */}
+                    {(() => {
+                      const selectedCount = chosenTeamSize ?? currentMaxTeam;
+                      const isLocked = teamSizeLocked;
+                      if (!isLocked && formData.teamMembers.length < Math.max(selectedCount - 1, 0)) {
+                        return (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const selectedCountNow = chosenTeamSize ?? currentMaxTeam;
+                              if (formData.teamMembers.length < selectedCountNow - 1) {
+                                setFormData({ ...formData, teamMembers: [...formData.teamMembers, ""] });
+                              } else {
+                                showToastPopup(`Maximum ${selectedCountNow - 1} members allowed.`, undefined);
+                              }
+                            }}
+                            className="text-cyan-400 text-sm hover:underline"
+                          >
+                            + Add Member
+                          </button>
+                        );
+                      }
+                      return null;
+                    })()}
 
                     {errors.teamMembers && <p className="text-red-400 text-sm mt-1">{errors.teamMembers}</p>}
                   </div>
@@ -1109,13 +1315,98 @@ export default function Register() {
           )}
         </motion.div>
       </div>
+
+      {/* -----------------------------
+         TEAM SIZE MODAL
+         Design follows the same layout/style as the registration success popup
+         - modal overlay now uses explicit high z-indexes to guarantee it's on top
+         - body scrolling is locked while modal is open (handled above in useEffect)
+         - now shows the Event name and icon for which the modal was opened
+         ----------------------------- */}
+      {showTeamSizeModal && modalEventLabel &&
+        (() => {
+          const EventIcon = icons[modalEventLabel] || Code;
+          return createPortal(
+            <div className="fixed inset-0 flex items-center justify-center px-4" aria-modal="true" role="dialog" style={{ zIndex: 99999 }}>
+              {/* overlay */}
+              <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-md"
+                onClick={cancelTeamSizeModal}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.18 }}
+                className="relative max-w-lg w-full bg-gradient-to-br from-gray-950 to-black border border-cyan-500/40 rounded-2xl p-6 shadow-[0_0_40px_rgba(0,255,255,0.4)] text-center"
+              >
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-cyan-600/10 flex items-center justify-center">
+                    <EventIcon className="w-6 h-6 text-cyan-300" />
+                  </div>
+                  <div>
+                    <div className="text-md text-white-400">Event</div>
+                    <div className="text-lg font-semibold text-white truncate">{modalEventLabel}</div>
+                  </div>
+                </div>
+
+                <CheckCircle className="w-16 h-16 text-cyan-300 mx-auto mb-4" />
+                <h3 className="text-2xl font-orbitron gradient-text mb-2">Select Team Size</h3>
+                <p className="text-gray-400 mb-6">Choose how many players will participate (including you).</p>
+                <p className="text-gray-400 mb-6">After choosing plz, fill Team Name and Team Members name below.</p>
+
+                <div className="flex flex-wrap justify-center gap-3 mb-4">
+                  {(() => {
+                    const info = eventInfo[modalEventLabel];
+                    if (!info) return null;
+
+                    // BGMI special case
+                    if (modalEventLabel === "BGMI") {
+                      const opts = [1, 4];
+                      return opts.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => confirmTeamSize(modalEventLabel, s)}
+                          className="px-4 py-2 rounded-lg bg-cyan-600/10 text-cyan-300 hover:bg-cyan-600/20 border border-cyan-500/20 font-medium"
+                        >
+                          {s} {s === 1 ? "Player" : "Players"}
+                        </button>
+                      ));
+                    }
+
+                    const min = info.minTeam ?? 1;
+                    const max = info.maxTeam ?? Math.max(min, 1);
+                    return Array.from({ length: max - min + 1 }, (_, i) => i + min).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => confirmTeamSize(modalEventLabel, s)}
+                        className="px-4 py-2 rounded-lg bg-cyan-600/10 text-cyan-300 border border-cyan-500/20 font-medium transition-all duration-200 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 hover:border-cyan-400 hover:shadow-[0_0_12px_rgba(0,255,255,0.6)]"
+                      >
+                        {s} {s === 1 ? "Player" : "Players"}
+                      </button>
+                    ));
+                  })()}
+                </div>
+
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <button
+                    onClick={cancelTeamSizeModal}
+                    className="px-4 py-2 rounded-lg bg-transparent border border-cyan-500/20 text-gray-300 hover:bg-white/2"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </motion.div>
+            </div>,
+            document.body
+          );
+        })()
+      }
     </section>
   );
 }
 
 /* -----------------------------
    INPUT FIELD COMPONENT
-   - kept simple, validation happens on submit (and shows floating pop)
 ----------------------------- */
 function InputField({
   label,
