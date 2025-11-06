@@ -31,9 +31,9 @@
         "name": "Tejasvi",
         "role": "Event Management Head",
         "image": "/images/team/tejasvi.webp",
-        "linkedin": "#",
-        "github": "#",
-        "email": "#"
+        "linkedin": "https://www.linkedin.com/in/tejasvi-sharma-001845295?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://www.instagram.com/tejas.visharma?igsh=NXd2MjZsb3JyYWRl",
+        "email": "tejasvisharma100@gmail.com"
     },
     {
         "id": 5,
@@ -55,27 +55,9 @@
     },
     {
         "id": 7,
-        "name": "Naveenta",
-        "role": "Marketing Head",
-        "image": "/images/team/naveenta.jpg",
-        "linkedin": "https://www.linkedin.com/in/naveenta-manhas-37b011391?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-        "github": "https://www.instagram.com/_komalmanhas_?igsh=bHFieGpxd29oMWZu",
-        "email": "naveentamanhas@gamil.com"
-    },
-    {
-        "id": 8,
         "name": "Meet Bajaj",
-        "role": "Discipline Incharge",
+        "role": "Creativity Head",
         "image": "/images/team/meet.jpg",
-        "linkedin": "#",
-        "github": "#",
-        "email": "#"
-    },
-    {
-        "id": 9,
-        "name": "Apeksha",
-        "role": "Sub Committee Head",
-        "image": "/images/team/apeksha.jpg",
         "linkedin": "#",
         "github": "#",
         "email": "#"

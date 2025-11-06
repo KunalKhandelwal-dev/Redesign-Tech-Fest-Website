@@ -101,6 +101,12 @@ export default function Register() {
       maxTeam: 3,
       whatsapp: "https://chat.whatsapp.com/LdlXwMnUD7L8URzB9PXV9Y",
     },
+    "Free Fire": {
+      type: "team",
+      fee: 100,
+      maxTeam: 4,
+      whatsapp: "https://chat.whatsapp.com/Ief26wFIkgTHVJF1x7qaU5",
+    }
   };
 
   /* -----------------------------
@@ -117,6 +123,7 @@ export default function Register() {
     "Tekken 7": Gamepad,
     "Code QueRelayst": Code,
     "Project Exhibition": FolderOpen,
+    "Free Fire": Gamepad2,
   };
 
   /* -----------------------------
@@ -145,8 +152,8 @@ export default function Register() {
     null
   );
 
-  // For toast popup (slide up + fade out)
-  const [toast, setToast] = useState<{ label: string; Icon?: any } | null>(null);
+  // For toast popup (bottom-center, motion-based)
+  const [toast, setToast] = useState<{ label: string; Icon?: any; subtitle?: string } | null>(null);
 
   const [totalFee, setTotalFee] = useState(0);
 
@@ -176,6 +183,7 @@ export default function Register() {
 
   /* -----------------------------
      FLOATING TOAST (form only)
+     Note: This is the original ephemeral JS-toast used in several places.
   ----------------------------- */
   const showFloatingToast = (msg: string) => {
     const toastEl = document.createElement("div");
@@ -198,6 +206,16 @@ export default function Register() {
     document.body.appendChild(toastEl);
     setTimeout(() => (toastEl.style.opacity = "0"), 1500);
     setTimeout(() => toastEl.remove(), 2000);
+  };
+
+  /* -----------------------------
+     Bottom-center motion toast helper
+     Use this for non-blocking messages (like max team reached)
+  ----------------------------- */
+  const showToastPopup = (label: string, subtitle?: string, Icon?: any) => {
+    setToast({ label, subtitle, Icon });
+    // auto-hide after 2.5s
+    window.setTimeout(() => setToast(null), 2500);
   };
 
   /* -----------------------------
@@ -501,6 +519,11 @@ export default function Register() {
   ----------------------------- */
   const isTeamEventSelected = formData.eventType.some((e) => eventInfo[e]?.type === "team");
 
+  // compute current max team size for currently selected team event(s)
+  const currentMaxTeam = isTeamEventSelected
+    ? Math.max(...formData.eventType.map((e) => eventInfo[e]?.maxTeam || 1))
+    : 1;
+
   const events = Object.keys(eventInfo).map((label) => {
     const Icon = icons[label] || Code;
     return { label, Icon };
@@ -510,7 +533,6 @@ export default function Register() {
   const individualEvents = events.filter((e) => eventInfo[e.label]?.type === "individual");
   const teamEvents = events.filter((e) => eventInfo[e.label]?.type === "team");
 
-  
   /* -----------------------------
      External event selection (from event cards)
   ----------------------------- */
@@ -522,7 +544,6 @@ export default function Register() {
     return () => window.removeEventListener("eventSelected", handleEventSelect as EventListener);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   /* -----------------------------
      Helpers for UI display name
@@ -616,7 +637,7 @@ export default function Register() {
                   name="mobileNumber"
                   value={formData.mobileNumber}
                   onChange={handleChange}
-                  placeholder="9876543210"
+                  placeholder="Enter Mobile Number"
                   error={errors.mobileNumber}
                   icon={<Phone className="text-cyan-400" />}
                 />
@@ -803,6 +824,9 @@ export default function Register() {
                     <label className="block text-sm mb-2 text-gray-300">
                       Team Members (excluding yourself)
                     </label>
+
+                    {/* Render each team member input and allow removing any member
+                        as long as there's at least one input left. */}
                     {formData.teamMembers.map((member, i) => (
                       <div key={i} className="flex gap-2 mb-2">
                         <input
@@ -816,12 +840,18 @@ export default function Register() {
                           placeholder={`Member ${i + 1}`}
                           className="w-full bg-[#0f1724] border border-cyan-500/20 rounded-lg px-4 py-2 text-white"
                         />
-                        {i > 0 && (
+                        {/* Show remove button for EVERY member if there is more than one input.
+                            This allows removing the first one as well after additional members are added.
+                            Ensure we always keep at least one input by restoring [""] if the last is removed. */}
+                        {formData.teamMembers.length > 1 && (
                           <button
                             type="button"
                             onClick={() => {
                               const updated = formData.teamMembers.filter((_, idx) => idx !== i);
-                              setFormData({ ...formData, teamMembers: updated });
+                              setFormData({
+                                ...formData,
+                                teamMembers: updated.length ? updated : [""],
+                              });
                             }}
                             className="px-3 text-red-400 hover:text-red-300"
                           >
@@ -830,20 +860,27 @@ export default function Register() {
                         )}
                       </div>
                     ))}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const max = Math.max(...formData.eventType.map((e) => eventInfo[e]?.maxTeam || 1));
-                        if (formData.teamMembers.length < max - 1) {
-                          setFormData({ ...formData, teamMembers: [...formData.teamMembers, ""] });
-                        } else {
-                          alert(`Maximum ${max} members allowed.`);
-                        }
-                      }}
-                      className="text-cyan-400 text-sm hover:underline"
-                    >
-                      + Add Member
-                    </button>
+
+                    {/* Only show Add Member button while under the max members limit.
+                        Note: teamMembers counts members excluding the user, so we compare with currentMaxTeam - 1 */}
+                    {formData.teamMembers.length < Math.max(currentMaxTeam - 1, 0) ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const max = currentMaxTeam;
+                          if (formData.teamMembers.length < max - 1) {
+                            setFormData({ ...formData, teamMembers: [...formData.teamMembers, ""] });
+                          } else {
+                            // show non-blocking toast popup instead of alert
+                            showToastPopup(`Maximum ${max - 1} members allowed.`, undefined);
+                          }
+                        }}
+                        className="text-cyan-400 text-sm hover:underline"
+                      >
+                        + Add Member
+                      </button>
+                    ) : null}
+
                     {errors.teamMembers && <p className="text-red-400 text-sm mt-1">{errors.teamMembers}</p>}
                   </div>
                 </div>
@@ -859,10 +896,11 @@ export default function Register() {
 
                   <div>
                     <p className="text-gray-400 text-sm">Scan the QR below to pay</p>
+                    {/* Slightly smaller QR as requested */}
                     <img
                       src="/images/bot/yashQR.jpg"
                       alt="Payment QR"
-                      className="mx-auto w-36 h-36 rounded-lg border border-cyan-500/20"
+                      className="mx-auto w-14 h-14 rounded-lg border border-cyan-500/20"
                     />
                   </div>
 
@@ -952,10 +990,11 @@ export default function Register() {
                           <button
                             type="button"
                             onClick={removeFile}
-                            className="absolute top-3 right-3 bg-black/50 text-red-400 hover:text-red-300 px-3 py-1 rounded text-sm backdrop-blur-sm"
+                            className="absolute top-3 right-3 bg-black/70 text-white hover:text-gray-300 px-3 py-1 rounded text-sm backdrop-blur-sm"
                           >
                             Remove
                           </button>
+
                         </div>
                       </div>
                     )}
@@ -998,14 +1037,13 @@ export default function Register() {
                   !formData.upiId.trim() ||
                   !formData.transactionId.trim()
                 }
-                className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2 ${
-                  (!formData.paymentReceipt ||
+                className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2 ${(!formData.paymentReceipt ||
                     !formData.upiId.trim() ||
                     !formData.transactionId.trim() ||
                     loading)
                     ? "opacity-60 cursor-not-allowed"
                     : ""
-                }`}
+                  }`}
               >
                 {loading ? (
                   <>
@@ -1034,7 +1072,7 @@ export default function Register() {
                       Join the WhatsApp group for <span className="font-bold">{eventName}</span> to get all updates and announcements!
                     </p>
                     <a href={whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition">
-                      <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor"><path d="M16.001 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.6 4.47 1.74 6.41l-1.84 6.73a1.6 1.6 0 0 0 1.96 1.96l6.73-1.84a12.74 12.74 0 0 0 6.41 1.74c7.06 0 12.8-5.74 12.8-12.8s-5.74-12.8-12.8-12.8zm0 23.04c-2.07 0-4.1-.54-5.87-1.56l-.42-.24-5.01 1.37 1.37-5.01-.24-.42a10.23 10.23 0 0 1-1.56-5.87c0-5.66 4.6-10.24 10.24-10.24s10.24 4.58 10.24 10.24-4.6 10.24-10.24 10.24zm5.61-7.67c-.31-.16-1.83-.91-2.11-1.01-.28-.1-.48-.16-.68.16-.2.31-.77 1.01-.94 1.21-.17.2-.35.23-.66.08-.31-.16-1.31-.48-2.5-1.53-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.13-.63.13-.13.31-.35.47-.53.16-.18.21-.31.31-.51.10-.2.05-.38-.03-.53-.08-.16-.68-1.63-.93-2.23-.24-.58-.48-.5-.68-.51-.18-.01-.38-.01-.58-.01-.2 0-.53.08-.81.38-.28.31-1.07 1.05-1.07 2.56 0 1.51 1.09 2.97 1.24 3.18.15.2 2.14 3.28 5.19 4.47.73.31 1.3.5 1.74.64.73.23 1.39.2 1.91.12.58-.09 1.83-.75 2.09-1.48.26-.73.26-1.36.18-1.48-.08-.12-.28-.2-.59-.36z"/></svg>
+                      <svg viewBox="0 0 32 32" width="22" height="22" fill="currentColor"><path d="M16.001 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.6 4.47 1.74 6.41l-1.84 6.73a1.6 1.6 0 0 0 1.96 1.96l6.73-1.84a12.74 12.74 0 0 0 6.41 1.74c7.06 0 12.8-5.74 12.8-12.8s-5.74-12.8-12.8-12.8zm0 23.04c-2.07 0-4.1-.54-5.87-1.56l-.42-.24-5.01 1.37 1.37-5.01-.24-.42a10.23 10.23 0 0 1-1.56-5.87c0-5.66 4.6-10.24 10.24-10.24s10.24 4.58 10.24 10.24-4.6 10.24-10.24 10.24zm5.61-7.67c-.31-.16-1.83-.91-2.11-1.01-.28-.1-.48-.16-.68.16-.2.31-.77 1.01-.94 1.21-.17.2-.35.23-.66.08-.31-.16-1.31-.48-2.5-1.53-.92-.82-1.54-1.83-1.72-2.14-.18-.31-.02-.48.13-.63.13-.13.31-.35.47-.53.16-.18.21-.31.31-.51.10-.2.05-.38-.03-.53-.08-.16-.68-1.63-.93-2.23-.24-.58-.48-.5-.68-.51-.18-.01-.38-.01-.58-.01-.2 0-.53.08-.81.38-.28.31-1.07 1.05-1.07 2.56 0 1.51 1.09 2.97 1.24 3.18.15.2 2.14 3.28 5.19 4.47.73.31 1.3.5 1.74.64.73.23 1.39.2 1.91.12.58-.09 1.83-.75 2.09-1.48.26-.73.26-1.36.18-1.48-.08-.12-.28-.2-.59-.36z" /></svg>
                       Join WhatsApp Group
                     </a>
                     <p className="text-xs text-gray-400 mt-2">Please join the group to receive important event updates and instructions.</p>
@@ -1064,8 +1102,8 @@ export default function Register() {
                 {toast.Icon ? <toast.Icon className="w-5 h-5 text-cyan-300" /> : <Search className="w-5 h-5 text-cyan-300" />}
               </div>
               <div className="text-left">
-                <div className="text-sm font-medium text-white">{toast.label} selected!</div>
-                <div className="text-xs text-gray-400">Added to your registration</div>
+                <div className="text-sm font-medium text-white">{toast.label}</div>
+                {toast.subtitle && <div className="text-xs text-gray-400">{toast.subtitle}</div>}
               </div>
             </div>
           )}

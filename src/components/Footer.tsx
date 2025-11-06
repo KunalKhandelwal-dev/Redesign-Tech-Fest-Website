@@ -65,7 +65,7 @@ export default function Footer() {
           >
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-cyan-400" />
-              <span className="text-xl font-orbitron gradient-text">YUGANTRAN2.0'25</span>
+              <span className="text-xl font-orbitron gradient-text">YUGANTRAN2.0</span>
             </div>
             <p className="text-gray-400 leading-relaxed mb-4">
               The premier annual tech fest organized by the School of Computer Science & Engineering at Geeta University.

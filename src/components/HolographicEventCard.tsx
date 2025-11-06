@@ -127,6 +127,12 @@ export default function HolographicEventCard({
       teamSize: "1–3 Members",
       fee: "₹100",
     },
+    "Free Fire": {
+      details:
+        "Team up and battle against the best in this thrilling Free Fire tournament. Showcase your strategy, skills, and teamwork to claim victory!",
+      teamSize: "Squad of 4 Members",
+      fee: "₹100",
+    },
   };
 
   const eventDetail = eventData[title] || {

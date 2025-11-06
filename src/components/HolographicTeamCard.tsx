@@ -96,13 +96,13 @@ export default function HolographicTeamCard({
         >
           {/* Image Section */}
           <div className="relative h-80 overflow-hidden">
-  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-pink-500/20" />
-  <ImageWithFallback
-    src={image}
-    alt={name}
-    className="w-full h-full object-cover"
-    loading="lazy"
-  />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-pink-500/20" />
+            <ImageWithFallback
+              src={image}
+              alt={name}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
             {isHovered && (
               <motion.div
                 className="absolute inset-0"
@@ -141,30 +141,25 @@ export default function HolographicTeamCard({
               className="absolute inset-0 bg-gradient-to-t from-black/95 via-cyan-900/50 to-transparent flex items-center justify-center"
             >
               {/* Social Icons */}
-              <div className="flex gap-5 z-10">
+              <div className="flex gap-8 z-10">
                 {[
                   { Icon: Linkedin, color: "cyan", link: linkedin },
                   { Icon: Instagram, color: "purple", link: github },
                   { Icon: Mail, color: "pink", link: email },
                 ].map(({ Icon, color, link }, i) => (
-                  <motion.a
+                  /* Replaced motion.a (which animated on card hover) with a plain anchor
+                     so icons no longer animate in/out based on the parent's hover.
+                     Local hover effects are preserved using CSS utility classes. */
+                  <a
                     key={i}
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    initial={{ scale: 0, rotate: -180 }}
-                    animate={
-                      isHovered
-                        ? { scale: 1, rotate: 0 }
-                        : { scale: 0, rotate: -180 }
-                    }
-                    transition={{ delay: 0.1 * i, type: "spring" }}
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.9 }}
-                    className={`w-12 h-12 bg-${color}-500/20 backdrop-blur-sm rounded-lg border border-${color}-400/50 flex items-center justify-center hover:bg-${color}-500 hover:border-${color}-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,212,255,0.3)]`}
+                    className={`w-12 h-12 bg-${color}-500/20 backdrop-blur-sm rounded-lg border border-${color}-400/50 flex items-center justify-center hover:bg-${color}-500 hover:border-${color}-400 transition-transform duration-200 transform hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(0,212,255,0.3)]`}
+                    aria-label={`Open ${name}'s ${color} link`}
                   >
                     <Icon className="w-6 h-6 text-white" />
-                  </motion.a>
+                  </a>
                 ))}
               </div>
             </motion.div>
@@ -206,24 +201,6 @@ export default function HolographicTeamCard({
             </div>
           </div>
         </motion.div>
-
-        {/* Outer Glow on Hover */}
-        <motion.div
-          className="absolute -inset-1 rounded-xl blur-xl pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(135deg, #00d4ff, #00ffff, #b000ff, #ff00ff)",
-          }}
-          animate={
-            isHovered
-              ? { opacity: [0.2, 0.6, 0.2] }
-              : { opacity: 0, transition: { duration: 0.4 } }
-          }
-          transition={{
-            duration: isHovered ? 2 : 0.5,
-            repeat: isHovered ? Infinity : 0,
-          }}
-        />
       </div>
     </motion.div>
   );

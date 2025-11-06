@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Kunal Khandelwal",
+        "role": "Tech Lead",
+        "image": "/images/team/kunal.jpg",
+        "linkedin": "https://www.linkedin.com/in/kunal-khandelwal-62a5b1311",
+        "instagram": "https://www.instagram.com/k13_kunal/",
+        "email": "kunalkhandelwal155@gmail.com"
+    },
+    {
+        "id": 2,
+        "name": "Suryansh",
+        "role": "Tech Lead",
+        "image": "/images/team/suryansh.jpg",
+        "linkedin": "https://www.linkedin.com/in/suryansh-saini-216712292/",
+        "instagram": "https://www.instagram.com/suryxnsh_09/",
+        "email": "anshsaini189@gmail.com"
+    },
+    {
+        "id": 3,
+        "name": "Naveenta",
+        "role": "Marketing Head",
+        "image": "/images/team/naveenta.jpg",
+        "linkedin": "https://www.linkedin.com/in/naveenta-manhas-37b011391?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://www.instagram.com/_komalmanhas_?igsh=bHFieGpxd29oMWZu",
+        "email": "naveentamanhas@gmail.com"
+    },
+    {
+        "id": 4,
+        "name": "Apeksha",
+        "role": "Sub Committee Head",
+        "image": "/images/team/apeksha.jpg",
+        "linkedin": "#",
+        "github": "#",
+        "email": "#"
+    }
+]

@@ -111,6 +111,15 @@ export default function Events() {
         gradient: "from-cyan-500 to-sky-600",
       },
       {
+        icon: Gamepad2,
+        title: "Free Fire",
+        category: "gaming",
+        description:
+          "Compete for glory in this intense Free Fire tournament.",
+        prize: "Exciting Rewards",
+        gradient: "from-orange-500 to-red-600",
+      },
+      {
         icon: Lightbulb,
         title: "Project Exhibition",
         category: "innovation",
@@ -187,11 +196,10 @@ export default function Events() {
               whileTap={{ scale: 0.97 }}
               transition={{ delay: 0.3 + index * 0.05 }}
               onClick={() => setActiveFilter(filter.id)}
-              className={`px-6 py-2 rounded-full transition-all duration-300 ${
-                activeFilter === filter.id
+              className={`px-6 py-2 rounded-full transition-all duration-300 ${activeFilter === filter.id
                   ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white glow-blue"
                   : "glass text-gray-400 hover:text-cyan-400 hover:border-cyan-400"
-              }`}
+                }`}
             >
               {filter.label}
             </motion.button>

@@ -3,6 +3,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Events from './components/Events';
 import Team from './components/Team';
+import SubTeam from "./components/subTeam"
 import Register from './components/Register';
 import Footer from './components/Footer';
 import BackgroundCircuit from './components/BackgroundCircuit';
@@ -26,6 +27,7 @@ export default function App() {
           <Events />
           <Register />
           <Team />
+          <SubTeam />
         </main>
 
         {/* Footer */}
