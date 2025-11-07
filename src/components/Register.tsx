@@ -87,13 +87,13 @@ export default function Register() {
     },
     "Tech Quiz": {
       type: "individual",
-      fee: 100,
+      fee: 25,
       minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/F0YqBqx65x69tTzd1ASrpL",
     },
     "Tekken 7": {
       type: "individual",
-      fee: 25,
+      fee: 50,
       minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M",
     },
@@ -1095,9 +1095,9 @@ export default function Register() {
               {/* Payment Section */}
               {formData.eventType.length > 0 && (
                 <div className="p-3 rounded-xl border border-cyan-500/20 bg-[#0f1724] text-center space-y-3">
-                  <p className="text-gray-300 flex items-center justify-center gap-2">
+                  <p className="text-white-500 flex items-center justify-center gap-2">
                     <IndianRupee className="w-5 h-5 text-cyan-400" />
-                    <span className="text-md font-medium">Total Registration Fee: ₹{totalFee}</span>
+                    <span className="text-lg font-medium">Total Registration Fee: ₹{totalFee}</span>
                   </p>
 
                   <div>

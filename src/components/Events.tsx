@@ -31,84 +31,13 @@ export default function Events() {
   const events = useMemo(
     () => [
       {
-        icon: Code,
-        title: "Debug It",
-        category: "coding",
-        description: "Find and fix programming errors faster than anyone else.",
-        prize: "₹1500",
-        gradient: "from-cyan-500 to-blue-600",
-      },
-      {
-        icon: Box,
-        title: "Tech Treasure",
-        category: "quiz",
-        description:
-          "Solve technical puzzles and clues to discover the hidden treasure.",
-        prize: "₹3000",
-        gradient: "from-yellow-500 to-orange-600",
-      },
-      {
         icon: Gamepad2,
         title: "BGMI",
         category: "gaming",
         description:
           "Compete in the ultimate battleground to prove your gaming skills.",
         prize: "₹5000",
-        gradient: "from-orange-500 to-red-600",
-      },
-      {
-        icon: Cpu,
-        title: "Tech Show",
-        category: "innovation",
-        description:
-          "Showcase your latest tech projects, prototypes, or research ideas.",
-        prize: "₹2000",
-        gradient: "from-purple-500 to-pink-600",
-      },
-      {
-        icon: Rocket,
-        title: "Startup Bid",
-        category: "entrepreneurship",
-        description:
-          "Pitch your startup idea and win support from investors and mentors.",
-        prize: "To be updated",
-        gradient: "from-green-500 to-emerald-600",
-      },
-      {
-        icon: Palette,
-        title: "Poster Making",
-        category: "design",
-        description:
-          "Create innovative and creative posters on technology or social themes.",
-        prize: "₹1000",
-        gradient: "from-indigo-500 to-purple-600",
-      },
-      {
-        icon: Brain,
-        title: "Tech Quiz",
-        category: "quiz",
-        description:
-          "Challenge your technical knowledge in a battle of wits and logic.",
-        prize: "₹2500",
-        gradient: "from-blue-500 to-teal-600",
-      },
-      {
-        icon: Gamepad2,
-        title: "Tekken 7",
-        category: "gaming",
-        description:
-          "Show your fighting skills in an electrifying Tekken 7 tournament.",
-        prize: "₹2000",
-        gradient: "from-red-500 to-rose-600",
-      },
-      {
-        icon: Terminal,
-        title: "Code Relay",
-        category: "coding",
-        description:
-          "Solve coding challenges and algorithms in this competitive event.",
-        prize: "₹3000",
-        gradient: "from-cyan-500 to-sky-600",
+        gradient: "from-pink-500 to-pink-600",
       },
       {
         icon: Gamepad2,
@@ -117,7 +46,60 @@ export default function Events() {
         description:
           "Compete for glory in this intense Free Fire tournament.",
         prize: "₹3000",
-        gradient: "from-orange-500 to-red-600",
+        gradient: "from-indigo-500 to-blue-600",
+      },
+      {
+        icon: Box,
+        title: "Tech Treasure",
+        category: "quiz",
+        description:
+        "Solve technical puzzles and clues to discover the hidden treasure.",
+        prize: "₹3000",
+        gradient: "from-blue-500 to-red-600",
+      },
+      {
+        icon: Terminal,
+        title: "Code Relay",
+        category: "coding",
+        description:
+        "Solve coding challenges and algorithms in this competitive event.",
+        prize: "₹3000",
+        gradient: "from-orange-500 to-cyan-600",
+      },
+      {
+        icon: Brain,
+        title: "Tech Quiz",
+        category: "quiz",
+        description:
+        "Challenge your technical knowledge in a battle of wits and logic.",
+        prize: "₹2500",
+        gradient: "from-amber-500 to-teal-600",
+      },
+      {
+        icon: Cpu,
+        title: "Tech Show",
+        category: "innovation",
+        description:
+        "Showcase your latest tech projects, prototypes, or research ideas.",
+        prize: "₹2000",
+        gradient: "from-pink-500 to-pink-600",
+      },
+      {
+        icon: Gamepad2,
+        title: "Tekken 7",
+        category: "gaming",
+        description:
+          "Show your fighting skills in an electrifying Tekken 7 tournament.",
+        prize: "₹2000",
+        gradient: "from-violet-500 to-red-600",
+      },
+      {
+        icon: Code,
+        title: "Debug It",
+        category: "coding",
+        description: "Find and fix programming errors faster than anyone else.",
+        prize: "₹1500",
+        gradient: "from-cyan-500 to-sky-600",
       },
       {
         icon: Lightbulb,
@@ -127,6 +109,24 @@ export default function Events() {
           "Display your academic or innovative projects for recognition.",
         prize: "₹1500",
         gradient: "from-amber-500 to-orange-600",
+      },
+      {
+        icon: Palette,
+        title: "Poster Making",
+        category: "design",
+        description:
+        "Create innovative and creative posters on technology or social themes.",
+        prize: "₹1000",
+        gradient: "from-indigo-500 to-purple-600",
+      },
+      {
+        icon: Rocket,
+        title: "Startup Bid",
+        category: "entrepreneurship",
+        description:
+        "Pitch your startup idea and win support from investors and mentors.",
+        prize: "To be updated",
+        gradient: "from-green-500 to-emerald-600",
       },
     ],
     []
