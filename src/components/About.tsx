@@ -147,7 +147,7 @@ export default function About() {
               { label: "Sponsors", value: "5+" },
             ].map((stat, index) => (
               <motion.div key={index} variants={itemVariants} className="text-center">
-                <div className="text-3xl md:text-4xl lg:text-5xl font-orbitron gradient-text mb-2">
+                <div className="text-1xl md:text-4xl lg:text-5xl font-orbitron gradient-text mb-2">
                   {stat.value}
                 </div>
                 <div className="text-gray-400">{stat.label}</div>
