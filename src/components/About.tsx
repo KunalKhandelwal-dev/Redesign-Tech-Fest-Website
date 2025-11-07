@@ -143,7 +143,7 @@ export default function About() {
             {[
               { label: "Participants", value: "500+" },
               { label: "Events", value: "10+" },
-              { label: "Prize Pool", value: "Cash 🏆" },
+              { label: "Prize Pool", value: "₹30,000" },
               { label: "Sponsors", value: "5+" },
             ].map((stat, index) => (
               <motion.div key={index} variants={itemVariants} className="text-center">

@@ -71,7 +71,7 @@ export default function HolographicEventCard({
       details:
         "Participants will be provided buggy code snippets. Identify and fix errors to make the program run correctly within the shortest time.",
       teamSize: "Individual",
-      fee: "₹100",
+      fee: "₹25",
     },
     "Tech Treasure": {
       details:
@@ -82,49 +82,49 @@ export default function HolographicEventCard({
     BGMI: {
       details:
         "Battle it out in the ultimate BGMI competition. Squad up and survive till the end to win prizes!",
-      teamSize: "Solo/ Squad (4 Players)",
+      teamSize: "Squad (4 Players)",
       fee: "₹100",
     },
     "Tech Show": {
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
-      teamSize: "1-3 Members",
-      fee: "₹100",
+      teamSize: "1-2 Members",
+      fee: "₹50",
     },
     "Startup Bid": {
       details:
         "Pitch your startup ideas to potential investors and mentors.",
-      teamSize: "2-4 Members",
+      teamSize: "1-4 Members",
       fee: "₹100",
     },
     "Poster Making": {
       details:
         "Design creative posters that communicate ideas on technology or social causes.",
       teamSize: "Individual",
-      fee: "₹100",
+      fee: "₹25",
     },
     "Tech Quiz": {
       details:
         "Test your technical and general knowledge in this fast-paced quiz.",
       teamSize: "Individual",
-      fee: "₹100",
+      fee: "₹25",
     },
     "Tekken 7": {
       details:
         "Prove your combat mastery in the ultimate Tekken 7 face-off.",
       teamSize: "Individual",
-      fee: "₹100",
+      fee: "₹50",
     },
     "Code Relay": {
       details:
         "Compete in timed programming challenges and algorithmic problems.",
       teamSize: "Duo",
-      fee: "₹100",
+      fee: "₹50",
     },
     "Project Exhibition": {
       details:
         "Showcase your academic, mini, or major projects with innovation.",
-      teamSize: "1–2 Members",
+      teamSize: "1–3 Members",
       fee: "₹100",
     },
     "Free Fire": {

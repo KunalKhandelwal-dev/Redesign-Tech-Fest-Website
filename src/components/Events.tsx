@@ -35,7 +35,7 @@ export default function Events() {
         title: "Debug It",
         category: "coding",
         description: "Find and fix programming errors faster than anyone else.",
-        prize: "Exciting Rewards",
+        prize: "₹1500",
         gradient: "from-cyan-500 to-blue-600",
       },
       {
@@ -44,7 +44,7 @@ export default function Events() {
         category: "quiz",
         description:
           "Solve technical puzzles and clues to discover the hidden treasure.",
-        prize: "Exciting Rewards",
+        prize: "₹3000",
         gradient: "from-yellow-500 to-orange-600",
       },
       {
@@ -53,7 +53,7 @@ export default function Events() {
         category: "gaming",
         description:
           "Compete in the ultimate battleground to prove your gaming skills.",
-        prize: "Exciting Rewards",
+        prize: "₹5000",
         gradient: "from-orange-500 to-red-600",
       },
       {
@@ -62,7 +62,7 @@ export default function Events() {
         category: "innovation",
         description:
           "Showcase your latest tech projects, prototypes, or research ideas.",
-        prize: "Exciting Rewards",
+        prize: "₹2000",
         gradient: "from-purple-500 to-pink-600",
       },
       {
@@ -71,7 +71,7 @@ export default function Events() {
         category: "entrepreneurship",
         description:
           "Pitch your startup idea and win support from investors and mentors.",
-        prize: "Exciting Rewards",
+        prize: "To be updated",
         gradient: "from-green-500 to-emerald-600",
       },
       {
@@ -80,7 +80,7 @@ export default function Events() {
         category: "design",
         description:
           "Create innovative and creative posters on technology or social themes.",
-        prize: "Exciting Rewards",
+        prize: "₹1000",
         gradient: "from-indigo-500 to-purple-600",
       },
       {
@@ -89,7 +89,7 @@ export default function Events() {
         category: "quiz",
         description:
           "Challenge your technical knowledge in a battle of wits and logic.",
-        prize: "Exciting Rewards",
+        prize: "₹2500",
         gradient: "from-blue-500 to-teal-600",
       },
       {
@@ -98,7 +98,7 @@ export default function Events() {
         category: "gaming",
         description:
           "Show your fighting skills in an electrifying Tekken 7 tournament.",
-        prize: "Exciting Rewards",
+        prize: "₹2000",
         gradient: "from-red-500 to-rose-600",
       },
       {
@@ -107,7 +107,7 @@ export default function Events() {
         category: "coding",
         description:
           "Solve coding challenges and algorithms in this competitive event.",
-        prize: "Exciting Rewards",
+        prize: "₹3000",
         gradient: "from-cyan-500 to-sky-600",
       },
       {
@@ -116,7 +116,7 @@ export default function Events() {
         category: "gaming",
         description:
           "Compete for glory in this intense Free Fire tournament.",
-        prize: "Exciting Rewards",
+        prize: "₹3000",
         gradient: "from-orange-500 to-red-600",
       },
       {
@@ -125,7 +125,7 @@ export default function Events() {
         category: "innovation",
         description:
           "Display your academic or innovative projects for recognition.",
-        prize: "Exciting Rewards",
+        prize: "₹1500",
         gradient: "from-amber-500 to-orange-600",
       },
     ],

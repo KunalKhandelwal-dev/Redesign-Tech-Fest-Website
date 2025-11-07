@@ -47,7 +47,7 @@ export default function Register() {
   > = {
     "Debug It": {
       type: "individual",
-      fee: 100,
+      fee: 25,
       minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/BWVnE4wjQeM3yRTMdCm5e1",
     },
@@ -61,27 +61,27 @@ export default function Register() {
     BGMI: {
       type: "team",
       fee: 100,
-      minTeam: 1,
+      minTeam: 4,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Busn9D6I7wa14z5VbI8W4A",
     },
     "Tech Show": {
       type: "team",
-      fee: 100,
+      fee: 50,
       minTeam: 1,
-      maxTeam: 3,
+      maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7",
     },
     "Startup Bid": {
       type: "team",
       fee: 100,
-      minTeam: 2,
+      minTeam: 1,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/HypSXtHqVcY18mKmKBcIdZ",
     },
     "Poster Making": {
       type: "individual",
-      fee: 100,
+      fee: 25,
       minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/Lt04XGiL4E7L83yMVAOFgN",
     },
@@ -93,13 +93,13 @@ export default function Register() {
     },
     "Tekken 7": {
       type: "individual",
-      fee: 100,
+      fee: 25,
       minTeam: 1,
       whatsapp: "https://chat.whatsapp.com/CMuQzhMFln6KsXRHVCly8M",
     },
     "Code Relay": {
       type: "team",
-      fee: 100,
+      fee: 50,
       minTeam: 2,
       maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/CC17GJQQ6buDc00EGDBOr2",
@@ -108,7 +108,7 @@ export default function Register() {
       type: "team",
       fee: 100,
       minTeam: 1,
-      maxTeam: 2,
+      maxTeam: 3,
       whatsapp: "https://chat.whatsapp.com/LdlXwMnUD7L8URzB9PXV9Y",
     },
     "Free Fire": {
@@ -1359,19 +1359,19 @@ export default function Register() {
                     const info = eventInfo[modalEventLabel];
                     if (!info) return null;
 
-                    // BGMI special case
-                    if (modalEventLabel === "BGMI") {
-                      const opts = [1, 4];
-                      return opts.map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => confirmTeamSize(modalEventLabel, s)}
-                          className="px-4 py-2 rounded-lg bg-cyan-600/10 text-cyan-300 hover:bg-cyan-600/20 border border-cyan-500/20 font-medium"
-                        >
-                          {s} {s === 1 ? "Player" : "Players"}
-                        </button>
-                      ));
-                    }
+                    // // BGMI special case
+                    // if (modalEventLabel === "BGMI") {
+                    //   const opts = [1, 4];
+                    //   return opts.map((s) => (
+                    //     <button
+                    //       key={s}
+                    //       onClick={() => confirmTeamSize(modalEventLabel, s)}
+                    //       className="px-4 py-2 rounded-lg bg-cyan-600/10 text-cyan-300 hover:bg-cyan-600/20 border border-cyan-500/20 font-medium"
+                    //     >
+                    //       {s} {s === 1 ? "Player" : "Players"}
+                    //     </button>
+                    //   ));
+                    // }
 
                     const min = info.minTeam ?? 1;
                     const max = info.maxTeam ?? Math.max(min, 1);
