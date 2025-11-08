@@ -235,14 +235,6 @@ export default function Register() {
   };
 
   /* -----------------------------
-     Bottom-center motion toast helper
-  ----------------------------- */
-  const showToastPopup = (label: string, subtitle?: string, Icon?: any) => {
-    setToast({ label, subtitle, Icon });
-    window.setTimeout(() => setToast(null), 2500);
-  };
-
-  /* -----------------------------
      Prevent body scroll while modal is open
   ----------------------------- */
   useEffect(() => {
@@ -287,7 +279,7 @@ export default function Register() {
      TOGGLE EVENT (form click only / external)
      - Team events remain exclusive (single selection).
      - Individual events are now single-select (exclusive).
-     - showFloatingToast and showToastPopup show for both external and internal selections.
+     - showFloatingToast show for both external and internal selections.
   ----------------------------- */
   const toggleEvent = (label: string, isExternal = false) => {
     const info = eventInfo[label];
@@ -323,7 +315,6 @@ export default function Register() {
       }
 
       showFloatingToast(`${label} deselected ❌`);
-      showToastPopup(`${label} deselected`, undefined, icons[label] || Search);
       return;
     }
 
@@ -332,7 +323,6 @@ export default function Register() {
       if (info.maxTeam != null && info.minTeam === info.maxTeam) {
         confirmTeamSize(label, info.minTeam);
         showFloatingToast(`${label} selected — Fixed team of ${info.minTeam} players ✅`);
-        showToastPopup(`${label} selected`, `Fixed team of ${info.minTeam}`, icons[label] || Code);
         return;
       }
 
@@ -347,7 +337,6 @@ export default function Register() {
         teamType: "team",
       }));
       showFloatingToast(`Choose team size for ${label}`);
-      showToastPopup(`Choose team size`, label, icons[label] || Code);
       return;
     }
 
@@ -365,7 +354,6 @@ export default function Register() {
     setChosenTeamEvent(null);
 
     showFloatingToast(`${label} selected ✅`);
-    showToastPopup(`${label} selected`, undefined, icons[label] || Search);
   };
 
   /* -----------------------------
@@ -387,7 +375,6 @@ export default function Register() {
         teamType: "individual",
       }));
       showFloatingToast(`${label} selected as individual ✅`);
-      showToastPopup(`${label} selected as individual`, undefined, icons[label] || Check);
       return;
     }
 
@@ -401,7 +388,6 @@ export default function Register() {
       teamMembers: Array.from({ length: size - 1 }, () => ({ name: "", rollNumber: "", program: "", semester: "" })),
     }));
     showFloatingToast(`${label} selected — Team of ${size} players ✅`);
-    showToastPopup(`${label} selected — Team of ${size}`, undefined, icons[label] || Users);
   };
 
   /* -----------------------------
@@ -569,7 +555,6 @@ export default function Register() {
     const errorMessages = Object.values(newErrors);
     if (errorMessages.length > 0) {
       showFloatingToast(errorMessages[0]);
-      showToastPopup(errorMessages[0]);
     }
 
     return Object.keys(newErrors).length === 0;
@@ -736,7 +721,6 @@ export default function Register() {
       } else {
         console.warn(`[Register] Unrecognized external event label: "${incoming}". Available: ${Object.keys(eventInfo).join(", ")}`);
         showFloatingToast(`Unknown event: ${incoming}`);
-        showToastPopup(`Unknown event`, String(incoming));
       }
     };
 
@@ -1097,7 +1081,6 @@ export default function Register() {
                               if (formData.teamMembers.length < selectedCountNow - 1) {
                                 setFormData({ ...formData, teamMembers: [...formData.teamMembers, { name: "", rollNumber: "", program: "", semester: "" }] });
                               } else {
-                                showToastPopup(`Maximum ${selectedCountNow - 1} members allowed.`, undefined);
                                 showFloatingToast(`Maximum ${selectedCountNow - 1} members allowed.`);
                               }
                             }}
