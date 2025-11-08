@@ -562,6 +562,7 @@ export default function Register() {
 
   /* -----------------------------
      SUBMIT HANDLER
+     NOTE: eventType is sent as a single string (first selected label) to match backend expectation
   ----------------------------- */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -580,7 +581,10 @@ export default function Register() {
       form.append("semester", formData.semester);
       form.append("mobileNumber", formData.mobileNumber);
       form.append("college", formData.college);
-      form.append("eventType", JSON.stringify(formData.eventType));
+
+      // <-- Updated: send single event label instead of JSON array
+      form.append("eventType", formData.eventType[0] ?? "");
+
       form.append("teamType", formData.teamType);
       form.append("teamName", formData.teamName);
       form.append("upiId", formData.upiId);
