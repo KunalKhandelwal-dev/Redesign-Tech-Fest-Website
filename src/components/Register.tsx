@@ -67,9 +67,9 @@ export default function Register() {
     },
     "Tech Show": {
       type: "team",
-      fee: 50,
+      fee: 100,
       minTeam: 1,
-      maxTeam: 2,
+      maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7",
     },
     "Startup Bid": {
