@@ -67,8 +67,8 @@ export default function Register() {
     },
     "Tech Show": {
       type: "team",
-      fee: 100,
-      minTeam: 1,
+      fee: 100, // default fee for Tech Show is 100 (for team of 4). Special-case for team of 3 handled in fee calculation.
+      minTeam: 3,
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7",
     },
@@ -194,11 +194,24 @@ export default function Register() {
      FEE CALCULATION
      - if any team event selected -> team event fee takes precedence
      - else sum individual event fees
+     - SPECIAL: Tech Show fee depends on chosen team size:
+         - 3 players => fee 80
+         - 4 players => fee 100 (default)
   ----------------------------- */
   useEffect(() => {
     const teamEvent = formData.eventType.find((ev) => eventInfo[ev]?.type === "team");
     if (teamEvent) {
-      setTotalFee(eventInfo[teamEvent].fee);
+      // Special-case for "Tech Show" which has variable fee depending on chosen team size.
+      if (teamEvent === "Tech Show") {
+        if (chosenTeamSize === 3) {
+          setTotalFee(80);
+        } else {
+          // default (4 or unspecified) -> use configured fee (100)
+          setTotalFee(eventInfo[teamEvent].fee);
+        }
+      } else {
+        setTotalFee(eventInfo[teamEvent].fee);
+      }
     } else {
       const total = formData.eventType.reduce((sum, ev) => {
         const info = eventInfo[ev];
@@ -206,7 +219,7 @@ export default function Register() {
       }, 0);
       setTotalFee(total);
     }
-  }, [formData.eventType]);
+  }, [formData.eventType, chosenTeamSize, chosenTeamEvent]);
 
   /* -----------------------------
      FLOATING TOAST (form only)

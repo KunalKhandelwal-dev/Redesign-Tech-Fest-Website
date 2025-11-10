@@ -88,8 +88,8 @@ export default function HolographicEventCard({
     "Tech Show": {
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
-      teamSize: "1-4 Members",
-      fee: "₹100",
+      teamSize: "3-4 Members",
+      fee: "₹80 - ₹100",
     },
     "Startup Bid": {
       details:
