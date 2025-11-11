@@ -45,7 +45,7 @@ export default function Events() {
         category: "gaming",
         description:
           "Compete in the ultimate battleground to prove your gaming skills.",
-        prize: "To be updated...",
+        prize: "Cash Prize",
         gradient: "from-pink-500 to-pink-600",
       },
       {
@@ -63,7 +63,7 @@ export default function Events() {
         category: "gaming",
         description:
           "Compete for glory in this intense Free Fire tournament.",
-        prize: "To be updated...",
+        prize: "Cash Prize",
         gradient: "from-indigo-500 to-blue-600",
       },
       {
@@ -143,7 +143,7 @@ export default function Events() {
         category: "entrepreneurship",
         description:
         "Pitch your startup idea and win support from investors and mentors.",
-        prize: "To be updated",
+        prize: "Cash Prize",
         gradient: "from-green-500 to-emerald-600",
       },
     ],
