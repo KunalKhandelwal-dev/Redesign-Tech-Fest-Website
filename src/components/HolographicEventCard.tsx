@@ -95,7 +95,7 @@ export default function HolographicEventCard({
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
       teamSize: "3-4 Members",
-      fee: "₹80 - ₹100",
+      fee: "₹100",
     },
     "Startup Bid": {
       details:

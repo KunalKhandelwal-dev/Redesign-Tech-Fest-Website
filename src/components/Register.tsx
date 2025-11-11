@@ -220,7 +220,7 @@ export default function Register() {
       // Special-case for "Tech Show" which has variable fee depending on chosen team size.
       if (teamEvent === "Tech Show") {
         if (chosenTeamSize === 3) {
-          setTotalFee(80);
+          setTotalFee(100);
         } else {
           // default (4 or unspecified) -> use configured fee (100)
           setTotalFee(eventInfo[teamEvent].fee);
