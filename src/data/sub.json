@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Anjali",
-        "role": "Sponsor Lead",
+        "role": "Event Manager",
         "image": "/images/team/anjali.jpg",
         "linkedin": "https://www.linkedin.com/in/anjali-dhankar?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         "github": "https://www.instagram.com/_anjali._.10._?igsh=MXNlb3FpeXJ3MXh2Yw==",
@@ -25,14 +25,5 @@
         "linkedin": "https://www.linkedin.com/in/naveenta-manhas-37b011391?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         "github": "https://www.instagram.com/_komalmanhas_?igsh=bHFieGpxd29oMWZu",
         "email": "naveentamanhas@gmail.com"
-    },
-    {
-        "id": 4,
-        "name": "Apeksha",
-        "role": "Event Manager",
-        "image": "/images/team/apeksha.jpg",
-        "linkedin": "https://www.linkedin.com/in/apeksha-rana-13b371384?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-        "github": "https://www.instagram.com/apeksharana.04?igsh=MWRrMDBxb2hkd3kzdw==",
-        "email": "ranav7983@gmail.com"
     }
 ]

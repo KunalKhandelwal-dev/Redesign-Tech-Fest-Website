@@ -164,12 +164,14 @@ export default function Register() {
     college: "",
     eventType: [] as string[],
     teamName: "",
-    // teamMembers now an array of objects (excluding the submitting user)
-    teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }] as Array<{
+    // teamMembers now include college field as well (excluding the submitting user)
+    // NOTE: college fields are initialized empty -- we no longer auto-fill them with the submitter's college.
+    teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }] as Array<{
       name: string;
       rollNumber: string;
       program: string;
       semester: string;
+      college: string;
     }>,
     paymentReceipt: null as File | null,
     teamType: "",
@@ -334,7 +336,8 @@ export default function Register() {
           ...prev,
           eventType: newEventType,
           teamName: "",
-          teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }],
+          // reset members with empty college fields (no auto-fill)
+          teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
           teamType: newTeamType,
         }));
       } else {
@@ -360,7 +363,8 @@ export default function Register() {
         ...prev,
         eventType: [label],
         teamName: "",
-        teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }],
+        // initialize members with empty college (do not copy submitter's college)
+        teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
         teamType: "team",
       }));
       showFloatingToast(`Choose team size for ${label}`);
@@ -374,7 +378,8 @@ export default function Register() {
       eventType: [label],
       teamType: "individual",
       teamName: "",
-      teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }],
+      // single-member placeholder with empty college
+      teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
     }));
 
     setChosenTeamSize(null);
@@ -398,7 +403,8 @@ export default function Register() {
         ...prev,
         eventType: [label],
         teamName: "",
-        teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }],
+        // individual placeholder, no auto-filled college
+        teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
         teamType: "individual",
       }));
       showFloatingToast(`${label} selected as individual ✅`);
@@ -412,7 +418,8 @@ export default function Register() {
       ...prev,
       eventType: [label],
       teamType: "team",
-      teamMembers: Array.from({ length: size - 1 }, () => ({ name: "", rollNumber: "", program: "", semester: "" })),
+      // initialize teamMembers with empty college fields (user should enter manually)
+      teamMembers: Array.from({ length: size - 1 }, () => ({ name: "", rollNumber: "", program: "", semester: "", college: "" })),
     }));
     showFloatingToast(`${label} selected — Team of ${size} players ✅`);
   };
@@ -547,13 +554,14 @@ export default function Register() {
     if (teamSelected) {
       if (!data.teamName.trim()) newErrors.teamName = "Team name is required.";
 
-      // require all fields for each member
+      // require all fields for each member (still includes college)
       const emptyFound = data.teamMembers.some(
         (m) =>
           !m.name.trim() ||
           !m.rollNumber.trim() ||
           !m.program.trim() ||
-          !m.semester.trim()
+          !m.semester.trim() ||
+          !m.college.trim()
       );
       if (emptyFound) newErrors.teamMembers = "All team member fields are required.";
 
@@ -596,7 +604,8 @@ export default function Register() {
     if (!validate(formData)) return;
     setLoading(true);
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    const backendUrl = "http://localhost:5000";
 
     try {
       const form = new FormData();
@@ -654,7 +663,7 @@ export default function Register() {
           college: "",
           eventType: [],
           teamName: "",
-          teamMembers: [{ name: "", rollNumber: "", program: "", semester: "" }],
+          teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
           paymentReceipt: null,
           teamType: "",
           upiId: "",
@@ -1026,7 +1035,7 @@ export default function Register() {
 
                   <div>
                     <label className="block text-sm mb-2 text-gray-300">
-                      Team Members (excluding yourself) — provide Name, Program, Roll Number, Semester
+                      Team Members (excluding yourself) — provide Name, Program, Roll Number, Semester, College/University
                     </label>
 
                     {formData.teamMembers.map((member, i) => (
@@ -1040,7 +1049,8 @@ export default function Register() {
                                 const updated = formData.teamMembers.filter((_, idx) => idx !== i);
                                 setFormData({
                                   ...formData,
-                                  teamMembers: updated.length ? updated : [{ name: "", rollNumber: "", program: "", semester: "" }],
+                                  // if no members remain, leave single blank placeholder with empty college
+                                  teamMembers: updated.length ? updated : [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
                                 });
                               }}
                               className="text-red-400 hover:text-red-300 text-sm px-2 py-1 rounded"
@@ -1051,7 +1061,7 @@ export default function Register() {
                           )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                           <IconInput
                             value={member.name}
                             onChange={(v) => {
@@ -1095,6 +1105,17 @@ export default function Register() {
                             placeholder="Semester"
                             Icon={<BookOpen className="w-4 h-4" />}
                           />
+
+                          <IconInput
+                            value={member.college}
+                            onChange={(v) => {
+                              const updated = [...formData.teamMembers];
+                              updated[i] = { ...updated[i], college: v };
+                              setFormData({ ...formData, teamMembers: updated });
+                            }}
+                            placeholder="College / University"
+                            Icon={<Building2 className="w-4 h-4" />}
+                          />
                         </div>
                       </div>
                     ))}
@@ -1110,7 +1131,8 @@ export default function Register() {
                             onClick={() => {
                               const selectedCountNow = chosenTeamSize ?? currentMaxTeam;
                               if (formData.teamMembers.length < selectedCountNow - 1) {
-                                setFormData({ ...formData, teamMembers: [...formData.teamMembers, { name: "", rollNumber: "", program: "", semester: "" }] });
+                                // new member starts with empty college field (do not copy submitter's college)
+                                setFormData({ ...formData, teamMembers: [...formData.teamMembers, { name: "", rollNumber: "", program: "", semester: "", college: "" }] });
                               } else {
                                 showFloatingToast(`Maximum ${selectedCountNow - 1} members allowed.`);
                               }
