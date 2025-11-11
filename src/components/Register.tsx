@@ -25,6 +25,7 @@ import {
   IndianRupee,
   Check,
   Users,
+  Mail, // added
 } from "lucide-react";
 
 export default function Register() {
@@ -162,6 +163,7 @@ export default function Register() {
     semester: "",
     mobileNumber: "",
     college: "",
+    email: "", // leader's email (only leader supplies this)
     eventType: [] as string[],
     teamName: "",
     // teamMembers now include college field as well (excluding the submitting user)
@@ -522,6 +524,17 @@ export default function Register() {
     if (!/^[0-9]{10}$/.test(data.mobileNumber))
       newErrors.mobileNumber = "Enter a valid 10-digit mobile number.";
     if (!data.college.trim()) newErrors.college = "College/University is required.";
+
+    // leader's email validation (only leader supplies email)
+    if (!data.email || !data.email.trim()) {
+      newErrors.email = "Email is required (leader's email).";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email.trim())) {
+        newErrors.email = "Enter a valid email address.";
+      }
+    }
+
     if (data.eventType.length === 0) newErrors.eventType = "Select at least one event.";
     if (!data.paymentReceipt) newErrors.paymentReceipt = "Please upload your payment receipt.";
 
@@ -595,40 +608,39 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  /* -----------------------------
-     SUBMIT HANDLER
-     NOTE: eventType is sent as a single string (first selected label) to match backend expectation
-  ----------------------------- */
+  const getSelectedWhatsappLink = () => {
+    const selected = formData.eventType[0];
+    return selected && eventInfo[selected] ? eventInfo[selected].whatsapp : "";
+  };
+
+  // SUBMIT HANDLER: Send all data to backend (including the WhatsApp link!), let backend send email
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate(formData)) return;
     setLoading(true);
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    const backendUrl = "http://localhost:5000";
 
     try {
       const form = new FormData();
 
-      // Append simple primitives
       form.append("name", formData.name);
       form.append("rollNumber", formData.rollNumber);
       form.append("program", formData.program);
       form.append("semester", formData.semester);
       form.append("mobileNumber", formData.mobileNumber);
       form.append("college", formData.college);
-
-      // <-- Updated: send single event label instead of JSON array
+      form.append("email", formData.email);
       form.append("eventType", formData.eventType[0] ?? "");
-
       form.append("teamType", formData.teamType);
       form.append("teamName", formData.teamName);
       form.append("upiId", formData.upiId);
       form.append("transactionId", formData.transactionId);
-
-      // Append teamMembers as JSON string (backend will parse it)
       form.append("teamMembers", JSON.stringify(formData.teamMembers));
+      // <-- Send WhatsApp group link to backend!
+      form.append("whatsappLink", getSelectedWhatsappLink());
 
-      // Append file
       if (formData.paymentReceipt instanceof File) {
         const isTeam = formData.eventType.some((e) => eventInfo[e]?.type === "team") && formData.teamType === "team";
         const baseName = isTeam ? (formData.teamName || formData.name || "team") : (formData.name || "participant");
@@ -645,14 +657,14 @@ export default function Register() {
       const resultText = await res.text();
 
       if (res.ok) {
-        console.log("✅ Registration Response:", resultText);
         setSubmitted(true);
         setLastRegisteredEvent(formData.eventType[0] || null);
+
         setTimeout(() => {
           successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 100);
 
-        // Reset
+        // Reset all fields
         setFormData({
           name: "",
           rollNumber: "",
@@ -660,6 +672,7 @@ export default function Register() {
           semester: "",
           mobileNumber: "",
           college: "",
+          email: "",
           eventType: [],
           teamName: "",
           teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
@@ -679,12 +692,10 @@ export default function Register() {
         setErrors({});
         setTimeout(() => setSubmitted(false), 15000);
       } else {
-        console.error("❌ Server returned error:", resultText);
-        alert("⚠️ Something went wrong. Please try again.");
+        showFloatingToast("Registration failed! Try again.");
       }
     } catch (err) {
-      console.error("❌ Network or server error:", err);
-      alert("⚠️ Network error. Please try again later.");
+      showFloatingToast("Network/server error. Try again.");
     } finally {
       setLoading(false);
     }
@@ -869,6 +880,17 @@ export default function Register() {
                   placeholder="Enter college"
                   error={errors.college}
                   icon={<Building2 className="text-cyan-400" />}
+                />
+
+                {/* Leader's Email (only leader fills this) */}
+                <InputField
+                  label="Email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  error={errors.email}
+                  icon={<Mail className="text-cyan-400" />}
                 />
               </div>
 
@@ -1286,11 +1308,13 @@ export default function Register() {
                   loading ||
                   !formData.paymentReceipt ||
                   !formData.upiId.trim() ||
-                  !formData.transactionId.trim()
+                  !formData.transactionId.trim() ||
+                  !formData.email.trim()
                 }
                 className={`w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-orbitron text-white flex items-center justify-center gap-2 mt-2 ${(!formData.paymentReceipt ||
                     !formData.upiId.trim() ||
                     !formData.transactionId.trim() ||
+                    !formData.email.trim() ||
                     loading)
                     ? "opacity-60 cursor-not-allowed"
                     : ""
