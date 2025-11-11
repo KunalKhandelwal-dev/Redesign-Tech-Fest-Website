@@ -846,7 +846,7 @@ export default function Register() {
                   icon={<Hash className="text-cyan-400" />}
                 />
                 <InputField
-                  label="program"
+                  label="Program"
                   name="program"
                   value={formData.program}
                   onChange={handleChange}
