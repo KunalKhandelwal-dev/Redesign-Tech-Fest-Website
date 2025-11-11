@@ -41,11 +41,29 @@ export default function Events() {
       },
       {
         icon: Gamepad2,
+        title: "BGMI(Solo)",
+        category: "gaming",
+        description:
+          "Compete in the ultimate battleground to prove your gaming skills.",
+        prize: "To be updated...",
+        gradient: "from-pink-500 to-pink-600",
+      },
+      {
+        icon: Gamepad2,
         title: "Free Fire",
         category: "gaming",
         description:
           "Compete for glory in this intense Free Fire tournament.",
         prize: "₹3000",
+        gradient: "from-indigo-500 to-blue-600",
+      },
+      {
+        icon: Gamepad2,
+        title: "Free Fire(Solo)",
+        category: "gaming",
+        description:
+          "Compete for glory in this intense Free Fire tournament.",
+        prize: "To be updated...",
         gradient: "from-indigo-500 to-blue-600",
       },
       {
