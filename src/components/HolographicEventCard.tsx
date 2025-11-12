@@ -67,12 +67,6 @@ export default function HolographicEventCard({
     string,
     { details: string; teamSize: string; fee?: string }
   > = {
-    "Debug It": {
-      details:
-        "Participants will be provided buggy code snippets. Identify and fix errors to make the program run correctly within the shortest time.",
-      teamSize: "Individual",
-      fee: "₹25",
-    },
     "Tech Treasure": {
       details:
         "A treasure hunt of logic and tech clues! Solve puzzles and follow hints that lead to the treasure.",
@@ -120,12 +114,6 @@ export default function HolographicEventCard({
         "Compete in timed programming challenges and algorithmic problems.",
       teamSize: "Duo",
       fee: "₹50",
-    },
-    "Project Exhibition": {
-      details:
-        "Showcase your academic, mini, or major projects with innovation.",
-      teamSize: "1–3 Members",
-      fee: "₹100",
     },
     "Free Fire": {
       details:

@@ -46,12 +46,6 @@ export default function Register() {
       whatsapp: string;
     }
   > = {
-    "Debug It": {
-      type: "individual",
-      fee: 25,
-      minTeam: 1,
-      whatsapp: "https://chat.whatsapp.com/BWVnE4wjQeM3yRTMdCm5e1",
-    },
     "Tech Treasure": {
       type: "team",
       fee: 100,
@@ -105,13 +99,6 @@ export default function Register() {
       maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/CC17GJQQ6buDc00EGDBOr2",
     },
-    "Project Exhibition": {
-      type: "team",
-      fee: 100,
-      minTeam: 1,
-      maxTeam: 3,
-      whatsapp: "https://chat.whatsapp.com/LdlXwMnUD7L8URzB9PXV9Y",
-    },
     "Free Fire": {
       type: "team",
       fee: 100,
@@ -126,7 +113,6 @@ export default function Register() {
      - fixed "Code Relay" key typo
   ----------------------------- */
   const icons: Record<string, any> = {
-    "Debug It": Bug,
     "Tech Treasure": Search,
     BGMI: Gamepad2,
     "Tech Show": Monitor,
@@ -135,7 +121,6 @@ export default function Register() {
     "Tech Quiz": HelpCircle,
     "Tekken 7": Gamepad,
     "Code Relay": Code,
-    "Project Exhibition": FolderOpen,
     "Free Fire": Gamepad2,
   };
 

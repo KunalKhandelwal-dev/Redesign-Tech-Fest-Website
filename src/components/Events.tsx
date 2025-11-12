@@ -94,23 +94,6 @@ export default function Events() {
         gradient: "from-violet-500 to-red-600",
       },
       {
-        icon: Code,
-        title: "Debug It",
-        category: "coding",
-        description: "Find and fix programming errors faster than anyone else.",
-        prize: "₹1500",
-        gradient: "from-cyan-500 to-sky-600",
-      },
-      {
-        icon: Lightbulb,
-        title: "Project Exhibition",
-        category: "innovation",
-        description:
-          "Display your academic or innovative projects for recognition.",
-        prize: "₹1500",
-        gradient: "from-amber-500 to-orange-600",
-      },
-      {
         icon: Palette,
         title: "Poster Making",
         category: "design",
