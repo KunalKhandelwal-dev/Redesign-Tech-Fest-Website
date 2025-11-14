@@ -29,7 +29,7 @@
     {
         "id": 4,
         "name": "Suryansh",
-        "role": "Tech Lead",
+        "role": "Marketing Head",
         "image": "/images/team/suryansh.jpg",
         "linkedin": "https://www.linkedin.com/in/suryansh-saini-216712292/",
         "github": "https://www.instagram.com/suryxnsh_09/",
@@ -38,7 +38,7 @@
     {
         "id": 5,
         "name": "Sahil Bhardwaj",
-        "role": "Sponsorship Head",
+        "role": "Outreach Head",
         "image": "/images/team/sahil.jpg",
         "linkedin": "https://www.linkedin.com/in/sahil-bhardwajs10?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
         "github": "https://www.instagram.com/bhardwaj_sahil10?igsh=aHc5NGhoM2FpdXV4",
@@ -64,12 +64,12 @@
     },
     {
         "id": 8,
-        "name": "Himanshu",
-        "role": "Discipline Head",
-        "image": "/images/team/himanshu.jpg",
-        "linkedin": "https://www.linkedin.com/in/himanshu-gahalyan-65a83b366/",
-        "github": "https://www.instagram.com/__gahalyan___00___?utm_source=qr",
-        "email": "himanhugahalyan006@gmail.com"
+        "name": "Palak Jain",
+        "role": "Participation Lead",
+        "image": "/images/team/palak.jpg",
+        "linkedin": "https://www.linkedin.com/in/palak-jain-4a1b3232b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+        "github": "https://github.com/jainpalak6319/",
+        "email": "palakjain6319@gmail.com"
         
     }
 ]
