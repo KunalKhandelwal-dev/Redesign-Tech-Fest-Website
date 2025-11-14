@@ -62,9 +62,9 @@ export default function Register() {
     },
     "Tech Show": {
       type: "team",
-      fee: 100, // default fee for Tech Show is 100 (for team of 4). Special-case for team of 3 handled in fee calculation.
-      minTeam: 3,
-      maxTeam: 4,
+      fee: 50, // default fee for Tech Show is 100 (for team of 4). Special-case for team of 3 handled in fee calculation.
+      minTeam: 1,
+      maxTeam: 2,
       whatsapp: "https://chat.whatsapp.com/LoMClqq4vGa90vNYV2IDt7",
     },
     "Startup Bid": {
@@ -192,8 +192,8 @@ export default function Register() {
     if (teamEvent) {
       // Special-case for "Tech Show" which has variable fee depending on chosen team size.
       if (teamEvent === "Tech Show") {
-        if (chosenTeamSize === 3) {
-          setTotalFee(100);
+        if (chosenTeamSize === 2) {
+          setTotalFee(50);
         } else {
           // default (4 or unspecified) -> use configured fee (100)
           setTotalFee(eventInfo[teamEvent].fee);
