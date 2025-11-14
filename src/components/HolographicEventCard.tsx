@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState, useRef } from "react";
-import { LucideIcon, X, Info } from "lucide-react";
+import { LucideIcon, X, Info, AlertTriangle } from "lucide-react";
 
 interface HolographicEventCardProps {
   icon: LucideIcon;
@@ -142,6 +142,16 @@ export default function HolographicEventCard({
     fee: "₹100",
   };
 
+  // If the details include a "Note:", extract it so we can highlight it separately
+  const noteIndex = eventDetail.details.toLowerCase().indexOf("note:");
+  const mainDetailText =
+    noteIndex !== -1 ? eventDetail.details.slice(0, noteIndex).trim() : eventDetail.details;
+  const noteText =
+    noteIndex !== -1 ? eventDetail.details.slice(noteIndex).replace(/^Note:\s*/i, "") : null;
+
+  // Show a small caution badge on the card if there is a note — helps users notice at glance
+  const hasCaution = Boolean(noteText);
+
   return (
     <>
       {/* === Event Card === */}
@@ -197,9 +207,23 @@ export default function HolographicEventCard({
           </div>
 
           <div className="p-6 space-y-4">
-            <h3 className="text-xl font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-              {title}
-            </h3>
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-xl font-orbitron text-cyan-300 drop-shadow">
+  {title}
+</h3>
+
+              {/* Small caution badge so solo/squad-note is visible on the card itself */}
+              {hasCaution && (
+                <div
+                  className="flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-yellow-300 to-orange-300 text-yellow-900 text-xs font-semibold shadow-md select-none"
+                  aria-hidden="true"
+                >
+                  <AlertTriangle className="w-4 h-4" />
+                  <span>Squad-based</span>
+                </div>
+              )}
+            </div>
+
             <p className="text-gray-300 text-sm leading-relaxed min-h-[60px]">
               {description}
             </p>
@@ -256,7 +280,25 @@ export default function HolographicEventCard({
               <p className="text-cyan-300 font-orbitron">
                 🏆 Prize Pool: {prize}
               </p>
-              <p className="text-gray-200 mt-2">{eventDetail.details}</p>
+
+              {/* Main description text (without the note) */}
+              {mainDetailText && (
+                <p className="text-gray-200 mt-2">{mainDetailText}</p>
+              )}
+
+              {/* Highlighted caution / note section */}
+              {noteText && (
+                <div
+                  role="alert"
+                  className="mt-3 p-3 rounded-lg bg-gradient-to-r from-yellow-200/90 to-orange-200/90 border border-yellow-400 shadow-[0_0_14px_rgba(250,180,60,0.18)] text-yellow-900 flex gap-3 items-start"
+                >
+                  <AlertTriangle className="w-6 h-6 shrink-0" />
+                  <div className="text-sm">
+                    <div className="font-semibold">Important note</div>
+                    <div className="mt-1 text-sm leading-snug">{noteText}</div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* ✅ Register button only scrolls to form now */}
@@ -267,28 +309,6 @@ export default function HolographicEventCard({
                 );
                 onSelectEvent?.(title);
                 setShowModal(false);
-
-                // ✅ Toast
-                // const toast = document.createElement("div");
-                // toast.textContent = `✅ ${title} selected!`;
-                // Object.assign(toast.style, {
-                //   position: "fixed",
-                //   bottom: "40px",
-                //   left: "50%",
-                //   transform: "translateX(-50%)",
-                //   background: "linear-gradient(to right, #00ffffaa, #007bffaa)",
-                //   color: "white",
-                //   padding: "12px 24px",
-                //   borderRadius: "12px",
-                //   fontFamily: "Orbitron, sans-serif",
-                //   boxShadow: "0 0 20px rgba(0,255,255,0.6)",
-                //   zIndex: "9999",
-                //   fontSize: "14px",
-                //   transition: "opacity 0.6s ease",
-                // });
-                // document.body.appendChild(toast);
-                // setTimeout(() => (toast.style.opacity = "0"), 2000);
-                // setTimeout(() => toast.remove(), 2600);
 
                 // ✅ Smooth scroll to register form
                 const form = document.getElementById("register");

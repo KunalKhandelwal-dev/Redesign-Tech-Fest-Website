@@ -25,7 +25,8 @@ import {
   IndianRupee,
   Check,
   Users,
-  Mail, // added
+  Mail,
+  AlertTriangle,
 } from "lucide-react";
 
 export default function Register() {
@@ -121,6 +122,17 @@ export default function Register() {
   };
 
   /* -----------------------------
+     Solo-event notes (these will be shown in a modal for emphasis)
+     - keeps the important "Note:" text very visible before selection
+  ----------------------------- */
+  const soloNotes: Record<string, string> = {
+    "Free Fire(Solo)":
+      "IMPORTANT: This is a squad-based event. You will be placed into a squad with other solo participants. Make sure you are comfortable playing in a team and communicating with squad-mates — you'll rely on them and they will rely on you.",
+    "BGMI(Solo)":
+      "IMPORTANT: This is a squad-based event. You will be teamed up with a squad of other solo participants. Please be aware that match outcome depends on squad coordination — joining means you accept being placed in a squad.",
+  };
+
+  /* -----------------------------
      ICON MAP (for toast & buttons)
      - fixed "Code Relay" key typo
   ----------------------------- */
@@ -151,8 +163,6 @@ export default function Register() {
     email: "", // leader's email (only leader supplies this)
     eventType: [] as string[],
     teamName: "",
-    // teamMembers now include college field as well (excluding the submitting user)
-    // NOTE: college fields are initialized empty -- we no longer auto-fill them with the submitter's college.
     teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }] as Array<{
       name: string;
       rollNumber: string;
@@ -177,39 +187,29 @@ export default function Register() {
   const [toast, setToast] = useState<{ label: string; Icon?: any; subtitle?: string } | null>(null);
 
   const [totalFee, setTotalFee] = useState(0);
-
-  // Preview URL for uploaded image (if image)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  // Drag state for drop area
   const [isDragActive, setIsDragActive] = useState(false);
 
   // Team size modal states
   const [showTeamSizeModal, setShowTeamSizeModal] = useState(false);
   const [modalEventLabel, setModalEventLabel] = useState<string | null>(null);
-   // chosenTeamSize tracks the user's selected size for the currently selected team event.
-  // chosenTeamEvent stores the event label that chosenTeamSize applies to.
-  // If the user selects size 1 for a team event we will treat it as an individual selection.
   const [chosenTeamSize, setChosenTeamSize] = useState<number | null>(null);
   const [chosenTeamEvent, setChosenTeamEvent] = useState<string | null>(null);
 
+  // Solo-note modal states (new)
+  const [showSoloNoteModal, setShowSoloNoteModal] = useState(false);
+  const [modalSoloEventLabel, setModalSoloEventLabel] = useState<string | null>(null);
+
   /* -----------------------------
      FEE CALCULATION
-     - if any team event selected -> team event fee takes precedence
-     - else sum individual event fees
-     - SPECIAL: Tech Show fee depends on chosen team size:
-         - 3 players => fee 80
-         - 4 players => fee 100 (default)
   ----------------------------- */
   useEffect(() => {
     const teamEvent = formData.eventType.find((ev) => eventInfo[ev]?.type === "team");
     if (teamEvent) {
-      // Special-case for "Tech Show" which has variable fee depending on chosen team size.
       if (teamEvent === "Tech Show") {
         if (chosenTeamSize === 2) {
           setTotalFee(50);
         } else {
-          // default (4 or unspecified) -> use configured fee (100)
           setTotalFee(eventInfo[teamEvent].fee);
         }
       } else {
@@ -251,11 +251,11 @@ export default function Register() {
   };
 
   /* -----------------------------
-     Prevent body scroll while modal is open
+     Prevent body scroll while modal(s) are open
   ----------------------------- */
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
-    if (showTeamSizeModal) {
+    if (showTeamSizeModal || showSoloNoteModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = prevOverflow || "";
@@ -263,21 +263,21 @@ export default function Register() {
     return () => {
       document.body.style.overflow = prevOverflow || "";
     };
-  }, [showTeamSizeModal]);
+  }, [showTeamSizeModal, showSoloNoteModal]);
 
   /* -----------------------------
-     Close modal on Escape
+     Close modal on Escape (handles both modals)
   ----------------------------- */
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === "Escape" && showTeamSizeModal) {
-        cancelTeamSizeModal();
+      if (ev.key === "Escape") {
+        if (showTeamSizeModal) cancelTeamSizeModal();
+        else if (showSoloNoteModal) cancelSoloNoteModal();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showTeamSizeModal]);
+  }, [showTeamSizeModal, showSoloNoteModal]);
 
   /* -----------------------------
      Helper: selected team info & fixed-size detection
@@ -295,8 +295,23 @@ export default function Register() {
      TOGGLE EVENT (form click only / external)
      - Team events remain exclusive (single selection).
      - Individual events are now single-select (exclusive).
-     - showFloatingToast show for both external and internal selections.
+     - For certain individual events (solo variants) we show an IMPORTANT-note modal before confirming.
   ----------------------------- */
+  const confirmSelectIndividual = (label: string, external = false) => {
+    setFormData((prev) => ({
+      ...prev,
+      eventType: [label],
+      teamType: "individual",
+      teamName: "",
+      teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
+    }));
+
+    setChosenTeamSize(null);
+    setChosenTeamEvent(null);
+
+    showFloatingToast(`${label} selected ✅`);
+  };
+
   const toggleEvent = (label: string, isExternal = false) => {
     const info = eventInfo[label];
     if (!info) return;
@@ -318,18 +333,14 @@ export default function Register() {
 
       setModalEventLabel(null);
 
-      if (info.type === "team") {
-        setFormData((prev) => ({
-          ...prev,
-          eventType: newEventType,
-          teamName: "",
-          // reset members with empty college fields (no auto-fill)
-          teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
-          teamType: newTeamType,
-        }));
-      } else {
-        setFormData((prev) => ({ ...prev, eventType: newEventType, teamType: newTeamType }));
-      }
+      setFormData((prev) => ({
+        ...prev,
+        eventType: newEventType,
+        teamName: "",
+        // reset members with empty college fields (no auto-fill)
+        teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
+        teamType: newTeamType,
+      }));
 
       showFloatingToast(`${label} deselected ❌`);
       return;
@@ -350,7 +361,6 @@ export default function Register() {
         ...prev,
         eventType: [label],
         teamName: "",
-        // initialize members with empty college (do not copy submitter's college)
         teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
         teamType: "team",
       }));
@@ -358,21 +368,19 @@ export default function Register() {
       return;
     }
 
-    // Individual event: now exclusive (single-select).
-    // Replace eventType with the selected label (clears other individual selections).
-    setFormData((prev) => ({
-      ...prev,
-      eventType: [label],
-      teamType: "individual",
-      teamName: "",
-      // single-member placeholder with empty college
-      teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
-    }));
+    // Individual event: check for solo-note modal requirement
+    if (info.type === "individual") {
+      if (label in soloNotes) {
+        // Show solo caution modal first; selection will happen only on confirm
+        setModalSoloEventLabel(label);
+        setShowSoloNoteModal(true);
+        return;
+      }
 
-    setChosenTeamSize(null);
-    setChosenTeamEvent(null);
-
-    showFloatingToast(`${label} selected ✅`);
+      // otherwise confirm immediately
+      confirmSelectIndividual(label, isExternal);
+      return;
+    }
   };
 
   /* -----------------------------
@@ -390,7 +398,6 @@ export default function Register() {
         ...prev,
         eventType: [label],
         teamName: "",
-        // individual placeholder, no auto-filled college
         teamMembers: [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
         teamType: "individual",
       }));
@@ -405,7 +412,6 @@ export default function Register() {
       ...prev,
       eventType: [label],
       teamType: "team",
-      // initialize teamMembers with empty college fields (user should enter manually)
       teamMembers: Array.from({ length: size - 1 }, () => ({ name: "", rollNumber: "", program: "", semester: "", college: "" })),
     }));
     showFloatingToast(`${label} selected — Team of ${size} players ✅`);
@@ -417,6 +423,21 @@ export default function Register() {
   const cancelTeamSizeModal = () => {
     setShowTeamSizeModal(false);
     setModalEventLabel(null);
+  };
+
+  /* -----------------------------
+     Solo-note modal handlers (new)
+     - confirm will finalize selection (same behaviour as choosing an individual event)
+  ----------------------------- */
+  const confirmSoloNoteAndSelect = (label: string | null) => {
+    if (label) confirmSelectIndividual(label);
+    setShowSoloNoteModal(false);
+    setModalSoloEventLabel(null);
+  };
+
+  const cancelSoloNoteModal = () => {
+    setShowSoloNoteModal(false);
+    setModalSoloEventLabel(null);
   };
 
   /* -----------------------------
@@ -552,7 +573,6 @@ export default function Register() {
     if (teamSelected) {
       if (!data.teamName.trim()) newErrors.teamName = "Team name is required.";
 
-      // require all fields for each member (still includes college)
       const emptyFound = data.teamMembers.some(
         (m) =>
           !m.name.trim() ||
@@ -563,7 +583,6 @@ export default function Register() {
       );
       if (emptyFound) newErrors.teamMembers = "All team member fields are required.";
 
-      // chosen team size enforcement (applies only if user specifically chose size for this event)
       const selectedEvent = data.eventType[0];
       const chosenApplies = chosenTeamSize != null && chosenTeamEvent === selectedEvent;
 
@@ -598,14 +617,13 @@ export default function Register() {
     return selected && eventInfo[selected] ? eventInfo[selected].whatsapp : "";
   };
 
-  // SUBMIT HANDLER: Send all data to backend (including the WhatsApp link!), let backend send email
+  // SUBMIT HANDLER
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate(formData)) return;
     setLoading(true);
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-    // const backendUrl = "http://localhost:5000";
 
     try {
       const form = new FormData();
@@ -623,7 +641,6 @@ export default function Register() {
       form.append("upiId", formData.upiId);
       form.append("transactionId", formData.transactionId);
       form.append("teamMembers", JSON.stringify(formData.teamMembers));
-      // <-- Send WhatsApp group link to backend!
       form.append("whatsappLink", getSelectedWhatsappLink());
 
       if (formData.paymentReceipt instanceof File) {
@@ -708,9 +725,7 @@ export default function Register() {
   const teamEvents = events.filter((e) => eventInfo[e.label]?.type === "team");
 
   /* -----------------------------
-     External event selection
-     - Accepts string or object detail
-     - Robust normalize function used for matching
+     External event selection (listens to window eventSelected)
   ----------------------------- */
   useEffect(() => {
     const normalize = (s?: string | null) =>
@@ -1055,7 +1070,6 @@ export default function Register() {
                                 const updated = formData.teamMembers.filter((_, idx) => idx !== i);
                                 setFormData({
                                   ...formData,
-                                  // if no members remain, leave single blank placeholder with empty college
                                   teamMembers: updated.length ? updated : [{ name: "", rollNumber: "", program: "", semester: "", college: "" }],
                                 });
                               }}
@@ -1137,7 +1151,6 @@ export default function Register() {
                             onClick={() => {
                               const selectedCountNow = chosenTeamSize ?? currentMaxTeam;
                               if (formData.teamMembers.length < selectedCountNow - 1) {
-                                // new member starts with empty college field (do not copy submitter's college)
                                 setFormData({ ...formData, teamMembers: [...formData.teamMembers, { name: "", rollNumber: "", program: "", semester: "", college: "" }] });
                               } else {
                                 showFloatingToast(`Maximum ${selectedCountNow - 1} members allowed.`);
@@ -1428,13 +1441,68 @@ export default function Register() {
           );
         })()
       }
+
+      {/* SOLO-NOTE MODAL (for Free Fire(Solo) & BGMI(Solo)) */}
+      {showSoloNoteModal && modalSoloEventLabel &&
+        (() => {
+          const EventIcon = icons[modalSoloEventLabel] || Code;
+          const note = soloNotes[modalSoloEventLabel] ?? "";
+          return createPortal(
+            <div className="fixed inset-0 flex items-center justify-center px-4" aria-modal="true" role="dialog" style={{ zIndex: 99999 }}>
+              <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-md"
+                onClick={cancelSoloNoteModal}
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.18 }}
+                className="relative max-w-lg w-full bg-gradient-to-br from-gray-950 to-black border border-yellow-300/20 rounded-2xl p-6 shadow-[0_0_40px_rgba(250,200,60,0.12)] text-left"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center">
+                    <EventIcon className="w-6 h-6 text-yellow-300" />
+                  </div>
+                  <div>
+                    <div className="text-md text-gray-200">Event</div>
+                    <div className="text-lg font-semibold text-white truncate">{modalSoloEventLabel}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 bg-yellow-50/90 border border-yellow-300 rounded-xl p-4 shadow-[0_0_18px_rgba(250,180,60,0.08)]">
+                  <AlertTriangle className="w-6 h-6 text-yellow-700 flex-shrink-0" />
+                  <div>
+                    <div className="font-semibold text-yellow-800">Important note</div>
+                    <div className="mt-2 whitespace-pre-line text-sm text-yellow-900 leading-snug">{note}</div>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex items-center justify-end gap-3">
+                  <button
+                    onClick={cancelSoloNoteModal}
+                    className="px-4 py-2 rounded-lg bg-transparent border border-cyan-500/20 text-gray-300 hover:bg-white/2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => confirmSoloNoteAndSelect(modalSoloEventLabel)}
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-500 to-orange-400 text-black font-semibold"
+                  >
+                    I understand — Continue
+                  </button>
+                </div>
+              </motion.div>
+            </div>,
+            document.body
+          );
+        })()
+      }
     </section>
   );
 }
 
 /* -----------------------------
    IconInput COMPONENT
-   Reusable small input with left icon (prevents placeholder overlap)
 ----------------------------- */
 function IconInput({
   value,
