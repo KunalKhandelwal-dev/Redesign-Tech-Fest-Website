@@ -60,6 +60,12 @@ export default function Register() {
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Busn9D6I7wa14z5VbI8W4A",
     },
+    "BGMI(Solo)": {
+      type: "individual",
+      fee: 30,
+      minTeam: 1,
+      whatsapp: "https://chat.whatsapp.com/Busn9D6I7wa14z5VbI8W4A",
+    },
     "Tech Show": {
       type: "team",
       fee: 50, // default fee for Tech Show is 100 (for team of 4). Special-case for team of 3 handled in fee calculation.
@@ -106,6 +112,12 @@ export default function Register() {
       maxTeam: 4,
       whatsapp: "https://chat.whatsapp.com/Ief26wFIkgTHVJF1x7qaU5",
     },
+    "Free Fire(Solo)": {
+      type: "individual",
+      fee: 30,
+      minTeam: 1,
+      whatsapp: "https://chat.whatsapp.com/Ief26wFIkgTHVJF1x7qaU5",
+    },
   };
 
   /* -----------------------------
@@ -115,6 +127,7 @@ export default function Register() {
   const icons: Record<string, any> = {
     "Tech Treasure": Search,
     BGMI: Gamepad2,
+    "BGMI(Solo)": Gamepad2,
     "Tech Show": Monitor,
     "Startup Bid": TrendingUp,
     "Poster Making": Image,
@@ -122,6 +135,7 @@ export default function Register() {
     "Tekken 7": Gamepad,
     "Code Relay": Code,
     "Free Fire": Gamepad2,
+    "Free Fire(Solo)": Gamepad2,
   };
 
   /* -----------------------------

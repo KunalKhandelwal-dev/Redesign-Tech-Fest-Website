@@ -79,6 +79,12 @@ export default function HolographicEventCard({
       teamSize: "Squad (4 Players)",
       fee: "₹100",
     },
+    "BGMI(Solo)": {
+      details:
+        "Battle it out in the ultimate BGMI competition. Survive till the end to win prizes! Note: This is a squad-based event. You’ll be teamed up with a squad that will fight with you, trust you, and depend on you.",
+      teamSize: "Individual",
+      fee: "₹30",
+    },
     "Tech Show": {
       details:
         "Showcase your innovative technology, hardware prototypes, or research models.",
@@ -120,6 +126,12 @@ export default function HolographicEventCard({
         "Team up and battle against the best in this thrilling Free Fire tournament. Showcase your strategy, skills, and teamwork to claim victory!",
       teamSize: "Squad (4 Players)",
       fee: "₹100",
+    },
+    "Free Fire(Solo)": {
+      details:
+        "Battle against the best in this thrilling Free Fire tournament. Showcase your strategy, skills to claim victory! Note: This is a squad-based event. You’ll be teamed up with a squad that will fight with you, trust you, and depend on you.",
+      teamSize: "Individual",
+      fee: "₹30",
     },
   };
 
