@@ -70,8 +70,8 @@ export default function HolographicEventCard({
     "Tech Treasure": {
       details:
         "A treasure hunt of logic and tech clues! Solve puzzles and follow hints that lead to the treasure.",
-      teamSize: "4 Members",
-      fee: "₹100",
+      teamSize: "Duo",
+      fee: "₹50",
     },
     BGMI: {
       details:

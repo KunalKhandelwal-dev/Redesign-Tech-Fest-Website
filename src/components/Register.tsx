@@ -49,9 +49,9 @@ export default function Register() {
   > = {
     "Tech Treasure": {
       type: "team",
-      fee: 100,
-      minTeam: 4,
-      maxTeam: 4,
+      fee: 50,
+      minTeam: 2,
+      maxTeam:2,
       whatsapp: "https://chat.whatsapp.com/Ee7oNF4JvkwKuIdomRRxpj",
     },
     BGMI: {
