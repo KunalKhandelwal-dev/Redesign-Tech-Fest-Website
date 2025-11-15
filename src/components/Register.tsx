@@ -1181,7 +1181,7 @@ export default function Register() {
                   <div>
                     <p className="text-gray-400 text-sm">Scan the QR below to pay</p>
                     <img
-                      src="/images/bot/QR2.jpg"
+                      src="/images/bot/yashQR1.jpg"
                       alt="Payment QR"
                       className="mx-auto w-14 h-14 rounded-lg border border-cyan-500/20"
                     />
